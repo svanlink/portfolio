@@ -273,7 +273,7 @@
 
 .work-preview-column {
   position: absolute;
-  left: 720px;
+  right: var(--content-left);
   top: 208px;
 }
 
@@ -414,8 +414,10 @@
 
 .about-portrait-column {
   position: absolute;
-  left: 900px;
-  width: 540px;
+  right: 0;
+  width: 44vw;
+  max-width: 680px;
+  min-width: 480px;
   top: 0;
   bottom: 0;
 }
@@ -509,13 +511,14 @@
   background-color: var(--ink-14);
 }
 
-/* Service plate grid — 3 columns × 2 rows */
+/* Service plate grid — 3 columns × 2 rows, spans full available width */
 .services-grid {
   position: absolute;
   top: 196px;
   left: var(--catalog-left);
+  right: var(--content-left);
   display: grid;
-  grid-template-columns: repeat(3, 432px);
+  grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 240px);
   gap: 40px;
 }
@@ -795,26 +798,7 @@
   color: var(--color-ember);
 }
 
-/* Hero + cinematic full-bleed: break out of 1440px site-wrapper */
-.section-hero,
-.section-cinematic {
-  overflow: visible;
-  width: 100vw;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-/* Hero-media clips the oversized video iframe so it doesn't bleed out */
-.hero-media {
-  overflow: hidden;
-}
-
-.cinematic-still-plate {
-  width: 100vw;
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%);
-}
+/* No full-bleed overrides needed — .site-wrapper is unconstrained (100% viewport) */
 
 .cinematic-video.is-ready .video-fallback {
   opacity: 0;

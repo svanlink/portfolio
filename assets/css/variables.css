@@ -91,10 +91,10 @@
 
   /* ─── SECTION HEIGHTS ─────────────────────────────────────────────────── */
   --height-hero:          100vh;
-  --height-selected-work: 760px;
-  --height-worked-with:   168px;
-  --height-about:         480px;
-  --height-services:      664px;
+  --height-selected-work: 840px;
+  --height-worked-with:   200px;
+  --height-about:         580px;
+  --height-services:      800px;
   --height-cinematic:     900px;
   --height-contact:       640px;
 

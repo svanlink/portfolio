@@ -5,8 +5,7 @@
 /* ─── SITE WRAPPER ────────────────────────────────────────────────────────── */
 
 .site-wrapper {
-  max-width: var(--site-width);
-  margin: 0 auto;
+  width: 100%;
   position: relative;
 }
 

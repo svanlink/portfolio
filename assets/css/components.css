@@ -414,7 +414,7 @@
 
 .service-plate {
   position: relative;
-  width: 432px;
+  width: 100%;
   height: 240px;
   background-color: var(--color-bone);
   border: 1px solid var(--ink-26);
@@ -478,7 +478,7 @@
   position: absolute;
   top: 132px;
   left: 28px;
-  width: 375px;
+  max-width: 375px;
   font-family: var(--font-editorial);
   font-weight: var(--weight-regular);
   font-size: 11px;
