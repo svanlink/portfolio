@@ -516,13 +516,13 @@
 /* Service plate grid — 3 columns × 2 rows, spans full available width */
 .services-grid {
   position: absolute;
-  top: 196px;
+  top: 220px;
   left: var(--catalog-left);
   right: var(--content-left);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 240px);
-  gap: 40px;
+  grid-template-rows: repeat(2, 260px);
+  gap: 48px;
 }
 
 
@@ -633,7 +633,7 @@
   bottom: 0;
   display: flex;
   flex-direction: column;
-  padding-top: 60px;
+  padding-top: 80px;
 }
 
 .contact-index {
@@ -647,11 +647,11 @@
 .contact-heading {
   font-family: var(--font-editorial);
   font-weight: var(--weight-medium);
-  font-size: 40px;
+  font-size: 52px;
   color: var(--ink-90);
-  line-height: 1.1;
-  letter-spacing: 0.005em;
-  margin-top: 16px;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin-top: 20px;
 }
 
 .contact-statement {
@@ -660,7 +660,7 @@
   font-size: 14px;
   color: var(--ink-62);
   line-height: 1.65;
-  margin-top: 40px;
+  margin-top: 56px;
   white-space: pre-line;
 }
 
@@ -668,9 +668,9 @@
   display: block;
   font-family: var(--font-editorial);
   font-weight: var(--weight-regular);
-  font-size: 15px;
+  font-size: 17px;
   color: var(--ink-88);
-  margin-top: 40px;
+  margin-top: 64px;
   transition: color var(--duration-fast) var(--ease-expo-out);
 }
 
@@ -684,7 +684,7 @@
   color: var(--ink-32);
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  margin-top: 12px;
+  margin-top: 28px;
   font-style: normal;
 }
 
@@ -692,9 +692,9 @@
 .contact-divider {
   position: absolute;
   left: 588px;
-  top: 60px;
+  top: 80px;
   width: 1px;
-  height: 380px;
+  height: 480px;
   background-color: var(--ink-10);
 }
 
@@ -704,7 +704,7 @@
   left: 628px;
   width: 460px;
   top: 0;
-  padding-top: 60px;
+  padding-top: 80px;
 }
 
 .contact-form {
@@ -712,7 +712,7 @@
 }
 
 .contact-submit-wrap {
-  margin-top: 48px;
+  margin-top: 56px;
 }
 
 
