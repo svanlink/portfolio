@@ -195,7 +195,7 @@
   font-family: var(--font-mono-display);
   font-weight: var(--weight-medium);
   font-size: 11px;
-  color: var(--ember-55);
+  color: var(--bone-28);
   letter-spacing: 0.02em;
 }
 
@@ -210,7 +210,7 @@
   font-family: var(--font-mono-display);
   font-weight: var(--weight-regular);
   font-size: 11px;
-  color: var(--bone-44);
+  color: var(--bone-28);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -240,7 +240,7 @@
   font-family: var(--font-mono-display);
   font-weight: var(--weight-regular);
   font-size: 11px;
-  color: var(--bone-42);
+  color: var(--bone-20);
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
@@ -249,7 +249,7 @@
   font-family: var(--font-editorial);
   font-weight: var(--weight-medium);
   font-size: 11px;
-  color: var(--bone-72);
+  color: var(--bone-32);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
@@ -257,11 +257,11 @@
 }
 
 .hero-footer-strip__scroll:hover {
-  color: var(--bone-100);
+  color: var(--bone-50);
 }
 
 .hero-footer-strip__scroll .arrow {
-  color: var(--color-ember);
+  color: var(--bone-28);
 }
 
 
@@ -304,24 +304,24 @@
 
 .work-list-column {
   position: absolute;
-  top: 240px;
+  top: 264px;
   left: var(--catalog-left);
   width: 440px;
 }
 
 .work-preview-column {
   position: absolute;
-  top: 240px;
+  top: 264px;
   left: 528px;
   right: 56px;
-  bottom: calc(100vh - 840px);
+  bottom: calc(100vh - 864px);
 }
 
 /* Preview plate fills the column — height adapts to viewport */
 .section-work .preview-plate {
   width: 100%;
   height: 100%;
-  min-height: 480px;
+  min-height: 520px;
 }
 
 
@@ -329,9 +329,8 @@
 
 .section-worked-with {
   height: var(--height-worked-with);
-  background-color: #141414;
+  background-color: var(--color-ink-soft);
   position: relative;
-  border-bottom: 1px solid rgba(242, 240, 236, 0.05);
 }
 
 .worked-with-inner {
@@ -352,13 +351,13 @@
   display: flex;
   align-items: center;
   height: auto;
-  opacity: 0.40;
+  opacity: 0.24;
   transition: opacity var(--duration-fast) var(--ease-expo-out);
   filter: grayscale(100%) invert(1);
 }
 
 .client-logo:hover {
-  opacity: 0.76;
+  opacity: 0.52;
 }
 
 .client-logo img {
@@ -487,33 +486,10 @@
 .about-portrait-placeholder {
   width: 75%;
   height: 75%;
-  background-color: rgba(11, 11, 11, 0.88);
+  background-color: var(--color-bone);
   border-radius: var(--radius-card);
   position: relative;
   overflow: hidden;
-}
-
-/* Radial vignette on portrait */
-.about-portrait-placeholder::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 35%,
-    rgba(11, 11, 11, 0.5) 100%
-  );
-  z-index: 2;
-}
-
-/* Crop marks on portrait — bone at 28% */
-.about-portrait-placeholder::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  /* Pseudo can only provide one set; additional crop marks via SVG or JS */
 }
 
 .about-portrait-label {
@@ -572,7 +548,7 @@
   display: grid;
   grid-template-columns: 64px 1fr 280px 40px;
   align-items: center;
-  padding: 28px 0;
+  padding: 36px 0;
 }
 
 .service-row__index {
@@ -841,8 +817,8 @@
   display: block;
   font-family: var(--font-editorial);
   font-weight: var(--weight-regular);
-  font-size: 22px;
-  color: var(--ink-88);
+  font-size: 24px;
+  color: var(--ink-90);
   margin-top: 64px;
   transition: color var(--duration-fast) var(--ease-expo-out);
 }
@@ -857,7 +833,9 @@
   color: var(--ink-32);
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  margin-top: 48px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--ink-10);
   font-style: normal;
 }
 
@@ -950,16 +928,6 @@
 /* ==========================================================================
    Asset integration additions — portrait treatment & form states
    ========================================================================== */
-
-/* Portrait: bone background matches section — PNG blends seamlessly */
-.about-portrait-placeholder {
-  background-color: var(--color-bone);
-}
-
-/* Remove dark radial vignette — designed for ink background, wrong on bone */
-.about-portrait-placeholder::before {
-  background: none;
-}
 
 /* Scale-in crop + horizontal flip */
 .about-portrait-image {
