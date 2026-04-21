@@ -654,8 +654,8 @@
   font-weight: var(--weight-regular);
   font-size: 14px;
   color: var(--ink-62);
-  line-height: 1.55;
-  margin-top: 68px;
+  line-height: 1.65;
+  margin-top: 40px;
   white-space: pre-line;
 }
 
@@ -665,7 +665,7 @@
   font-weight: var(--weight-regular);
   font-size: 15px;
   color: var(--ink-88);
-  margin-top: 28px;
+  margin-top: 40px;
   transition: color var(--duration-fast) var(--ease-expo-out);
 }
 
@@ -679,7 +679,7 @@
   color: var(--ink-32);
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  margin-top: 18px;
+  margin-top: 12px;
   font-style: normal;
 }
 
@@ -689,7 +689,7 @@
   left: 588px;
   top: 60px;
   width: 1px;
-  height: 300px;
+  height: 380px;
   background-color: var(--ink-10);
 }
 
@@ -699,7 +699,7 @@
   left: 628px;
   width: 460px;
   top: 0;
-  padding-top: 76px;
+  padding-top: 60px;
 }
 
 .contact-form {
@@ -707,7 +707,7 @@
 }
 
 .contact-submit-wrap {
-  margin-top: 8px;
+  margin-top: 48px;
 }
 
 
