@@ -272,6 +272,33 @@
   transition: opacity var(--duration-normal) var(--ease-expo-out);
 }
 
+/* Vimeo video layer — sits above the image, fades in on hover */
+.preview-plate__video {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  overflow: hidden;
+  transition: opacity var(--duration-normal) var(--ease-expo-out);
+  pointer-events: none;
+}
+
+.preview-plate__video.is-visible {
+  opacity: 1;
+}
+
+/* Cover-fill trick: 16:9 iframe sized to fill the 680×456 plate */
+.preview-plate__video-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* At plate height 456px → 456 * (16/9) = 812px wide, covers 680 */
+  height: 100%;
+  width: 177.78%;
+  transform: translate(-50%, -50%);
+  border: none;
+}
+
 /* Edge vignette overlay */
 .preview-plate::before {
   content: '';

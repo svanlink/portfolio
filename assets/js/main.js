@@ -92,11 +92,13 @@
     const plate = document.querySelector('.js-preview-plate');
     if (!list || !plate) return;
 
-    const image = plate.querySelector('.js-preview-image');
-    const badge = plate.querySelector('.js-preview-badge');
+    const image        = plate.querySelector('.js-preview-image');
+    const videoWrap    = plate.querySelector('.js-preview-video');
+    const videoFrame   = plate.querySelector('.js-preview-frame');
+    const badge        = plate.querySelector('.js-preview-badge');
     const captionIndex = plate.querySelector('.js-preview-caption-index');
     const captionTitle = plate.querySelector('.js-preview-caption-title');
-    const captionMeta = plate.querySelector('.js-preview-caption-meta');
+    const captionMeta  = plate.querySelector('.js-preview-caption-meta');
 
     const items = list.querySelectorAll('.work-item');
     let isTransitioning = false;
@@ -112,37 +114,52 @@
       item.classList.add('is-active');
       item.setAttribute('aria-selected', 'true');
 
-      const newSrc = item.dataset.previewSrc;
-      const newIndex = item.dataset.previewIndex;
-      const newTitle = item.dataset.previewTitle;
-      const newMeta = item.dataset.previewMeta;
+      const newSrc     = item.dataset.previewSrc;
+      const newVimeoId = item.dataset.vimeoId;
+      const newIndex   = item.dataset.previewIndex;
+      const newTitle   = item.dataset.previewTitle;
+      const newMeta    = item.dataset.previewMeta;
 
-      if (!newSrc || !image) return;
       isTransitioning = true;
 
-      image.style.transition = 'opacity 150ms ease';
-      image.style.opacity = '0';
+      // Fade out current view
+      if (image)     { image.style.transition = 'opacity 150ms ease'; image.style.opacity = '0'; }
+      if (videoWrap) videoWrap.classList.remove('is-visible');
 
       setTimeout(() => {
-        image.src = newSrc;
-        image.alt = newTitle ? newTitle + ' preview' : 'Work preview';
+        // Update caption
+        if (badge)        badge.textContent        = newIndex;
+        if (captionIndex) captionIndex.textContent  = newIndex;
+        if (captionTitle) captionTitle.textContent  = newTitle;
+        if (captionMeta)  captionMeta.textContent   = newMeta;
 
-        if (badge) badge.textContent = newIndex;
-        if (captionIndex) captionIndex.textContent = newIndex;
-        if (captionTitle) captionTitle.textContent = newTitle;
-        if (captionMeta) captionMeta.textContent = newMeta;
-
-        requestAnimationFrame(() => {
-          image.style.transition = 'opacity 300ms cubic-bezier(0.16, 1, 0.3, 1)';
-          image.style.opacity = '0.85';
+        if (newVimeoId && videoFrame && videoWrap) {
+          // Show looping muted Vimeo background in the plate
+          videoFrame.src = `https://player.vimeo.com/video/${newVimeoId}?autoplay=1&loop=1&muted=1&background=1&autopause=0&dnt=1`;
+          if (image) image.style.opacity = '0';
+          requestAnimationFrame(() => {
+            videoWrap.classList.add('is-visible');
+            isTransitioning = false;
+          });
+        } else if (newSrc && image) {
+          // Fallback: static image
+          if (videoFrame) videoFrame.src = '';
+          image.src = newSrc;
+          image.alt = newTitle ? newTitle + ' preview' : 'Work preview';
+          requestAnimationFrame(() => {
+            image.style.transition = 'opacity 300ms cubic-bezier(0.16, 1, 0.3, 1)';
+            image.style.opacity = '0.85';
+            isTransitioning = false;
+          });
+        } else {
           isTransitioning = false;
-        });
+        }
       }, 150);
     }
 
     items.forEach(item => {
       item.addEventListener('mouseenter', () => activateItem(item));
-      item.addEventListener('focus', () => activateItem(item));
+      item.addEventListener('focus',      () => activateItem(item));
       item.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();

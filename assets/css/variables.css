@@ -90,7 +90,7 @@
   --nav-height:    56px;
 
   /* ─── SECTION HEIGHTS ─────────────────────────────────────────────────── */
-  --height-hero:          900px;
+  --height-hero:          100vh;
   --height-selected-work: 760px;
   --height-worked-with:   168px;
   --height-about:         480px;
