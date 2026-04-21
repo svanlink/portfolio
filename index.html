@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Google Fonts: Archivo (400, 500) + DM Mono (400) -->
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Archivo (400, 500, 900) + DM Mono (400) + JetBrains Mono (400) -->
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;900&family=DM+Mono:wght@400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 
   <!-- Stylesheet load order: reset → variables → base → layout → components → sections -->
   <link rel="stylesheet" href="assets/css/reset.css">
@@ -54,11 +54,10 @@
           <a href="#"
              class="nav-link">NOTES</a>
         </li>
-        <li class="nav-links__separator" aria-hidden="true">|</li>
         <li>
           <a href="#contact"
-             class="nav-link nav-link--dot-after"
-             data-section="contact">CONTACT</a>
+             class="nav-link"
+             data-section="contact">CONTACT <span class="nav-arrow" aria-hidden="true">→</span></a>
         </li>
       </ul>
 
@@ -133,11 +132,10 @@
              aria-labelledby="work-heading"
              id="work">
 
-      <!-- Catalog tab: index + label + vertical rule -->
-      <div class="catalog-tab" aria-hidden="true">
-        <span class="catalog-tab__index">01</span>
-        <span class="catalog-tab__label" id="work-heading">Selected Work</span>
-        <div class="catalog-tab__rule"></div>
+      <!-- Section label: index + title -->
+      <div class="work-section-label" aria-hidden="true">
+        <span class="work-section-index">01</span>
+        <span class="work-section-title" id="work-heading">Selected Work</span>
       </div>
 
       <!-- View Archive link — top right -->
@@ -350,11 +348,10 @@
              aria-labelledby="about-heading"
              id="about">
 
-      <!-- Catalog tab -->
-      <div class="catalog-tab" aria-hidden="true">
-        <span class="catalog-tab__index">04</span>
-        <span class="catalog-tab__label" id="about-heading">About</span>
-        <div class="catalog-tab__rule"></div>
+      <!-- Section label -->
+      <div class="section-label-block" aria-hidden="true">
+        <span class="section-label-index">04</span>
+        <span class="section-label-title" id="about-heading">About</span>
       </div>
 
       <!-- Two-column layout -->
@@ -402,11 +399,10 @@
              aria-labelledby="services-heading"
              id="services">
 
-      <!-- Catalog tab -->
-      <div class="catalog-tab" aria-hidden="true">
-        <span class="catalog-tab__index">05</span>
-        <span class="catalog-tab__label" id="services-heading">Services</span>
-        <div class="catalog-tab__rule"></div>
+      <!-- Section label -->
+      <div class="section-label-block" aria-hidden="true">
+        <span class="section-label-index">05</span>
+        <span class="section-label-title" id="services-heading">Services</span>
       </div>
 
       <!-- Disciplines counter — top right -->
@@ -556,56 +552,61 @@
              aria-labelledby="cinematic-heading"
              id="cinematic">
 
-      <!-- Media layer: video + veil + grain -->
-      <!-- js-cinematic-media: triggers Vimeo player + parallax -->
-      <div class="cinematic-media js-cinematic-media" aria-hidden="true">
+      <!-- Still-plate: dark inner frame (843px tall), bone outer section -->
+      <div class="cinematic-still-plate">
 
-        <!-- js-vimeo-target: Vimeo iframe injected here by JS -->
-        <div class="cinematic-video js-vimeo-target"
-             data-vimeo-id="PLACEHOLDER"
-             data-vimeo-params="autoplay=1&loop=1&muted=1&background=1&dnt=1"
-             role="img"
-             aria-label="Sebastian Van Eickelen — working on set">
-          <img src="assets/img/cinematic-poster.jpg"
-               alt=""
-               class="video-fallback js-video-fallback"
-               aria-hidden="true">
+        <!-- Media layer: video + veil + grain -->
+        <!-- js-cinematic-media: triggers Vimeo player + parallax -->
+        <div class="cinematic-media js-cinematic-media" aria-hidden="true">
+
+          <!-- js-vimeo-target: Vimeo iframe injected here by JS -->
+          <div class="cinematic-video js-vimeo-target"
+               data-vimeo-id="PLACEHOLDER"
+               data-vimeo-params="autoplay=1&loop=1&muted=1&background=1&dnt=1"
+               role="img"
+               aria-label="Sebastian Van Eickelen — working on set">
+            <img src="assets/img/cinematic-poster.jpg"
+                 alt=""
+                 class="video-fallback js-video-fallback"
+                 aria-hidden="true">
+          </div>
+
+          <div class="cinematic-veil" aria-hidden="true"></div>
+          <div class="cinematic-grain" aria-hidden="true"></div>
         </div>
 
-        <div class="cinematic-veil" aria-hidden="true"></div>
-        <div class="cinematic-grain" aria-hidden="true"></div>
-      </div>
+        <!-- Section index — top right -->
+        <span class="cinematic-section-index" aria-hidden="true">N° 006</span>
 
-      <!-- Section index — top right -->
-      <span class="cinematic-section-index" aria-hidden="true">N° 006</span>
+        <!-- Cinematic card — smoked glass surface -->
+        <!-- js-card-reveal: triggered by IntersectionObserver scroll reveal -->
+        <article class="cinematic-card js-card-reveal" aria-labelledby="cinematic-heading">
 
-      <!-- Cinematic card — smoked glass surface -->
-      <!-- js-card-reveal: triggered by IntersectionObserver scroll reveal -->
-      <article class="cinematic-card js-card-reveal" aria-labelledby="cinematic-heading">
+          <!-- Utility bar -->
+          <div class="cinematic-card__utility-bar">
+            <span class="cinematic-card__utility-label">SCROLL TO EXPLORE</span>
+            <span class="cinematic-card__utility-right">WORKING ACROSS THE GLOBE</span>
+          </div>
 
-        <!-- Utility bar -->
-        <div class="cinematic-card__utility-bar">
-          <span class="cinematic-card__utility-label">↓ Scroll to Explore</span>
-          <span class="cinematic-card__utility-right">Working Across the Globe ⊕</span>
-        </div>
+          <!-- Card body: headline + CTA -->
+          <div class="cinematic-card__body">
 
-        <!-- Card body: headline + CTA -->
-        <div class="cinematic-card__body">
+            <h2 id="cinematic-heading" class="cinematic-card__headline">
+              The look<br>that earns<br>the work.
+            </h2>
 
-          <h2 id="cinematic-heading" class="cinematic-card__headline">
-            The look / that earns / the work.
-          </h2>
+            <!-- Ghost ember CTA button -->
+            <a href="#work" class="cta-ghost-button" aria-label="View the full work archive">
+              VIEW THE ARCHIVE ——— →
+            </a>
 
-          <!-- Ghost ember CTA button -->
-          <a href="#work" class="cta-ghost-button" aria-label="View the full work archive">
-            VIEW THE ARCHIVE ——— →
-          </a>
+          </div>
 
-        </div>
+        </article>
 
-      </article>
+      </div><!-- /.cinematic-still-plate -->
 
-      <!-- Caption bar -->
+      <!-- Caption bar — sits in bone strip below still-plate -->
       <div class="cinematic-caption-bar" aria-hidden="true">
         <div class="cinematic-caption-bar__left">
           <span class="cinematic-caption-bar__index">N° 006</span>
@@ -706,27 +707,20 @@ and long-form documentary work.
 
       </div>
 
+      <!-- Footer strip — embedded at y=500 inside contact section per Figma -->
+      <footer class="site-footer">
+        <span class="footer-copyright">© 2025 Sebastian Van Eickelen</span>
+        <nav class="footer-social" aria-label="Social links">
+          <a href="#" class="footer-social__link" aria-label="LinkedIn profile">LinkedIn</a>
+          <a href="#" class="footer-social__link" aria-label="Instagram profile">Instagram</a>
+          <a href="#" class="footer-social__link" aria-label="Substack newsletter">Substack</a>
+        </nav>
+        <span class="footer-disciplines">Filmmaker · Photographer · Creative Direction</span>
+      </footer>
+
     </section>
 
   </main>
-
-
-  <!-- ═══════════════════════════════════════════════════════════════════════
-       FOOTER
-       ═══════════════════════════════════════════════════════════════════════ -->
-  <footer class="site-footer">
-
-    <span class="footer-copyright">© 2025 Sebastian Van Eickelen</span>
-
-    <nav class="footer-social" aria-label="Social links">
-      <a href="#" class="footer-social__link" aria-label="LinkedIn profile">LinkedIn</a>
-      <a href="#" class="footer-social__link" aria-label="Instagram profile">Instagram</a>
-      <a href="#" class="footer-social__link" aria-label="Substack newsletter">Substack</a>
-    </nav>
-
-    <span class="footer-disciplines">Filmmaker · Photographer · Creative Direction</span>
-
-  </footer>
 
 </div><!-- /.site-wrapper -->
 

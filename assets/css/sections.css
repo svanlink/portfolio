@@ -7,10 +7,16 @@
 
 /* ─── SHARED: DARK MEDIA SECTIONS ────────────────────────────────────────── */
 
-.section-hero,
-.section-cinematic {
+.section-hero {
   background-color: var(--color-ink);
   color: var(--color-bone);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Cinematic: bone outer, dark still-plate inner */
+.section-cinematic {
+  background-color: var(--color-bone);
   position: relative;
   overflow: hidden;
 }
@@ -232,24 +238,19 @@
   left: 0;
   right: 0;
   bottom: 0;
-  display: flex;
-  align-items: center;
-  padding-left: var(--catalog-left);
-  gap: 0;
 }
 
 .work-list-column {
-  flex-shrink: 0;
-  width: 480px;
-  padding-top: 96px;
+  position: absolute;
+  top: 169px;
+  left: var(--catalog-left);
+  width: 600px;
 }
 
 .work-preview-column {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding-right: var(--content-left);
+  position: absolute;
+  left: 720px;
+  top: 169px;
 }
 
 
@@ -336,10 +337,9 @@
 
 .about-text-column {
   position: absolute;
-  left: 320px;
+  left: 306px;
   width: 540px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 108px;
 }
 
 .about-text-column p + p {
@@ -349,7 +349,7 @@
 .about-bio-primary {
   font-family: var(--font-editorial);
   font-weight: var(--weight-regular);
-  font-size: 15px;
+  font-size: 18px;
   color: var(--ink-88);
   line-height: 1.55;
 }
@@ -357,7 +357,7 @@
 .about-bio-secondary {
   font-family: var(--font-editorial);
   font-weight: var(--weight-regular);
-  font-size: 13px;
+  font-size: 15px;
   color: var(--ink-56);
   line-height: 1.55;
   margin-top: 20px;
@@ -387,10 +387,9 @@
 .about-portrait-column {
   position: absolute;
   left: 900px;
-  width: 400px;
-  height: 340px;
-  top: 50%;
-  transform: translateY(-50%);
+  width: 540px;
+  height: 480px;
+  top: 0;
 }
 
 .about-portrait-placeholder {
@@ -500,6 +499,17 @@
   position: relative;
 }
 
+/* Dark inner plate — full width, 843px tall, contains video + card */
+.cinematic-still-plate {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 843px;
+  overflow: hidden;
+  background-color: var(--color-ink);
+}
+
 .cinematic-section-index {
   position: absolute;
   top: var(--space-9);
@@ -563,7 +573,7 @@
 
 .section-contact {
   height: var(--height-contact);
-  background-color: var(--color-bone);
+  background-color: var(--color-contact-bg);
   position: relative;
 }
 
@@ -619,7 +629,7 @@
   display: block;
   font-family: var(--font-editorial);
   font-weight: var(--weight-regular);
-  font-size: 26px;
+  font-size: 15px;
   color: var(--ink-88);
   margin-top: 28px;
   transition: color var(--duration-fast) var(--ease-expo-out);
@@ -642,7 +652,7 @@
 /* Vertical divider */
 .contact-divider {
   position: absolute;
-  left: 608px;
+  left: 588px;
   top: 60px;
   width: 1px;
   height: 300px;
@@ -652,7 +662,7 @@
 /* Right column */
 .contact-right {
   position: absolute;
-  left: 648px;
+  left: 628px;
   width: 460px;
   top: 0;
   padding-top: 76px;
@@ -667,12 +677,16 @@
 }
 
 
-/* ─── FOOTER ──────────────────────────────────────────────────────────────── */
+/* ─── FOOTER — embedded at bottom of contact section ─────────────────────── */
 
 .site-footer {
-  background-color: var(--color-bone);
-  border-top: 1px solid var(--ink-14);
-  height: 50px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: transparent;
+  border-top: 1px solid var(--color-rule);
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;

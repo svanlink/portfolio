@@ -64,6 +64,38 @@
   pointer-events: none;
 }
 
+/* ─── SECTION LABEL BLOCK ─────────────────────────────────────────────────── */
+/* Replaces catalog-tab in sections that have no vertical rule in Figma       */
+
+.section-label-block,
+.work-section-label {
+  position: absolute;
+  left: var(--catalog-left);
+  top: var(--space-9);           /* 96px */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: var(--z-content);
+}
+
+.section-label-index,
+.work-section-index {
+  font-family: var(--font-mono-display);
+  font-size: 9px;
+  color: var(--ember-72);
+  letter-spacing: 0.04em;
+}
+
+.section-label-title,
+.work-section-title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-40);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+
 /* ─── SECTION HORIZONTAL RULE ─────────────────────────────────────────────── */
 
 .section-rule {
