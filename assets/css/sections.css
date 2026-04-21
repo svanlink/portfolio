@@ -304,17 +304,17 @@
 
 .work-list-column {
   position: absolute;
-  top: 200px;
+  top: 240px;
   left: var(--catalog-left);
   width: 440px;
 }
 
 .work-preview-column {
   position: absolute;
-  top: 200px;
+  top: 240px;
   left: 528px;
   right: 56px;
-  bottom: calc(100vh - 800px);
+  bottom: calc(100vh - 840px);
 }
 
 /* Preview plate fills the column — height adapts to viewport */
@@ -560,7 +560,7 @@
 .service-row {
   border-top: 1px solid var(--ink-10);
   overflow: hidden;
-  cursor: default;
+  cursor: pointer;
 }
 
 .service-row:last-child {
@@ -570,7 +570,7 @@
 /* Inner grid — always visible */
 .service-row__main {
   display: grid;
-  grid-template-columns: 64px 1fr 320px;
+  grid-template-columns: 64px 1fr 280px 40px;
   align-items: center;
   padding: 28px 0;
 }
@@ -593,7 +593,8 @@
   transition: color var(--duration-fast) var(--ease-expo-out);
 }
 
-.service-row:hover .service-row__title {
+.service-row:hover .service-row__title,
+.service-row.is-open .service-row__title {
   color: var(--color-ember);
 }
 
@@ -607,7 +608,35 @@
   text-align: right;
 }
 
-/* Accordion detail — CSS grid-template-rows reveal */
+/* Toggle icon — plus rotates 45° to form × on open */
+.service-row__toggle {
+  justify-self: end;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-regular);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--ink-36);
+  transition:
+    transform 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    color var(--duration-fast) var(--ease-expo-out);
+  user-select: none;
+}
+
+.service-row:hover .service-row__toggle {
+  color: var(--ink-56);
+}
+
+.service-row.is-open .service-row__toggle {
+  transform: rotate(45deg);
+  color: var(--color-ember);
+}
+
+/* Accordion detail — triggered by .is-open via click, not hover */
 .service-row__detail {
   display: grid;
   grid-template-rows: 0fr;
@@ -615,7 +644,7 @@
   padding-left: 72px;
 }
 
-.service-row:hover .service-row__detail {
+.service-row.is-open .service-row__detail {
   grid-template-rows: 1fr;
 }
 
@@ -625,7 +654,7 @@
   transition: padding-bottom 380ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.service-row:hover .service-row__detail-inner {
+.service-row.is-open .service-row__detail-inner {
   padding-bottom: 26px;
 }
 
@@ -733,7 +762,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  bottom: 0;
+  bottom: 60px;
   width: 700px;
   z-index: 0;
   overflow: hidden;
@@ -876,7 +905,6 @@
   left: 0;
   right: 0;
   background-color: transparent;
-  border-top: 1px solid var(--color-rule);
   height: 60px;
   display: flex;
   align-items: center;

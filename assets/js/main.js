@@ -368,6 +368,44 @@
     }, { passive: true });
   }
 
+  // ─── SERVICES: Click accordion ───────────────────────────────────────────
+
+  function initServicesAccordion() {
+    const rows = document.querySelectorAll('.service-row');
+    if (!rows.length) return;
+
+    rows.forEach(row => {
+      const detail = row.querySelector('.service-row__detail');
+      if (!detail) return;
+
+      row.setAttribute('role', 'button');
+      row.setAttribute('tabindex', '0');
+      row.setAttribute('aria-expanded', 'false');
+
+      function toggle() {
+        const isOpen = row.classList.contains('is-open');
+        // Close all rows
+        rows.forEach(r => {
+          r.classList.remove('is-open');
+          r.setAttribute('aria-expanded', 'false');
+        });
+        // Open this one if it was closed
+        if (!isOpen) {
+          row.classList.add('is-open');
+          row.setAttribute('aria-expanded', 'true');
+        }
+      }
+
+      row.addEventListener('click', toggle);
+      row.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggle();
+        }
+      });
+    });
+  }
+
   // ─── CONTACT: Focus states ───────────────────────────────────────────────
 
   function initContactForm() {
@@ -470,6 +508,7 @@
     initVimeoBackground('.js-hero-media .js-vimeo-target', '.js-video-fallback');
     initVimeoBackground('.js-cinematic-media .js-vimeo-target', '.js-video-fallback');
     initWorkPreview();
+    initServicesAccordion();
     initCinematicParallax();
     initContactForm();
     initScrollReveal();
