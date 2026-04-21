@@ -99,6 +99,25 @@
     });
   }
 
+  // ─── VIMEO: Thumbnail fetcher ─────────────────────────────────────────────
+
+  var thumbCache = {};
+
+  function fetchVimeoThumb(vimeoId) {
+    if (thumbCache[vimeoId]) return Promise.resolve(thumbCache[vimeoId]);
+    return fetch(
+      'https://vimeo.com/api/oembed.json?url=' + encodeURIComponent('https://vimeo.com/' + vimeoId) + '&width=1280',
+      { mode: 'cors' }
+    )
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var url = data.thumbnail_url || null;
+        thumbCache[vimeoId] = url;
+        return url;
+      })
+      .catch(function () { return null; });
+  }
+
   // ─── SELECTED WORK: Preview transitions ──────────────────────────────────
 
   function initWorkPreview() {
@@ -148,9 +167,17 @@
         if (captionMeta)  captionMeta.textContent   = newMeta;
 
         if (newVimeoId && videoFrame && videoWrap) {
-          // Show looping muted Vimeo background in the plate
+          // Show thumbnail while video loads — prevents black flash during transition
+          fetchVimeoThumb(newVimeoId).then(function (thumbUrl) {
+            if (thumbUrl && image) {
+              image.src = thumbUrl;
+              image.alt = newTitle ? newTitle + ' preview' : 'Work preview';
+              image.style.transition = 'opacity 300ms cubic-bezier(0.16, 1, 0.3, 1)';
+              image.style.opacity = '0.85';
+            }
+          });
+          // Load video — fades in over the thumbnail via .is-visible opacity transition
           videoFrame.src = `https://player.vimeo.com/video/${newVimeoId}?autoplay=1&loop=1&muted=1&background=1&autopause=0&dnt=1`;
-          if (image) image.style.opacity = '0';
           requestAnimationFrame(() => {
             videoWrap.classList.add('is-visible');
             isTransitioning = false;
@@ -181,6 +208,18 @@
         }
       });
     });
+
+    // On page load: fetch thumbnail for the initial active item so the plate
+    // is never a dead black rectangle on first visit.
+    var initialItem = list.querySelector('.work-item.is-active');
+    if (initialItem && image) {
+      var initVimeoId = initialItem.dataset.vimeoId;
+      if (initVimeoId) {
+        fetchVimeoThumb(initVimeoId).then(function (thumbUrl) {
+          if (thumbUrl) { image.src = thumbUrl; }
+        });
+      }
+    }
   }
 
   // ─── NAV: Hide on scroll down, reveal on scroll up ───────────────────────

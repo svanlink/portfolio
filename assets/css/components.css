@@ -188,7 +188,7 @@
 /* ─── WORK LIST ───────────────────────────────────────────────────────────── */
 
 .work-list {
-  width: 360px;
+  width: 400px;
 }
 
 /* Two-line grid: index | title / client | category */
@@ -197,8 +197,8 @@
   grid-template-columns: 28px 1fr auto;
   grid-template-rows: auto auto;
   align-content: center;
-  row-gap: 4px;
-  height: 88px;
+  row-gap: 5px;
+  height: 100px;
   padding: 0 8px 0 0;
   border-bottom: 1px solid var(--ink-7);
   cursor: pointer;
@@ -237,9 +237,9 @@
   align-self: end;
   font-family: var(--font-editorial);
   font-weight: var(--weight-medium);
-  font-size: 17px;
+  font-size: 20px;
   color: var(--ink-80);
-  letter-spacing: -0.005em;
+  letter-spacing: -0.01em;
 }
 
 .work-item.is-active .work-item__title {
@@ -254,8 +254,8 @@
   align-self: start;
   font-family: var(--font-editorial);
   font-weight: var(--weight-regular);
-  font-size: 10px;
-  color: var(--ink-36);
+  font-size: 11px;
+  color: var(--ink-44);
   letter-spacing: 0;
 }
 
@@ -400,36 +400,6 @@
   text-transform: uppercase;
 }
 
-/* 8 crop marks — 4 corners × 2 lines each */
-.preview-plate__crop-marks {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 4;
-}
-
-.preview-plate__crop-marks::before,
-.preview-plate__crop-marks::after {
-  content: '';
-  position: absolute;
-  background-color: var(--bone-20);
-}
-
-/* Top-left corner — horizontal arm */
-.crop-mark { position: absolute; background-color: var(--bone-20); }
-
-/* Top-left: arms extend right and down from the corner point */
-.cm-tl-h { top: 14px;    left: 14px;  width: 12px; height: 1px; }
-.cm-tl-v { top: 14px;    left: 14px;  width: 1px;  height: 12px; }
-/* Top-right: horizontal arm extends left from corner; vertical arm extends down */
-.cm-tr-h { top: 14px;    right: 14px; width: 12px; height: 1px; transform: translateX(-12px); }
-.cm-tr-v { top: 14px;    right: 14px; width: 1px;  height: 12px; }
-/* Bottom-left: horizontal arm extends right; vertical arm extends up from corner */
-.cm-bl-h { bottom: 14px; left: 14px;  width: 12px; height: 1px; }
-.cm-bl-v { bottom: 14px; left: 14px;  width: 1px;  height: 12px; transform: translateY(-12px); }
-/* Bottom-right: horizontal arm extends left; vertical arm extends up */
-.cm-br-h { bottom: 14px; right: 14px; width: 12px; height: 1px; transform: translateX(-12px); }
-.cm-br-v { bottom: 14px; right: 14px; width: 1px;  height: 12px; transform: translateY(-12px); }
 
 
 /* ─── SERVICE PLATE ───────────────────────────────────────────────────────── */
