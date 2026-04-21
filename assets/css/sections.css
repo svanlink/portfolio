@@ -195,7 +195,7 @@
   font-family: var(--font-mono-display);
   font-weight: var(--weight-medium);
   font-size: 11px;
-  color: var(--ember-80);
+  color: var(--ember-55);
   letter-spacing: 0.02em;
 }
 
@@ -203,15 +203,15 @@
   display: block;
   width: 96px;
   height: 1px;
-  background-color: var(--ember-60);
+  background-color: var(--bone-20);
 }
 
 .hero-kicker__tagline {
-  font-family: var(--font-editorial);
+  font-family: var(--font-mono-display);
   font-weight: var(--weight-regular);
-  font-size: 16px;
-  color: var(--bone-90);
-  letter-spacing: 0.08em;
+  font-size: 11px;
+  color: var(--bone-44);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
@@ -733,7 +733,7 @@
   color: var(--ink-32);
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  margin-top: 28px;
+  margin-top: 48px;
   font-style: normal;
 }
 
