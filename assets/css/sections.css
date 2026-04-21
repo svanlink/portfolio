@@ -476,8 +476,8 @@
 }
 
 .about-portrait-placeholder {
-  width: 80%;
-  height: 80%;
+  width: 75%;
+  height: 75%;
   background-color: rgba(11, 11, 11, 0.88);
   border-radius: var(--radius-card);
   position: relative;

@@ -1,0 +1,63 @@
+/* ==========================================================================
+   type-test.css — Hero name typographic direction tests
+   Apply .type-dir-1 / .type-dir-2 / .type-dir-3 to .hero-headline__name
+   to evaluate each direction. Remove this file once a direction is locked.
+   ========================================================================== */
+
+
+/*
+ * DIRECTION 1 — Syne ExtraBold / Swiss architectural sans
+ *
+ * Strong editorial Swiss personality. Heavier, more condensed optically
+ * than HelveticaNow at this weight. ALL CAPS with ultra-tight tracking
+ * reads as an architectural cover statement. More aggressive than Dir 2,
+ * appropriate if the tone leans harder Swiss / studio / structural.
+ */
+.type-dir-1.hero-headline__name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  font-size: clamp(64px, 6.5vw, 108px);
+  letter-spacing: -0.045em;
+  line-height: 0.94;
+  text-transform: uppercase;
+}
+
+
+/*
+ * DIRECTION 2 — Cormorant Garamond Light Italic / luxury editorial serif
+ *
+ * High-contrast Garamond at Light italic. The extreme thin-to-thick contrast
+ * reads as luxury print culture — monograph, fashion editorial, cinema.
+ * Italic adds authorship and movement without becoming decorative.
+ * Contrasts strongly with the DINPro mono utility system below it,
+ * which is exactly the hierarchy signal the hero needs.
+ * Size runs slightly larger because Light Italic has optical lightness.
+ */
+.type-dir-2.hero-headline__name {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(84px, 8.5vw, 140px);
+  letter-spacing: -0.02em;
+  line-height: 0.91;
+}
+
+
+/*
+ * DIRECTION 3 — Fraunces Bold Italic / authored optical serif
+ *
+ * Fraunces is a variable optical serif with a deliberate, authored quality —
+ * slightly wonky terminals, strong personality at display sizes. Bold italic
+ * reads as more contemporary and less classic than Cormorant. Closer to
+ * the visual language of independent film titles and art-book covers.
+ * More distinctive than either DM Serif or Playfair at the same scale.
+ */
+.type-dir-3.hero-headline__name {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(76px, 7.5vw, 126px);
+  letter-spacing: -0.025em;
+  line-height: 0.93;
+}
