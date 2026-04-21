@@ -188,7 +188,7 @@
 /* ─── WORK LIST ───────────────────────────────────────────────────────────── */
 
 .work-list {
-  width: 400px;
+  width: 440px;
 }
 
 /* Two-line grid: index | title / client | category */
@@ -309,15 +309,18 @@
   opacity: 1;
 }
 
-/* Cover-fill trick: 16:9 iframe sized to fill the plate.
-   scale(1.2) eliminates Vimeo sidebar bars at the edges. */
+/* CSS cover pattern: iframe maintains 16:9 and fills the plate from
+   whichever axis is the binding constraint — no black bars, no bleed. */
 .preview-plate__video-frame {
   position: absolute;
   top: 50%;
   left: 50%;
-  height: 100%;
-  width: 177.78%;
-  transform: translate(-50%, -50%) scale(1.2);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  transform: translate(-50%, -50%);
   border: none;
 }
 

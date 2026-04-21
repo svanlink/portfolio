@@ -306,14 +306,14 @@
   position: absolute;
   top: 200px;
   left: var(--catalog-left);
-  width: 400px;
+  width: 440px;
 }
 
 .work-preview-column {
   position: absolute;
   top: 200px;
-  left: 492px;
-  right: 40px;
+  left: 528px;
+  right: 56px;
   bottom: calc(100vh - 800px);
 }
 
