@@ -388,59 +388,80 @@
 .about-text-column {
   position: absolute;
   left: 306px;
-  width: 540px;
-  top: 160px;
+  width: 460px;
+  top: 130px;
 }
 
-.about-text-column p + p {
-  margin-top: 28px;
+/* Short identity preface — sits above main paragraph */
+.about-identity {
+  display: block;
+  font-family: var(--font-mono-display);
+  font-weight: var(--weight-medium);
+  font-size: 9px;
+  color: var(--ember-72);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 22px;
 }
 
 .about-bio-primary {
   font-family: var(--font-editorial);
   font-weight: var(--weight-regular);
-  font-size: 22px;
+  font-size: 20px;
   color: var(--ink-88);
-  line-height: 1.6;
+  line-height: 1.68;
   letter-spacing: -0.01em;
 }
 
 .about-bio-secondary {
   font-family: var(--font-editorial);
   font-weight: var(--weight-regular);
-  font-size: 15px;
-  color: var(--ink-56);
+  font-size: 14px;
+  color: var(--ink-50);
   line-height: 1.55;
   letter-spacing: 0;
-  margin-top: 20px;
+  margin-top: 32px;
 }
 
-.about-profile-link {
+/* Editorial CTA — typographic with top-rule authority */
+.about-cta {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 40px;
+  justify-content: space-between;
+  gap: 16px;
+  width: 220px;
+  margin-top: 52px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ink-14);
   font-family: var(--font-editorial);
   font-weight: var(--weight-medium);
   font-size: 11px;
-  color: var(--ink-70);
-  letter-spacing: 0.07em;
+  color: var(--ink-62);
+  letter-spacing: 0.10em;
   text-transform: uppercase;
-  transition: color var(--duration-fast) var(--ease-expo-out);
+  transition:
+    color var(--duration-fast) var(--ease-expo-out),
+    border-color var(--duration-fast) var(--ease-expo-out);
 }
 
-.about-profile-link .arrow {
+.about-cta .arrow {
   color: var(--color-ember);
+  transition: transform var(--duration-fast) var(--ease-expo-out);
 }
 
-.about-profile-link:hover {
+.about-cta:hover {
   color: var(--color-ink);
+  border-top-color: var(--ink-28);
+}
+
+.about-cta:hover .arrow {
+  transform: translateX(3px);
 }
 
 .about-portrait-column {
   position: absolute;
-  right: var(--content-left);
-  width: 400px;
+  right: 120px;
+  width: 440px;
   top: 80px;
   bottom: 80px;
 }
