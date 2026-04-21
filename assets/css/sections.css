@@ -143,10 +143,10 @@
   z-index: var(--z-content);
 }
 
-/* Kicker cluster — label group at ~79% from top */
+/* Kicker cluster — fixed lower-third position, works at any viewport height */
 .hero-kicker {
   position: absolute;
-  bottom: calc(var(--height-hero) - 716px);  /* = 900 - 716 = 184px from bottom */
+  bottom: 188px;
   left: 0;
   display: flex;
   align-items: center;
@@ -180,7 +180,7 @@
 /* Thin horizontal rule below kicker */
 .hero-thin-rule {
   position: absolute;
-  bottom: calc(var(--height-hero) - 742px);  /* 158px from bottom */
+  bottom: 162px;
   left: 0;
   right: 0;
   height: 1px;
@@ -190,7 +190,7 @@
 /* Footer metadata strip */
 .hero-footer-strip {
   position: absolute;
-  bottom: 52px;
+  bottom: 64px;
   left: 0;
   right: 0;
   display: flex;
@@ -266,7 +266,7 @@
 
 .work-list-column {
   position: absolute;
-  top: 169px;
+  top: 208px;
   left: var(--catalog-left);
   width: 600px;
 }
@@ -274,7 +274,7 @@
 .work-preview-column {
   position: absolute;
   left: 720px;
-  top: 169px;
+  top: 208px;
 }
 
 
@@ -364,11 +364,11 @@
   position: absolute;
   left: 306px;
   width: 540px;
-  top: 108px;
+  top: 136px;
 }
 
 .about-text-column p + p {
-  margin-top: 20px;
+  margin-top: 28px;
 }
 
 .about-bio-primary {
@@ -394,7 +394,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 28px;
+  margin-top: 40px;
   font-family: var(--font-editorial);
   font-weight: var(--weight-medium);
   font-size: 11px;
@@ -416,8 +416,8 @@
   position: absolute;
   left: 900px;
   width: 540px;
-  height: 480px;
   top: 0;
+  bottom: 0;
 }
 
 .about-portrait-placeholder {
@@ -512,12 +512,12 @@
 /* Service plate grid — 3 columns × 2 rows */
 .services-grid {
   position: absolute;
-  top: 156px;
+  top: 196px;
   left: var(--catalog-left);
   display: grid;
   grid-template-columns: repeat(3, 432px);
-  grid-template-rows: repeat(2, 200px);
-  gap: 32px;
+  grid-template-rows: repeat(2, 240px);
+  gap: 40px;
 }
 
 
