@@ -287,15 +287,15 @@
   opacity: 1;
 }
 
-/* Cover-fill trick: 16:9 iframe sized to fill the 680×456 plate */
+/* Cover-fill trick: 16:9 iframe sized to fill the plate.
+   scale(1.2) eliminates Vimeo sidebar bars at the edges. */
 .preview-plate__video-frame {
   position: absolute;
   top: 50%;
   left: 50%;
-  /* At plate height 456px → 456 * (16/9) = 812px wide, covers 680 */
   height: 100%;
   width: 177.78%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(1.2);
   border: none;
 }
 
