@@ -306,7 +306,7 @@
   position: absolute;
   top: 208px;
   left: var(--catalog-left);
-  width: 440px;
+  width: 360px;
 }
 
 .work-preview-column {
@@ -322,6 +322,7 @@
   height: var(--height-worked-with);
   background-color: #141414;
   position: relative;
+  border-bottom: 1px solid rgba(242, 240, 236, 0.05);
 }
 
 .worked-with-inner {
@@ -341,21 +342,29 @@
 .client-logo {
   display: flex;
   align-items: center;
-  height: 18px;
-  opacity: 0.44;
+  height: auto;
+  opacity: 0.40;
   transition: opacity var(--duration-fast) var(--ease-expo-out);
   filter: grayscale(100%) invert(1);
 }
 
 .client-logo:hover {
-  opacity: 0.80;
+  opacity: 0.76;
 }
 
 .client-logo img {
-  height: 20px;
   width: auto;
   display: block;
 }
+
+/* Optical balancing — sized by visual weight, not mathematical equality.
+   Delicate marks (Cartier) sit small; bold marks (Mammut) read large. */
+.client-logo[title="Richemont"] img  { height: 13px; }
+.client-logo[title="Decathlon"] img  { height: 18px; }
+.client-logo[title="Mammut"] img     { height: 21px; }
+.client-logo[title="Cartier"] img    { height: 10px; }
+.client-logo[title="EPFL"] img       { height: 14px; }
+.client-logo[title="SWISStours"] img { height: 13px; }
 
 /* Text fallback when SVG is absent */
 .client-logo__fallback {
@@ -460,15 +469,15 @@
 
 .about-portrait-column {
   position: absolute;
-  right: 120px;
-  width: 440px;
+  right: 160px;
+  width: 800px;
   top: 80px;
   bottom: 80px;
 }
 
 .about-portrait-placeholder {
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 80%;
   background-color: rgba(11, 11, 11, 0.88);
   border-radius: var(--radius-card);
   position: relative;
@@ -534,7 +543,7 @@
 /* Service list — editorial rows with accordion expand on hover */
 .services-list {
   position: absolute;
-  top: 180px;
+  top: 200px;
   left: var(--catalog-left);
   right: var(--content-left);
 }
@@ -554,7 +563,7 @@
   display: grid;
   grid-template-columns: 64px 1fr 320px;
   align-items: center;
-  padding: 22px 0;
+  padding: 28px 0;
 }
 
 .service-row__index {
@@ -568,9 +577,9 @@
 .service-row__title {
   font-family: var(--font-editorial);
   font-weight: var(--weight-regular);
-  font-size: 44px;
+  font-size: 48px;
   color: var(--color-ink);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   line-height: 1.0;
   transition: color var(--duration-fast) var(--ease-expo-out);
 }
@@ -594,7 +603,7 @@
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 380ms cubic-bezier(0.16, 1, 0.3, 1);
-  padding-left: 64px;
+  padding-left: 72px;
 }
 
 .service-row:hover .service-row__detail {

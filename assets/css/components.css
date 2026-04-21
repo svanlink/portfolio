@@ -188,14 +188,17 @@
 /* ─── WORK LIST ───────────────────────────────────────────────────────────── */
 
 .work-list {
-  width: 440px;
+  width: 360px;
 }
 
+/* Two-line grid: index | title / client | category */
 .work-item {
   display: grid;
-  grid-template-columns: 40px 180px 1fr auto;
-  align-items: center;
-  height: 76px;
+  grid-template-columns: 28px 1fr auto;
+  grid-template-rows: auto auto;
+  align-content: center;
+  row-gap: 4px;
+  height: 88px;
   padding: 0 8px 0 0;
   border-bottom: 1px solid var(--ink-7);
   cursor: pointer;
@@ -211,23 +214,30 @@
   background-color: var(--ink-3);
 }
 
+/* Index spans both rows — vertically centred */
 .work-item__index {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  align-self: center;
   font-family: var(--font-mono-display);
   font-weight: var(--weight-medium);
   font-size: 10px;
   color: var(--ink-50);
   letter-spacing: 0.02em;
-  padding-left: 0;
 }
 
 .work-item.is-active .work-item__index {
   color: var(--color-ember);
 }
 
+/* Title — row 1, anchored to bottom of its row */
 .work-item__title {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
   font-family: var(--font-editorial);
   font-weight: var(--weight-medium);
-  font-size: 18px;
+  font-size: 17px;
   color: var(--ink-80);
   letter-spacing: -0.005em;
 }
@@ -237,19 +247,27 @@
   color: var(--color-ink);
 }
 
+/* Client — row 2, sits below title */
 .work-item__client {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: start;
   font-family: var(--font-editorial);
   font-weight: var(--weight-regular);
-  font-size: 11px;
-  color: var(--ink-44);
+  font-size: 10px;
+  color: var(--ink-36);
   letter-spacing: 0;
 }
 
+/* Category / year — spans both rows, right edge */
 .work-item__category {
+  grid-column: 3;
+  grid-row: 1 / 3;
+  align-self: center;
   font-family: var(--font-mono-display);
   font-weight: var(--weight-regular);
-  font-size: 10px;
-  color: var(--ink-40);
+  font-size: 9px;
+  color: var(--ink-32);
   letter-spacing: 0.04em;
   text-align: right;
   text-transform: uppercase;
@@ -260,8 +278,8 @@
 
 .preview-plate {
   position: relative;
-  width: 780px;
-  height: 520px;
+  width: 880px;
+  height: 560px;
   background-color: rgba(11, 11, 11, 0.90);
   border-radius: var(--radius-plate);
   overflow: hidden;
