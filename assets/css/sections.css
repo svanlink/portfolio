@@ -755,8 +755,19 @@
    Asset integration additions — portrait treatment & form states
    ========================================================================== */
 
+/* Portrait: bone background matches section — PNG blends seamlessly */
+.about-portrait-placeholder {
+  background-color: var(--color-bone);
+}
+
+/* Remove dark radial vignette — designed for ink background, wrong on bone */
+.about-portrait-placeholder::before {
+  background: none;
+}
+
+/* Scale-in crop + horizontal flip */
 .about-portrait-image {
-  transform: scale(1.02);
+  transform: scale(1.02) scaleX(-1);
   transform-origin: center top;
 }
 
@@ -771,6 +782,18 @@
 .form-field.has-value .form-field__label,
 .form-field.is-focused .form-field__label {
   color: var(--color-ember);
+}
+
+/* Cinematic full-bleed: break out of 1440px site-wrapper */
+.section-cinematic {
+  overflow: visible;
+}
+
+.cinematic-still-plate {
+  width: 100vw;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
 }
 
 .cinematic-video.is-ready .video-fallback {
