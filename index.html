@@ -36,7 +36,7 @@
   <main>
 
     <!-- SECTION 1: HERO -->
-    <section class="section-inner section-hero" aria-labelledby="hero-tagline" id="hero">
+    <section class="section-inner section-hero" aria-labelledby="hero-name" id="hero">
       <div class="hero-media js-hero-media" aria-hidden="true">
         <div class="hero-video js-vimeo-target"
              data-vimeo-id="762064959"
@@ -55,6 +55,10 @@
       </div>
 
       <div class="hero-content">
+        <div class="hero-headline">
+          <h1 id="hero-name" class="hero-headline__name">Sebastian<br>Van Eickelen</h1>
+          <span class="hero-headline__sub" aria-hidden="true">Filmmaker &amp; Photographer · Geneva</span>
+        </div>
         <div class="hero-kicker js-hero-kicker">
           <span class="hero-kicker__index">N° 001</span>
           <span class="hero-kicker__accent-line js-hero-rule" aria-hidden="true"></span>
@@ -241,60 +245,36 @@
         <span class="section-label-index">05</span>
         <span class="section-label-title" id="services-heading">Services</span>
       </div>
-      <div class="services-grid">
-        <article class="service-plate">
-          <svg class="service-plate__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
-            <circle cx="12" cy="12" r="7"/><line x1="12" y1="1" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="1" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="23" y2="12"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
-          </svg>
-          <span class="service-plate__index" aria-hidden="true">01</span>
-          <h3 class="service-plate__title">Creative Direction</h3>
-          <p class="service-plate__desc">Concept to camera — visual strategy and art direction from first frame to final grade.</p>
-          <span class="service-plate__watermark" aria-hidden="true">CD</span>
+      <div class="services-list">
+        <article class="service-row">
+          <span class="service-row__index" aria-hidden="true">01</span>
+          <h3 class="service-row__title">Creative Direction</h3>
+          <p class="service-row__desc">Concept to camera — visual strategy and art direction from first frame to final grade.</p>
         </article>
-        <article class="service-plate">
-          <svg class="service-plate__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
-            <rect x="2" y="5" width="20" height="14" rx="1"/><rect x="5" y="8" width="3" height="3" rx="0.5"/><rect x="16" y="8" width="3" height="3" rx="0.5"/><rect x="5" y="13" width="3" height="3" rx="0.5"/><rect x="16" y="13" width="3" height="3" rx="0.5"/>
-          </svg>
-          <span class="service-plate__index" aria-hidden="true">02</span>
-          <h3 class="service-plate__title">Cinematography</h3>
-          <p class="service-plate__desc">Brand films, documentary portraits, and campaign content. One operator, one vision.</p>
-          <span class="service-plate__watermark" aria-hidden="true">CF</span>
+        <article class="service-row">
+          <span class="service-row__index" aria-hidden="true">02</span>
+          <h3 class="service-row__title">Cinematography</h3>
+          <p class="service-row__desc">Brand films, documentary portraits, and campaign content. One operator, one vision.</p>
         </article>
-        <article class="service-plate">
-          <svg class="service-plate__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
-            <line x1="2" y1="7" x2="22" y2="7"/><rect x="6" y="5" width="5" height="4" rx="0.5" fill="currentColor" opacity="0.5" stroke="none"/><line x1="2" y1="12" x2="22" y2="12"/><rect x="12" y="10" width="5" height="4" rx="0.5" fill="currentColor" opacity="0.5" stroke="none"/><line x1="2" y1="17" x2="22" y2="17"/><rect x="4" y="15" width="5" height="4" rx="0.5" fill="currentColor" opacity="0.5" stroke="none"/>
-          </svg>
-          <span class="service-plate__index" aria-hidden="true">03</span>
-          <h3 class="service-plate__title">Edit & Sound</h3>
-          <p class="service-plate__desc">Narrative edit and sound design — offline to online, structured to the brief.</p>
-          <span class="service-plate__watermark" aria-hidden="true">ES</span>
+        <article class="service-row">
+          <span class="service-row__index" aria-hidden="true">03</span>
+          <h3 class="service-row__title">Edit &amp; Sound</h3>
+          <p class="service-row__desc">Narrative edit and sound design — offline to online, structured to the brief.</p>
         </article>
-        <article class="service-plate">
-          <svg class="service-plate__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
-            <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/>
-          </svg>
-          <span class="service-plate__index" aria-hidden="true">04</span>
-          <h3 class="service-plate__title">Photography</h3>
-          <p class="service-plate__desc">Product and editorial stills — technically precise and atmospherically considered.</p>
-          <span class="service-plate__watermark" aria-hidden="true">PH</span>
+        <article class="service-row">
+          <span class="service-row__index" aria-hidden="true">04</span>
+          <h3 class="service-row__title">Photography</h3>
+          <p class="service-row__desc">Product and editorial stills — technically precise and atmospherically considered.</p>
         </article>
-        <article class="service-plate">
-          <svg class="service-plate__icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <circle cx="3" cy="18" r="2"/><circle cx="7.5" cy="15" r="2"/><circle cx="12" cy="11" r="2"/><circle cx="16.5" cy="8" r="2"/><circle cx="21" cy="6" r="2"/>
-          </svg>
-          <span class="service-plate__index" aria-hidden="true">05</span>
-          <h3 class="service-plate__title">Visual Motion</h3>
-          <p class="service-plate__desc">Typography, transitions, and kinetics that serve the story without distracting from it.</p>
-          <span class="service-plate__watermark" aria-hidden="true">VM</span>
+        <article class="service-row">
+          <span class="service-row__index" aria-hidden="true">05</span>
+          <h3 class="service-row__title">Visual Motion</h3>
+          <p class="service-row__desc">Typography, transitions, and kinetics that serve the story without distracting from it.</p>
         </article>
-        <article class="service-plate">
-          <svg class="service-plate__icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <rect x="4" y="14" width="5" height="8" opacity="0.44"/><rect x="10" y="9" width="5" height="13" opacity="0.62"/><rect x="16" y="4" width="5" height="18" opacity="0.80"/>
-          </svg>
-          <span class="service-plate__index" aria-hidden="true">06</span>
-          <h3 class="service-plate__title">Color & Grade</h3>
-          <p class="service-plate__desc">Tonal range and grade in DaVinci Resolve — consistent across every deliverable format.</p>
-          <span class="service-plate__watermark" aria-hidden="true">CG</span>
+        <article class="service-row">
+          <span class="service-row__index" aria-hidden="true">06</span>
+          <h3 class="service-row__title">Color &amp; Grade</h3>
+          <p class="service-row__desc">Tonal range and grade in DaVinci Resolve — consistent across every deliverable format.</p>
         </article>
       </div>
     </section>
@@ -326,7 +306,10 @@
             <span class="cinematic-card__utility-right">CAMPAIGNS · EDITORIAL · DOCUMENTARY</span>
           </div>
           <div class="cinematic-card__body">
-            <h2 id="cinematic-heading" class="cinematic-card__headline">The look<br>that earns<br>the work.</h2>
+            <div class="cinematic-card__body-left">
+              <h2 id="cinematic-heading" class="cinematic-card__headline">The look<br>that earns<br>the work.</h2>
+              <p class="cinematic-card__statement">Working across campaigns, editorial,<br>and documentary. Based in Geneva.</p>
+            </div>
             <a href="#work" class="cta-ghost-button" aria-label="View the full work archive">VIEW THE ARCHIVE ——— →</a>
           </div>
         </article>

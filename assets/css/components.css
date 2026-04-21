@@ -588,6 +588,14 @@
   z-index: 2;
 }
 
+/* Left body cluster — headline + supporting statement */
+.cinematic-card__body-left {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+  gap: 14px;
+}
+
 /* Display headline */
 .cinematic-card__headline {
   font-family: var(--font-editorial);
@@ -597,8 +605,17 @@
   line-height: 1.0;
   letter-spacing: -0.025em;
   max-width: 440px;
-  align-self: flex-end;
-  margin-bottom: 4px;
+}
+
+/* Supporting statement below headline */
+.cinematic-card__statement {
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-regular);
+  font-size: 13px;
+  color: var(--bone-72);
+  line-height: 1.6;
+  letter-spacing: 0;
+  max-width: 360px;
 }
 
 

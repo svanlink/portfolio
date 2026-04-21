@@ -94,11 +94,18 @@
 }
 
 .hero-veil {
-  background: linear-gradient(
-    to top,
-    rgba(11, 11, 11, 0.72) 0%,
-    transparent 40%
-  );
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(11, 11, 11, 0.65) 0%,
+      rgba(11, 11, 11, 0.20) 35%,
+      transparent 55%
+    ),
+    linear-gradient(
+      to top,
+      rgba(11, 11, 11, 0.72) 0%,
+      transparent 40%
+    );
 }
 
 .cinematic-veil {
@@ -136,13 +143,42 @@
   height: var(--height-hero);
 }
 
-/* Lower-third content cluster */
+/* Full-height content layer — anchors headline top and kicker bottom */
 .hero-content {
   position: absolute;
   left: var(--content-left);
   right: var(--content-left);
+  top: 0;
   bottom: 0;
   z-index: var(--z-content);
+}
+
+/* Display headline — upper compositional zone */
+.hero-headline {
+  position: absolute;
+  top: 160px;
+  left: 0;
+}
+
+.hero-headline__name {
+  display: block;
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-regular);
+  font-size: clamp(72px, 7vw, 120px);
+  color: var(--bone-100);
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+}
+
+.hero-headline__sub {
+  display: block;
+  font-family: var(--font-mono-display);
+  font-weight: var(--weight-regular);
+  font-size: 13px;
+  color: var(--bone-72);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 20px;
 }
 
 /* Kicker cluster — fixed lower-third position, works at any viewport height */
@@ -377,10 +413,10 @@
 .about-bio-primary {
   font-family: var(--font-editorial);
   font-weight: var(--weight-regular);
-  font-size: 18px;
+  font-size: 22px;
   color: var(--ink-88);
-  line-height: 1.68;
-  letter-spacing: -0.005em;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
 }
 
 .about-bio-secondary {
@@ -490,16 +526,52 @@
 }
 
 
-/* Service plate grid — 3 columns × 2 rows, spans full available width */
-.services-grid {
+/* Service list — editorial rows replacing the plate grid in v0.2 */
+.services-list {
   position: absolute;
-  top: 220px;
+  top: 180px;
   left: var(--catalog-left);
   right: var(--content-left);
+}
+
+.service-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 260px);
-  gap: 48px;
+  grid-template-columns: 64px 1fr 320px;
+  align-items: center;
+  padding: 24px 0;
+  border-top: 1px solid var(--ink-10);
+  cursor: default;
+}
+
+.service-row:last-child {
+  border-bottom: 1px solid var(--ink-10);
+}
+
+.service-row__index {
+  font-family: var(--font-mono-display);
+  font-weight: var(--weight-medium);
+  font-size: 11px;
+  color: var(--color-ember);
+  letter-spacing: 0.02em;
+}
+
+.service-row__title {
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-regular);
+  font-size: 44px;
+  color: var(--color-ink);
+  letter-spacing: -0.02em;
+  line-height: 1.0;
+}
+
+.service-row__desc {
+  font-family: var(--font-mono-display);
+  font-weight: var(--weight-regular);
+  font-size: 11px;
+  color: var(--ink-44);
+  letter-spacing: 0.02em;
+  line-height: 1.55;
+  text-align: right;
 }
 
 
@@ -605,12 +677,12 @@
 .contact-left {
   position: absolute;
   left: var(--content-left);
-  width: 508px;
+  width: 576px;
   top: 0;
   bottom: 0;
   display: flex;
   flex-direction: column;
-  padding-top: 80px;
+  padding-top: 120px;
 }
 
 .contact-index {
@@ -645,7 +717,7 @@
   display: block;
   font-family: var(--font-editorial);
   font-weight: var(--weight-regular);
-  font-size: 17px;
+  font-size: 22px;
   color: var(--ink-88);
   margin-top: 64px;
   transition: color var(--duration-fast) var(--ease-expo-out);
@@ -668,8 +740,8 @@
 /* Vertical divider */
 .contact-divider {
   position: absolute;
-  left: 588px;
-  top: 80px;
+  left: 736px;
+  top: 120px;
   width: 1px;
   height: 480px;
   background-color: var(--ink-10);
@@ -678,10 +750,10 @@
 /* Right column */
 .contact-right {
   position: absolute;
-  left: 628px;
+  left: 776px;
   width: 460px;
   top: 0;
-  padding-top: 80px;
+  padding-top: 120px;
 }
 
 .contact-form {
