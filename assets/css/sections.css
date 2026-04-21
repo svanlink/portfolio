@@ -739,3 +739,39 @@
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
+
+
+/* ==========================================================================
+   Asset integration additions — portrait treatment & form states
+   ========================================================================== */
+
+.about-portrait-image {
+  transform: scale(1.02);
+  transform-origin: center top;
+}
+
+.form-field.is-error .form-field__input {
+  border-bottom-color: var(--color-ember);
+}
+
+.form-field.is-error .form-field__label {
+  color: var(--color-ember);
+}
+
+.form-field.has-value .form-field__label,
+.form-field.is-focused .form-field__label {
+  color: var(--color-ember);
+}
+
+.cinematic-video.is-ready .video-fallback {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preview-plate__image {
+  opacity: 0.85;
+}
+
+.service-plate__arrow {
+  will-change: transform, opacity;
+}
