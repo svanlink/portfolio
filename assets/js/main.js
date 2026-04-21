@@ -15,30 +15,44 @@
   // ─── HERO: Entrance animation ────────────────────────────────────────────
 
   function initHeroEntrance() {
-    const kicker = document.querySelector('.js-hero-kicker');
-    const rule = document.querySelector('.js-hero-rule');
+    const headline = document.querySelector('.hero-headline');
+    const kicker   = document.querySelector('.js-hero-kicker');
+    const rule     = document.querySelector('.js-hero-rule');
     if (!kicker) return;
 
-    kicker.style.opacity = '0';
+    if (headline && !prefersReducedMotion) {
+      headline.style.opacity   = '0';
+      headline.style.transform = 'translateY(22px)';
+      headline.style.transition = 'opacity 900ms cubic-bezier(0.16, 1, 0.3, 1), transform 900ms cubic-bezier(0.16, 1, 0.3, 1)';
+    }
+
+    kicker.style.opacity   = '0';
     kicker.style.transform = 'translateY(16px)';
     kicker.style.transition = 'opacity 800ms cubic-bezier(0.16, 1, 0.3, 1), transform 800ms cubic-bezier(0.16, 1, 0.3, 1)';
 
     if (rule) {
-      rule.style.transform = 'scaleX(0)';
+      rule.style.transform      = 'scaleX(0)';
       rule.style.transformOrigin = 'left center';
-      rule.style.transition = 'transform 600ms cubic-bezier(0.16, 1, 0.3, 1)';
+      rule.style.transition     = 'transform 600ms cubic-bezier(0.16, 1, 0.3, 1)';
     }
 
     requestAnimationFrame(() => {
+      if (headline && !prefersReducedMotion) {
+        setTimeout(() => {
+          headline.style.opacity   = '1';
+          headline.style.transform = 'translateY(0)';
+        }, 60);
+      }
+
       setTimeout(() => {
-        kicker.style.opacity = '1';
+        kicker.style.opacity   = '1';
         kicker.style.transform = 'translateY(0)';
-      }, 200);
+      }, 380);
 
       if (rule) {
         setTimeout(() => {
           rule.style.transform = 'scaleX(1)';
-        }, 450);
+        }, 620);
       }
     });
   }
@@ -169,26 +183,36 @@
     });
   }
 
-  // ─── SERVICES: Hover arrow injection ─────────────────────────────────────
+  // ─── NAV: Hide on scroll down, reveal on scroll up ───────────────────────
 
-  function initServicesHover() {
-    document.querySelectorAll('.service-plate').forEach(plate => {
-      const arrow = document.createElement('span');
-      arrow.className = 'service-plate__arrow';
-      arrow.textContent = '→';
-      arrow.setAttribute('aria-hidden', 'true');
-      arrow.style.cssText = 'position:absolute;bottom:28px;right:28px;font-family:var(--font-mono-display);font-size:12px;color:var(--color-ember);opacity:0;transform:translateX(-6px);transition:opacity 300ms cubic-bezier(0.16,1,0.3,1),transform 300ms cubic-bezier(0.16,1,0.3,1);pointer-events:none;';
-      plate.appendChild(arrow);
+  function initNavHide() {
+    const nav = document.querySelector('.site-nav');
+    if (!nav || prefersReducedMotion) return;
 
-      plate.addEventListener('mouseenter', () => {
-        arrow.style.opacity = '1';
-        arrow.style.transform = 'translateX(0)';
-      });
-      plate.addEventListener('mouseleave', () => {
-        arrow.style.opacity = '0';
-        arrow.style.transform = 'translateX(-6px)';
-      });
-    });
+    let lastScrollY = window.scrollY;
+    let ticking     = false;
+
+    function update() {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY <= 80) {
+        nav.classList.remove('is-hidden');
+      } else if (currentScrollY > lastScrollY + 4) {
+        nav.classList.add('is-hidden');
+      } else if (currentScrollY < lastScrollY - 4) {
+        nav.classList.remove('is-hidden');
+      }
+
+      lastScrollY = currentScrollY;
+      ticking     = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
   }
 
   // ─── CINEMATIC: Parallax ─────────────────────────────────────────────────
@@ -329,10 +353,10 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     initHeroEntrance();
+    initNavHide();
     initVimeoBackground('.js-hero-media .js-vimeo-target', '.js-video-fallback');
     initVimeoBackground('.js-cinematic-media .js-vimeo-target', '.js-video-fallback');
     initWorkPreview();
-    initServicesHover();
     initCinematicParallax();
     initContactForm();
     initScrollReveal();

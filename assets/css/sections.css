@@ -163,7 +163,7 @@
 .hero-headline__name {
   display: block;
   font-family: var(--font-editorial);
-  font-weight: var(--weight-regular);
+  font-weight: var(--weight-medium);
   font-size: clamp(72px, 7vw, 120px);
   color: var(--bone-100);
   line-height: 1.0;
@@ -306,7 +306,7 @@
   position: absolute;
   top: 208px;
   left: var(--catalog-left);
-  width: 600px;
+  width: 440px;
 }
 
 .work-preview-column {
@@ -320,49 +320,35 @@
 
 .section-worked-with {
   height: var(--height-worked-with);
-  background-color: var(--color-bone);
+  background-color: #141414;
   position: relative;
-  border-top: 1px solid var(--ink-18);
-  border-bottom: 1px solid var(--ink-8);
 }
 
 .worked-with-inner {
   height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
   padding: 0 var(--content-left);
-}
-
-.worked-with-label {
-  font-family: var(--font-editorial);
-  font-weight: var(--weight-regular);
-  font-size: 22px;
-  color: var(--ink-80);
-  letter-spacing: -0.005em;
-  padding-bottom: 28px;
-  border-bottom: 1px solid var(--ink-10);
-  margin-bottom: 28px;
-  width: 100%;
 }
 
 .worked-with-logos {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 
 .client-logo {
   display: flex;
   align-items: center;
-  height: 20px;
-  opacity: 0.72;
+  height: 18px;
+  opacity: 0.44;
   transition: opacity var(--duration-fast) var(--ease-expo-out);
-  filter: grayscale(100%);
+  filter: grayscale(100%) invert(1);
 }
 
 .client-logo:hover {
-  opacity: 1;
+  opacity: 0.80;
 }
 
 .client-logo img {
@@ -453,12 +439,10 @@
 
 .about-portrait-column {
   position: absolute;
-  right: 0;
-  width: 44vw;
-  max-width: 680px;
-  min-width: 480px;
-  top: 0;
-  bottom: 0;
+  right: var(--content-left);
+  width: 400px;
+  top: 80px;
+  bottom: 80px;
 }
 
 .about-portrait-placeholder {
@@ -526,7 +510,7 @@
 }
 
 
-/* Service list — editorial rows replacing the plate grid in v0.2 */
+/* Service list — editorial rows with accordion expand on hover */
 .services-list {
   position: absolute;
   top: 180px;
@@ -535,16 +519,21 @@
 }
 
 .service-row {
-  display: grid;
-  grid-template-columns: 64px 1fr 320px;
-  align-items: center;
-  padding: 24px 0;
   border-top: 1px solid var(--ink-10);
+  overflow: hidden;
   cursor: default;
 }
 
 .service-row:last-child {
   border-bottom: 1px solid var(--ink-10);
+}
+
+/* Inner grid — always visible */
+.service-row__main {
+  display: grid;
+  grid-template-columns: 64px 1fr 320px;
+  align-items: center;
+  padding: 22px 0;
 }
 
 .service-row__index {
@@ -562,6 +551,11 @@
   color: var(--color-ink);
   letter-spacing: -0.02em;
   line-height: 1.0;
+  transition: color var(--duration-fast) var(--ease-expo-out);
+}
+
+.service-row:hover .service-row__title {
+  color: var(--color-ember);
 }
 
 .service-row__desc {
@@ -572,6 +566,37 @@
   letter-spacing: 0.02em;
   line-height: 1.55;
   text-align: right;
+}
+
+/* Accordion detail — CSS grid-template-rows reveal */
+.service-row__detail {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 380ms cubic-bezier(0.16, 1, 0.3, 1);
+  padding-left: 64px;
+}
+
+.service-row:hover .service-row__detail {
+  grid-template-rows: 1fr;
+}
+
+.service-row__detail-inner {
+  overflow: hidden;
+  padding-bottom: 0;
+  transition: padding-bottom 380ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.service-row:hover .service-row__detail-inner {
+  padding-bottom: 26px;
+}
+
+.service-row__extended {
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-regular);
+  font-size: 14px;
+  color: var(--ink-56);
+  line-height: 1.65;
+  max-width: 600px;
 }
 
 
@@ -664,6 +689,36 @@
   position: relative;
 }
 
+/* Atmospheric map layer — behind all contact content */
+.contact-map-wrap {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 700px;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.contact-map-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+}
+
+.contact-map-frame {
+  width: 150%;
+  height: 150%;
+  margin-left: -25%;
+  margin-top: -15%;
+  border: none;
+  filter: grayscale(100%) contrast(0.48) brightness(0.26);
+  pointer-events: none;
+  display: block;
+}
+
 .contact-layout {
   position: absolute;
   top: 0;
@@ -671,6 +726,7 @@
   right: 0;
   bottom: 0;
   display: flex;
+  z-index: 1;
 }
 
 /* Left column */
@@ -747,13 +803,21 @@
   background-color: var(--ink-10);
 }
 
-/* Right column */
+/* Right column — sits above map layer with left-edge fade */
 .contact-right {
   position: absolute;
   left: 776px;
   width: 460px;
   top: 0;
   padding-top: 120px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(250, 250, 249, 0.94) 22%,
+    rgba(250, 250, 249, 0.98) 100%
+  );
+  z-index: 2;
+  padding-right: 40px;
 }
 
 .contact-form {

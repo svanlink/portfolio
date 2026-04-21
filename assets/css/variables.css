@@ -92,8 +92,8 @@
   /* ─── SECTION HEIGHTS — full-screen scene structure ──────────────────── */
   --height-hero:          100vh;
   --height-selected-work: 100vh;
-  --height-worked-with:   280px;                  /* combined with about = 100vh */
-  --height-about:         calc(100vh - 280px);    /* together = one full scene   */
+  --height-worked-with:   200px;                  /* credibility strip below about */
+  --height-about:         100vh;                  /* full editorial scene         */
   --height-services:      100vh;
   --height-cinematic:     100vh;
   --height-contact:       100vh;

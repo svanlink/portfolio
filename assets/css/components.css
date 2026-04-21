@@ -16,12 +16,16 @@
   background: rgba(11, 11, 11, 0.62);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--bone-28);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--catalog-left);
   z-index: var(--z-nav);
+  transition: transform var(--duration-slow) var(--ease-expo-out);
+}
+
+.site-nav.is-hidden {
+  transform: translateY(-100%);
 }
 
 /* Top edge highlight */
@@ -184,12 +188,12 @@
 /* ─── WORK LIST ───────────────────────────────────────────────────────────── */
 
 .work-list {
-  width: 600px;
+  width: 440px;
 }
 
 .work-item {
   display: grid;
-  grid-template-columns: 56px 244px 1fr auto;
+  grid-template-columns: 40px 180px 1fr auto;
   align-items: center;
   height: 76px;
   padding: 0 8px 0 0;
@@ -256,8 +260,8 @@
 
 .preview-plate {
   position: relative;
-  width: 680px;
-  height: 456px;
+  width: 780px;
+  height: 520px;
   background-color: rgba(11, 11, 11, 0.90);
   border-radius: var(--radius-plate);
   overflow: hidden;
