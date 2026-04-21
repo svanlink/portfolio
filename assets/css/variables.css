@@ -61,9 +61,9 @@
   --ember-55:  rgba(215, 90, 47, 0.55);
 
   /* ─── TYPOGRAPHY ──────────────────────────────────────────────────────── */
-  --font-editorial:    'Archivo', sans-serif;
-  --font-mono:         'DM Mono', monospace;
-  --font-mono-display: 'JetBrains Mono', monospace;
+  --font-editorial:    'HelveticaNow', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono:         'DINPro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono-display: 'DINPro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   --weight-regular: 400;
   --weight-medium:  500;

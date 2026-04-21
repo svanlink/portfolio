@@ -24,10 +24,20 @@
 
 /* ─── MEDIA LAYER (hero + cinematic shared pattern) ──────────────────────── */
 
-.hero-media,
-.cinematic-media {
+.hero-media {
   position: absolute;
   inset: 0;
+  z-index: var(--z-media);
+}
+
+/* Cinematic media extends 80px beyond the plate in both directions so the
+   parallax translateY() has room to move without revealing gaps at the edges */
+.cinematic-media {
+  position: absolute;
+  top: -80px;
+  bottom: -80px;
+  left: 0;
+  right: 0;
   z-index: var(--z-media);
 }
 
