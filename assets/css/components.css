@@ -89,10 +89,17 @@
   position: relative;
 }
 
-.nav-arrow {
+.nav-arrow,
+.arrow {
   font-family: var(--font-mono-display);
+  font-weight: var(--weight-regular);
   color: var(--color-ember);
   font-style: normal;
+  letter-spacing: 0;
+}
+
+.nav-arrow {
+  font-size: 11px;
 }
 
 .nav-link:hover {
@@ -201,10 +208,11 @@
 }
 
 .work-item__index {
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-mono-display);
+  font-weight: var(--weight-medium);
+  font-size: 10px;
   color: var(--ink-50);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   padding-left: 0;
 }
 
@@ -214,28 +222,31 @@
 
 .work-item__title {
   font-family: var(--font-editorial);
-  font-weight: var(--weight-regular);
-  font-size: 14px;
+  font-weight: var(--weight-medium);
+  font-size: 18px;
   color: var(--ink-80);
+  letter-spacing: -0.005em;
 }
 
 .work-item.is-active .work-item__title {
-  font-weight: var(--weight-medium);
+  font-weight: var(--weight-bold);
   color: var(--color-ink);
 }
 
 .work-item__client {
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-regular);
+  font-size: 11px;
   color: var(--ink-44);
-  letter-spacing: 0.03em;
+  letter-spacing: 0;
 }
 
 .work-item__category {
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-mono-display);
+  font-weight: var(--weight-regular);
+  font-size: 10px;
   color: var(--ink-40);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   text-align: right;
   text-transform: uppercase;
 }
@@ -280,10 +291,11 @@
   position: absolute;
   top: 16px;
   right: 16px;
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-mono-display);
+  font-weight: var(--weight-medium);
+  font-size: 11px;
   color: var(--color-ember);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   z-index: 3;
 }
 
@@ -309,10 +321,11 @@
 }
 
 .preview-plate__caption-index {
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-mono-display);
+  font-weight: var(--weight-medium);
+  font-size: 11px;
   color: var(--color-ember);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
 
 .preview-plate__caption-hairline {
@@ -322,17 +335,19 @@
 }
 
 .preview-plate__caption-title {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--bone-72);
-  letter-spacing: 0.03em;
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-bold);
+  font-size: 13px;
+  color: var(--bone-90);
+  letter-spacing: -0.005em;
 }
 
 .preview-plate__caption-meta {
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-mono-display);
+  font-weight: var(--weight-regular);
+  font-size: 10px;
   color: var(--bone-42);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -412,7 +427,7 @@
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--ember-72);
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
   transition: color var(--duration-fast) var(--ease-expo-out);
 }
 
@@ -437,10 +452,12 @@
   top: 108px;
   left: 28px;
   width: 375px;
-  font-family: var(--font-mono);
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-regular);
   font-size: 11px;
   color: var(--ink-56);
   line-height: 1.5;
+  letter-spacing: 0;
 }
 
 /* Ghost watermark */
@@ -518,6 +535,7 @@
 .cinematic-card__utility-label {
   font-family: var(--font-mono);
   font-size: 10px;
+  line-height: 20px;
   color: var(--ember-80);
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -526,6 +544,7 @@
 .cinematic-card__utility-right {
   font-family: var(--font-mono);
   font-size: 10px;
+  line-height: 20px;
   color: var(--bone-50);
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -586,7 +605,9 @@
   border-bottom: 1px solid var(--ink-14);
   padding: 0 0 12px 0;
   font-family: var(--font-editorial);
-  font-size: 15px;
+  font-weight: var(--weight-regular);
+  font-size: 13px;
+  letter-spacing: 0;
   color: var(--color-ink);
   transition: border-color var(--duration-fast) var(--ease-expo-out);
 }

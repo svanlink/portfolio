@@ -81,17 +81,19 @@
 .section-label-index,
 .work-section-index {
   font-family: var(--font-mono-display);
-  font-size: 9px;
+  font-weight: var(--weight-medium);
+  font-size: 10px;
   color: var(--ember-72);
   letter-spacing: 0.04em;
 }
 
 .section-label-title,
 .work-section-title {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--ink-40);
-  letter-spacing: 0.04em;
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-bold);
+  font-size: 12px;
+  color: var(--ink-100);
+  letter-spacing: 0.10em;
   text-transform: uppercase;
 }
 
