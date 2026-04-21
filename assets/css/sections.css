@@ -784,9 +784,18 @@
   color: var(--color-ember);
 }
 
-/* Cinematic full-bleed: break out of 1440px site-wrapper */
+/* Hero + cinematic full-bleed: break out of 1440px site-wrapper */
+.section-hero,
 .section-cinematic {
   overflow: visible;
+  width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Hero-media clips the oversized video iframe so it doesn't bleed out */
+.hero-media {
+  overflow: hidden;
 }
 
 .cinematic-still-plate {
