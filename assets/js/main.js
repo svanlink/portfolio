@@ -121,7 +121,7 @@
   // ─── SELECTED WORK: Preview transitions ──────────────────────────────────
 
   function initWorkPreview() {
-    const list = document.querySelector('.js-work-list');
+    const list  = document.querySelector('.js-work-list');
     const plate = document.querySelector('.js-preview-plate');
     if (!list || !plate) return;
 
@@ -133,8 +133,20 @@
     const captionTitle = plate.querySelector('.js-preview-caption-title');
     const captionMeta  = plate.querySelector('.js-preview-caption-meta');
 
+    // Focus overlay (cinematic screening mode)
+    const overlay    = document.querySelector('.js-work-focus');
+    const focusClose = document.querySelector('.js-work-focus-close');
+    const focusFrame = document.querySelector('.js-work-focus-frame');
+    const focusIndex = document.querySelector('.js-focus-index');
+    const focusTitle = document.querySelector('.js-focus-title');
+    const focusMeta  = document.querySelector('.js-focus-meta');
+
     const items = list.querySelectorAll('.work-item');
     let isTransitioning = false;
+    let focusOpen       = false;
+    let autoStarted     = false;
+
+    // ── INLINE PREVIEW ────────────────────────────────────────────────────
 
     function activateItem(item) {
       if (isTransitioning) return;
@@ -155,19 +167,17 @@
 
       isTransitioning = true;
 
-      // Fade out current view
       if (image)     { image.style.transition = 'opacity 150ms ease'; image.style.opacity = '0'; }
       if (videoWrap) videoWrap.classList.remove('is-visible');
 
       setTimeout(() => {
-        // Update caption
-        if (badge)        badge.textContent        = newIndex;
-        if (captionIndex) captionIndex.textContent  = newIndex;
-        if (captionTitle) captionTitle.textContent  = newTitle;
-        if (captionMeta)  captionMeta.textContent   = newMeta;
+        if (badge)        badge.textContent       = newIndex;
+        if (captionIndex) captionIndex.textContent = newIndex;
+        if (captionTitle) captionTitle.textContent = newTitle;
+        if (captionMeta)  captionMeta.textContent  = newMeta;
 
         if (newVimeoId && videoFrame && videoWrap) {
-          // Show thumbnail while video loads — prevents black flash during transition
+          // Thumbnail shows while video loads — no black flash
           fetchVimeoThumb(newVimeoId).then(function (thumbUrl) {
             if (thumbUrl && image) {
               image.src = thumbUrl;
@@ -176,14 +186,13 @@
               image.style.opacity = '0.85';
             }
           });
-          // Load video — fades in over the thumbnail via .is-visible opacity transition
+          // Video fades in on top of thumbnail via .is-visible opacity transition
           videoFrame.src = `https://player.vimeo.com/video/${newVimeoId}?autoplay=1&loop=1&muted=1&background=1&autopause=0&dnt=1`;
           requestAnimationFrame(() => {
             videoWrap.classList.add('is-visible');
             isTransitioning = false;
           });
         } else if (newSrc && image) {
-          // Fallback: static image
           if (videoFrame) videoFrame.src = '';
           image.src = newSrc;
           image.alt = newTitle ? newTitle + ' preview' : 'Work preview';
@@ -198,19 +207,84 @@
       }, 150);
     }
 
+    // ── FOCUS OVERLAY: open / close ────────────────────────────────────────
+
+    function openFocus(item) {
+      if (!overlay || !focusFrame) return;
+      const vimeoId = item.dataset.vimeoId;
+      const index   = item.dataset.previewIndex;
+      const title   = item.dataset.previewTitle;
+      const meta    = item.dataset.previewMeta;
+
+      if (focusIndex) focusIndex.textContent = index || '';
+      if (focusTitle) focusTitle.textContent = title || '';
+      if (focusMeta)  focusMeta.textContent  = meta  || '';
+
+      if (vimeoId) {
+        // Full player with sound in focus mode
+        focusFrame.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&muted=0&background=0&autopause=0&dnt=1`;
+      }
+
+      overlay.setAttribute('aria-hidden', 'false');
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      focusOpen = true;
+    }
+
+    function closeFocus() {
+      if (!overlay || !focusFrame) return;
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      focusOpen = false;
+      setTimeout(function () { if (!focusOpen) focusFrame.src = ''; }, 440);
+    }
+
+    // ── EVENT LISTENERS ───────────────────────────────────────────────────
+
     items.forEach(item => {
       item.addEventListener('mouseenter', () => activateItem(item));
       item.addEventListener('focus',      () => activateItem(item));
+      item.addEventListener('click',      () => openFocus(item));
       item.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          activateItem(item);
-        }
+        if (e.key === 'Enter') { e.preventDefault(); activateItem(item); openFocus(item); }
+        if (e.key === ' ')     { e.preventDefault(); activateItem(item); }
       });
     });
 
-    // On page load: fetch thumbnail for the initial active item so the plate
-    // is never a dead black rectangle on first visit.
+    if (focusClose) {
+      focusClose.addEventListener('click', closeFocus);
+    }
+
+    if (overlay) {
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) closeFocus(); });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && focusOpen) closeFocus();
+    });
+
+    // ── AUTO-START: video plays when section scrolls into view ─────────────
+
+    const workSection = list.closest('section');
+    if (workSection && videoFrame && videoWrap && !prefersReducedMotion) {
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !autoStarted) {
+            const active = list.querySelector('.work-item.is-active');
+            if (active && active.dataset.vimeoId) {
+              videoFrame.src = `https://player.vimeo.com/video/${active.dataset.vimeoId}?autoplay=1&loop=1&muted=1&background=1&autopause=0&dnt=1`;
+              requestAnimationFrame(() => { videoWrap.classList.add('is-visible'); });
+              autoStarted = true;
+            }
+          }
+        });
+      }, { threshold: 0.3 });
+      sectionObserver.observe(workSection);
+    }
+
+    // ── INITIAL THUMBNAIL: plate is alive from first paint ─────────────────
+
     var initialItem = list.querySelector('.work-item.is-active');
     if (initialItem && image) {
       var initVimeoId = initialItem.dataset.vimeoId;

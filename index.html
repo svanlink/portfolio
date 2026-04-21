@@ -423,6 +423,28 @@
   </main>
 </div>
 
+<!-- WORK FOCUS OVERLAY — cinematic screening mode on project click -->
+<div class="work-focus-overlay js-work-focus" aria-hidden="true" role="dialog" aria-label="Work preview">
+  <button class="work-focus-close js-work-focus-close" aria-label="Close preview">
+    <span class="work-focus-close__line" aria-hidden="true"></span>
+    <span class="work-focus-close__line" aria-hidden="true"></span>
+  </button>
+  <div class="work-focus-media">
+    <iframe class="work-focus-frame js-work-focus-frame"
+            src=""
+            frameborder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            title="Selected work preview"
+            allowfullscreen></iframe>
+    <div class="work-focus-caption">
+      <span class="work-focus-index js-focus-index"></span>
+      <span class="work-focus-hairline" aria-hidden="true"></span>
+      <span class="work-focus-title js-focus-title"></span>
+      <span class="work-focus-meta js-focus-meta"></span>
+    </div>
+  </div>
+</div>
+
 <script src="assets/js/main.js" defer></script>
 </body>
 </html>

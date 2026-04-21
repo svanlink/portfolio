@@ -311,10 +311,10 @@
 
 .work-preview-column {
   position: absolute;
-  top: 155px;
+  top: 200px;
   left: 492px;
   right: 40px;
-  bottom: 56px;
+  bottom: calc(100vh - 800px);
 }
 
 /* Preview plate fills the column — height adapts to viewport */
