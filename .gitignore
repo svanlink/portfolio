@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Licensed fonts — do not commit to public repo
+assets/fonts/
+
+# Editor
+.vscode/
+.idea/
+
+# Node (if added later)
+node_modules/

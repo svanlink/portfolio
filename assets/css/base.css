@@ -1,0 +1,60 @@
+/* ==========================================================================
+   base.css — Global document styles, typography utilities
+   ========================================================================== */
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-bone);
+}
+
+body {
+  background-color: var(--color-bone);
+  color: var(--color-ink);
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-regular);
+  font-size: 16px;
+  line-height: 1.5;
+  min-width: var(--site-width);
+  overflow-x: hidden;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--color-ember);
+  color: var(--color-bone);
+}
+
+/* Focus-visible ring — ember-colored, keyboard only */
+:focus-visible {
+  outline: 2px solid var(--color-ember);
+  outline-offset: 3px;
+}
+
+/* ─── TYPOGRAPHY UTILITIES ────────────────────────────────────────────────── */
+
+/* Monospace label style */
+.u-mono {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-regular);
+}
+
+/* All-caps tracking utility */
+.u-caps {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ─── SMOOTH REVEAL STATE ─────────────────────────────────────────────────── */
+
+/* Placeholder for JS-driven reveal animations */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity var(--duration-slow) var(--ease-expo-out),
+              transform var(--duration-slow) var(--ease-expo-out);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}

@@ -1,0 +1,106 @@
+# Sebastian Van Eickelen — Portfolio
+
+Static HTML + CSS desktop homepage. No build system. Open `index.html` in a browser or serve with any static host.
+
+## Structure
+
+```
+portfolio/
+├── index.html
+├── assets/
+│   ├── css/
+│   │   ├── reset.css        — CSS reset
+│   │   ├── variables.css    — All design tokens (colors, spacing, z-index, easing)
+│   │   ├── base.css         — Global document styles, typography utilities
+│   │   ├── layout.css       — Site wrapper, catalog tab, section rules
+│   │   ├── components.css   — Nav, buttons, cards, form fields, work list, preview plate
+│   │   └── sections.css     — Section-specific layout and visual styles
+│   ├── js/
+│   │   └── main.js          — Stub file with commented implementation hooks
+│   ├── img/                 — Place image assets here
+│   ├── icons/               — Place client logo SVGs here
+│   └── media/               — Place video poster frames here
+```
+
+## Placeholder Replacements
+
+### Images (`assets/img/`)
+
+| Filename | Usage |
+|---|---|
+| `hero-poster.jpg` | Hero section video fallback (full-bleed, dark, cinematic) |
+| `cinematic-poster.jpg` | Cinematic section video fallback (full-bleed, dark) |
+| `work-preview.jpg` | Selected work preview — Watches & Wonders |
+| `work-dolomite.jpg` | Selected work preview — The Dolomite Sessions |
+| `work-decathlon.jpg` | Selected work preview — Decathlon Switzerland |
+| `work-still-frame.jpg` | Selected work preview — Still Frame Series |
+| `work-mountain.jpg` | Selected work preview — Mountain Architecture |
+| `work-geneva-light.jpg` | Selected work preview — Geneva Light Study |
+| `portrait.jpg` | About section — portrait |
+
+Recommended dimensions: hero/cinematic posters at 1440×900px or larger. Work previews at 680×456px or 2× for retina.
+
+### Client Logos (`assets/icons/`)
+
+| Filename | Client |
+|---|---|
+| `richemont.svg` | Richemont |
+| `decathlon.svg` | Decathlon |
+| `mammut.svg` | Mammut |
+| `cartier.svg` | Cartier |
+| `epfl.svg` | EPFL |
+| `swisstours.svg` | SWISStours |
+
+All logos should be single-color (ideally black or neutral). CSS applies `filter: grayscale(100%)` and `opacity: 0.72`. SVGs should have `viewBox` set and no hardcoded fill colors (use `currentColor` or inherit).
+
+### Vimeo Video IDs
+
+In `index.html`, find the two `data-vimeo-id="PLACEHOLDER"` attributes:
+
+1. Hero section: `.js-hero-media .js-vimeo-target` — replace `PLACEHOLDER` with your Vimeo reel ID
+2. Cinematic section: `.js-cinematic-media .js-vimeo-target` — replace `PLACEHOLDER` with your Vimeo ID
+
+### Contact Email
+
+Update `href="mailto:contact@vaneickelen.com"` and the visible email address in the contact section.
+
+## JavaScript Wiring
+
+`assets/js/main.js` contains fully documented stubs for:
+
+- Vimeo background video (hero + cinematic)
+- Selected work preview plate transitions on hover
+- Hero entrance animation
+- Services hover behavior
+- Cinematic parallax on scroll
+- Contact form focus states and validation
+- IntersectionObserver scroll reveals
+
+Each section is clearly commented with an implementation plan. Uncomment and fill in as needed.
+
+Dependencies required when implementing video:
+```html
+<script src="https://player.vimeo.com/api/player.js"></script>
+```
+
+## Deployment
+
+GitHub Pages ready. All paths are relative. No server dependencies.
+
+To serve locally:
+```bash
+# Python
+python3 -m http.server 8080
+
+# Node
+npx serve .
+```
+
+## Design Tokens
+
+All tokens are in `assets/css/variables.css`. Key values:
+
+- `--color-ink: #0B0B0B` — near-black
+- `--color-bone: #F6F2EE` — warm off-white
+- `--color-ember: #D75A2F` — orange-red accent
+- Site canvas: 1440px minimum width (desktop-first, no responsive breakpoints yet)

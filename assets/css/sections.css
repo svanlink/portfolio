@@ -1,0 +1,714 @@
+/* ==========================================================================
+   sections.css — Section-specific layout and visual styles
+   Each section block lives here: hero, work, worked-with, about,
+   services, cinematic, contact
+   ========================================================================== */
+
+
+/* ─── SHARED: DARK MEDIA SECTIONS ────────────────────────────────────────── */
+
+.section-hero,
+.section-cinematic {
+  background-color: var(--color-ink);
+  color: var(--color-bone);
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* ─── MEDIA LAYER (hero + cinematic shared pattern) ──────────────────────── */
+
+.hero-media,
+.cinematic-media {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-media);
+}
+
+.hero-video,
+.cinematic-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.hero-video iframe,
+.cinematic-video iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 177.78vh;   /* 16:9 aspect, covers height */
+  min-width: 100%;
+  height: 100%;
+  min-height: 56.25vw;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.video-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Gradient veil — bottom-to-top fade */
+.hero-veil,
+.cinematic-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--z-veil);
+}
+
+.hero-veil {
+  background: linear-gradient(
+    to top,
+    rgba(11, 11, 11, 0.72) 0%,
+    transparent 40%
+  );
+}
+
+.cinematic-veil {
+  background:
+    linear-gradient(
+      to top,
+      rgba(11, 11, 11, 0.85) 0%,
+      rgba(11, 11, 11, 0.40) 40%,
+      rgba(11, 11, 11, 0.20) 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 20%,
+      rgba(11, 11, 11, 0.96) 100%
+    );
+}
+
+/* CSS grain texture pseudo-element */
+.hero-grain,
+.cinematic-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--z-grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.055'/%3E%3C/svg%3E");
+  opacity: 0.032;
+  /* Bone-tinted: mix-blend-mode screen softens the grain */
+  mix-blend-mode: screen;
+}
+
+
+/* ─── SECTION 1: HERO ─────────────────────────────────────────────────────── */
+
+.section-hero {
+  height: var(--height-hero);
+}
+
+/* Lower-third content cluster */
+.hero-content {
+  position: absolute;
+  left: var(--content-left);
+  right: var(--content-left);
+  bottom: 0;
+  z-index: var(--z-content);
+}
+
+/* Kicker cluster — label group at ~79% from top */
+.hero-kicker {
+  position: absolute;
+  bottom: calc(var(--height-hero) - 716px);  /* = 900 - 716 = 184px from bottom */
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero-kicker__index {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ember-80);
+  letter-spacing: 0.04em;
+}
+
+.hero-kicker__accent-line {
+  display: block;
+  width: 96px;
+  height: 1px;
+  background-color: var(--ember-60);
+}
+
+.hero-kicker__tagline {
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-regular);
+  font-size: 16px;
+  color: var(--bone-90);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Thin horizontal rule below kicker */
+.hero-thin-rule {
+  position: absolute;
+  bottom: calc(var(--height-hero) - 742px);  /* 158px from bottom */
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--bone-18);
+}
+
+/* Footer metadata strip */
+.hero-footer-strip {
+  position: absolute;
+  bottom: 52px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-footer-strip__reel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--bone-42);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.hero-footer-strip__scroll {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--bone-72);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-expo-out);
+}
+
+.hero-footer-strip__scroll:hover {
+  color: var(--bone-100);
+}
+
+.hero-footer-strip__scroll .arrow {
+  color: var(--color-ember);
+}
+
+
+/* ─── SECTION 2: SELECTED WORK ────────────────────────────────────────────── */
+
+.section-work {
+  height: var(--height-selected-work);
+  background-color: var(--color-bone);
+  position: relative;
+}
+
+.work-section-header {
+  position: absolute;
+  top: var(--space-9);
+  right: var(--content-left);
+  z-index: var(--z-content);
+}
+
+.work-archive-link {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-50);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  transition: color var(--duration-fast) var(--ease-expo-out);
+}
+
+.work-archive-link:hover {
+  color: var(--color-ink);
+}
+
+/* Two-column layout container */
+.work-columns {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  padding-left: var(--catalog-left);
+  gap: 0;
+}
+
+.work-list-column {
+  flex-shrink: 0;
+  width: 480px;
+  padding-top: 96px;
+}
+
+.work-preview-column {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: var(--content-left);
+}
+
+
+/* ─── SECTION 3: WORKED WITH ──────────────────────────────────────────────── */
+
+.section-worked-with {
+  height: var(--height-worked-with);
+  background-color: var(--color-bone);
+  position: relative;
+  border-top: 1px solid var(--ink-18);
+  border-bottom: 1px solid var(--ink-8);
+}
+
+.worked-with-inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--content-left);
+  gap: 40px;
+}
+
+.worked-with-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-48);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.worked-with-logos {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.client-logo {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  opacity: 0.72;
+  transition: opacity var(--duration-fast) var(--ease-expo-out);
+  filter: grayscale(100%);
+}
+
+.client-logo:hover {
+  opacity: 1;
+}
+
+.client-logo img {
+  height: 20px;
+  width: auto;
+  display: block;
+}
+
+/* Text fallback when SVG is absent */
+.client-logo__fallback {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-72);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+
+/* ─── SECTION 4: ABOUT ────────────────────────────────────────────────────── */
+
+.section-about {
+  height: var(--height-about);
+  background-color: var(--color-bone);
+  position: relative;
+}
+
+.about-columns {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+}
+
+.about-text-column {
+  position: absolute;
+  left: 320px;
+  width: 540px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.about-text-column p + p {
+  margin-top: 20px;
+}
+
+.about-bio-primary {
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-regular);
+  font-size: 15px;
+  color: var(--ink-88);
+  line-height: 1.55;
+}
+
+.about-bio-secondary {
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-regular);
+  font-size: 13px;
+  color: var(--ink-56);
+  line-height: 1.55;
+  margin-top: 20px;
+}
+
+.about-profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 28px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-70);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color var(--duration-fast) var(--ease-expo-out);
+}
+
+.about-profile-link .arrow {
+  color: var(--color-ember);
+}
+
+.about-profile-link:hover {
+  color: var(--color-ink);
+}
+
+.about-portrait-column {
+  position: absolute;
+  left: 900px;
+  width: 400px;
+  height: 340px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.about-portrait-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(11, 11, 11, 0.88);
+  border-radius: var(--radius-card);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Radial vignette on portrait */
+.about-portrait-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 35%,
+    rgba(11, 11, 11, 0.5) 100%
+  );
+  z-index: 2;
+}
+
+/* Crop marks on portrait — bone at 28% */
+.about-portrait-placeholder::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  /* Pseudo can only provide one set; additional crop marks via SVG or JS */
+}
+
+.about-portrait-label {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--bone-28);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  z-index: 4;
+}
+
+.about-portrait-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+
+/* ─── SECTION 5: SERVICES ─────────────────────────────────────────────────── */
+
+.section-services {
+  height: var(--height-services);
+  background-color: var(--color-bone);
+  position: relative;
+  padding-top: var(--space-9);
+}
+
+.services-header {
+  position: absolute;
+  top: var(--space-9);
+  right: var(--content-left);
+}
+
+.services-disciplines-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ember-80);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Partial width rule under header */
+.services-section-rule {
+  position: absolute;
+  top: calc(var(--space-9) + 28px);
+  left: 320px;
+  width: 400px;
+  height: 1px;
+  background-color: var(--ink-14);
+}
+
+/* Service plate grid — 3 columns × 2 rows */
+.services-grid {
+  position: absolute;
+  top: 156px;
+  left: var(--catalog-left);
+  display: grid;
+  grid-template-columns: repeat(3, 432px);
+  grid-template-rows: repeat(2, 200px);
+  gap: 32px;
+}
+
+
+/* ─── SECTION 6: CINEMATIC ────────────────────────────────────────────────── */
+
+.section-cinematic {
+  height: var(--height-cinematic);
+  position: relative;
+}
+
+.cinematic-section-index {
+  position: absolute;
+  top: var(--space-9);
+  right: var(--content-left);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ember-80);
+  letter-spacing: 0.04em;
+  z-index: var(--z-content);
+}
+
+/* Caption bar — bottom of cinematic section */
+.cinematic-caption-bar {
+  position: absolute;
+  bottom: 40px;
+  left: var(--content-left);
+  right: var(--content-left);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: var(--z-content);
+}
+
+.cinematic-caption-bar__left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cinematic-caption-bar__index {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--color-ember);
+  letter-spacing: 0.04em;
+}
+
+.cinematic-caption-bar__hairline {
+  width: 1px;
+  height: 12px;
+  background-color: var(--bone-28);
+}
+
+.cinematic-caption-bar__still {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--bone-42);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.cinematic-caption-bar__right {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--bone-32);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+
+/* ─── SECTION 7: CONTACT ──────────────────────────────────────────────────── */
+
+.section-contact {
+  height: var(--height-contact);
+  background-color: var(--color-bone);
+  position: relative;
+}
+
+.contact-layout {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+}
+
+/* Left column */
+.contact-left {
+  position: absolute;
+  left: var(--content-left);
+  width: 508px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+}
+
+.contact-index {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-36);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.contact-heading {
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-medium);
+  font-size: 40px;
+  color: var(--ink-90);
+  line-height: 1.1;
+  margin-top: 16px;
+}
+
+.contact-statement {
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-regular);
+  font-size: 14px;
+  color: var(--ink-62);
+  line-height: 1.55;
+  margin-top: 68px;
+  white-space: pre-line;
+}
+
+.contact-email {
+  display: block;
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-regular);
+  font-size: 26px;
+  color: var(--ink-88);
+  margin-top: 28px;
+  transition: color var(--duration-fast) var(--ease-expo-out);
+}
+
+.contact-email:hover {
+  color: var(--color-ember);
+}
+
+.contact-address {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-32);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-top: 18px;
+  font-style: normal;
+}
+
+/* Vertical divider */
+.contact-divider {
+  position: absolute;
+  left: 608px;
+  top: 60px;
+  width: 1px;
+  height: 300px;
+  background-color: var(--ink-10);
+}
+
+/* Right column */
+.contact-right {
+  position: absolute;
+  left: 648px;
+  width: 460px;
+  top: 0;
+  padding-top: 76px;
+}
+
+.contact-form {
+  width: 100%;
+}
+
+.contact-submit-wrap {
+  margin-top: 8px;
+}
+
+
+/* ─── FOOTER ──────────────────────────────────────────────────────────────── */
+
+.site-footer {
+  background-color: var(--color-bone);
+  border-top: 1px solid var(--ink-14);
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--content-left);
+}
+
+.footer-copyright {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--ink-36);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.footer-social {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-social__link {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--ink-44);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color var(--duration-fast) var(--ease-expo-out);
+}
+
+.footer-social__link:hover {
+  color: var(--color-ink);
+}
+
+.footer-disciplines {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--ink-36);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}

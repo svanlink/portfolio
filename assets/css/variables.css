@@ -1,0 +1,117 @@
+/* ==========================================================================
+   variables.css — Design token definitions
+   All CSS custom properties. Single source of truth.
+   ========================================================================== */
+
+:root {
+
+  /* ─── PALETTE ─────────────────────────────────────────────────────────── */
+  --color-ink:   #0B0B0B;
+  --color-bone:  #F6F2EE;
+  --color-ember: #D75A2F;
+
+  /* ─── INK AT OPACITY ──────────────────────────────────────────────────── */
+  --ink-100: rgba(11, 11, 11, 1);
+  --ink-90:  rgba(11, 11, 11, 0.90);
+  --ink-88:  rgba(11, 11, 11, 0.88);
+  --ink-80:  rgba(11, 11, 11, 0.80);
+  --ink-72:  rgba(11, 11, 11, 0.72);
+  --ink-70:  rgba(11, 11, 11, 0.70);
+  --ink-62:  rgba(11, 11, 11, 0.62);
+  --ink-56:  rgba(11, 11, 11, 0.56);
+  --ink-50:  rgba(11, 11, 11, 0.50);
+  --ink-48:  rgba(11, 11, 11, 0.48);
+  --ink-44:  rgba(11, 11, 11, 0.44);
+  --ink-40:  rgba(11, 11, 11, 0.40);
+  --ink-36:  rgba(11, 11, 11, 0.36);
+  --ink-34:  rgba(11, 11, 11, 0.34);
+  --ink-32:  rgba(11, 11, 11, 0.32);
+  --ink-28:  rgba(11, 11, 11, 0.28);
+  --ink-26:  rgba(11, 11, 11, 0.26);
+  --ink-24:  rgba(11, 11, 11, 0.24);
+  --ink-18:  rgba(11, 11, 11, 0.18);
+  --ink-16:  rgba(11, 11, 11, 0.16);
+  --ink-14:  rgba(11, 11, 11, 0.14);
+  --ink-10:  rgba(11, 11, 11, 0.10);
+  --ink-8:   rgba(11, 11, 11, 0.08);
+  --ink-7:   rgba(11, 11, 11, 0.07);
+  --ink-3:   rgba(11, 11, 11, 0.03);
+
+  /* ─── BONE AT OPACITY ─────────────────────────────────────────────────── */
+  --bone-100: rgba(246, 242, 238, 1);
+  --bone-90:  rgba(246, 242, 238, 0.90);
+  --bone-72:  rgba(246, 242, 238, 0.72);
+  --bone-50:  rgba(246, 242, 238, 0.50);
+  --bone-44:  rgba(246, 242, 238, 0.44);
+  --bone-42:  rgba(246, 242, 238, 0.42);
+  --bone-32:  rgba(246, 242, 238, 0.32);
+  --bone-28:  rgba(246, 242, 238, 0.28);
+  --bone-20:  rgba(246, 242, 238, 0.20);
+  --bone-18:  rgba(246, 242, 238, 0.18);
+  --bone-16:  rgba(246, 242, 238, 0.16);
+
+  /* ─── EMBER AT OPACITY ────────────────────────────────────────────────── */
+  --ember-100: rgba(215, 90, 47, 1);
+  --ember-90:  rgba(215, 90, 47, 0.90);
+  --ember-80:  rgba(215, 90, 47, 0.80);
+  --ember-72:  rgba(215, 90, 47, 0.72);
+  --ember-60:  rgba(215, 90, 47, 0.60);
+  --ember-55:  rgba(215, 90, 47, 0.55);
+
+  /* ─── TYPOGRAPHY ──────────────────────────────────────────────────────── */
+  --font-editorial: 'Archivo', sans-serif;
+  --font-mono:      'DM Mono', monospace;
+
+  --weight-regular: 400;
+  --weight-medium:  500;
+
+  /* ─── SPACING SCALE (px) ──────────────────────────────────────────────── */
+  --space-1:  8px;
+  --space-2:  16px;
+  --space-3:  24px;
+  --space-4:  32px;
+  --space-5:  40px;    /* catalog left margin */
+  --space-6:  48px;
+  --space-7:  64px;
+  --space-8:  80px;    /* content left margin */
+  --space-9:  96px;    /* top safe zone */
+  --space-10: 120px;
+  --space-11: 160px;
+
+  /* ─── LAYOUT ──────────────────────────────────────────────────────────── */
+  --site-width:    1440px;
+  --content-left:  80px;
+  --catalog-left:  40px;
+  --nav-height:    56px;
+
+  /* ─── SECTION HEIGHTS ─────────────────────────────────────────────────── */
+  --height-hero:          900px;
+  --height-selected-work: 760px;
+  --height-worked-with:   168px;
+  --height-about:         480px;
+  --height-services:      664px;
+  --height-cinematic:     900px;
+  --height-contact:       560px;
+
+  /* ─── Z-INDEX LAYERS ──────────────────────────────────────────────────── */
+  --z-background: 0;
+  --z-media:      1;
+  --z-veil:       2;
+  --z-grain:      3;
+  --z-content:    10;
+  --z-caption:    15;
+  --z-card:       20;
+  --z-nav:        100;
+
+  /* ─── BORDERS & RULES ─────────────────────────────────────────────────── */
+  --rule-weight: 1px;
+  --radius-card:  8px;
+  --radius-plate: 8px;
+
+  /* ─── EASING & DURATION ───────────────────────────────────────────────── */
+  --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast:   150ms;
+  --duration-normal: 300ms;
+  --duration-slow:   600ms;
+
+}
