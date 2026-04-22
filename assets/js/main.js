@@ -81,6 +81,7 @@
     const videoWrap    = plate.querySelector('.js-preview-video');
     const videoFrame   = plate.querySelector('.js-preview-frame');
     const badge        = plate.querySelector('.js-preview-badge');
+    const captionLeft  = plate.querySelector('.preview-plate__caption-left');
     const captionIndex = plate.querySelector('.js-preview-caption-index');
     const captionTitle = plate.querySelector('.js-preview-caption-title');
     const captionMeta  = plate.querySelector('.js-preview-caption-meta');
@@ -98,20 +99,104 @@
     // GSAP initial states — overlay elements hidden before any interaction
     if (typeof gsap !== 'undefined') {
       if (overlay)      gsap.set(overlay, { autoAlpha: 0 });
-      if (focusMedia)   gsap.set(focusMedia, { autoAlpha: 0, scale: 0.94 });
+      if (focusMedia)   gsap.set(focusMedia, { autoAlpha: 0 });
       if (focusCaption) gsap.set(focusCaption, { autoAlpha: 0 });
       if (focusClose)   gsap.set(focusClose, { autoAlpha: 0 });
     }
 
-    const items = list.querySelectorAll('.work-item');
+    const items = Array.from(list.querySelectorAll('.work-item'));
+    const useGsap = typeof gsap !== 'undefined' && !prefersReducedMotion;
     let isTransitioning = false;
     let focusOpen       = false;
     let autoStarted     = false;
+    let activeRequestId = 0;
+    let queuedItem      = null;
+
+    function getPreviewElements() {
+      return [badge, captionLeft, captionMeta].filter(Boolean);
+    }
+
+    function completeTransition() {
+      isTransitioning = false;
+      if (queuedItem && !queuedItem.classList.contains('is-active')) {
+        const nextItem = queuedItem;
+        queuedItem = null;
+        activateItem(nextItem);
+      } else {
+        queuedItem = null;
+      }
+    }
+
+    function setPreviewCopy(index, title, meta) {
+      if (badge)        badge.textContent        = index;
+      if (captionIndex) captionIndex.textContent = index;
+      if (captionTitle) captionTitle.textContent = title;
+      if (captionMeta)  captionMeta.textContent  = meta;
+    }
+
+    function getPosterForItem(item) {
+      if (!item) return Promise.resolve(null);
+      const previewSrc = item.dataset.previewSrc;
+      const vimeoId = item.dataset.vimeoId;
+      if (!vimeoId) return Promise.resolve(previewSrc || null);
+      return fetchVimeoThumb(vimeoId).then(function (thumbUrl) {
+        return thumbUrl || previewSrc || null;
+      });
+    }
+
+    function revealInlineVideo(vimeoId) {
+      if (!videoFrame || !videoWrap || !vimeoId) {
+        completeTransition();
+        return;
+      }
+
+      videoFrame.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&muted=1&background=1&autopause=0&dnt=1`;
+      videoWrap.classList.add('is-visible');
+
+      if (useGsap) {
+        gsap.fromTo(videoWrap,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 0.42,
+            ease: 'power2.out',
+            overwrite: true,
+            onComplete: completeTransition
+          }
+        );
+      } else {
+        videoWrap.style.opacity = '1';
+        completeTransition();
+      }
+    }
+
+    function getFocusTargetRect() {
+      const gutter = 88;
+      const maxWidth = 1220;
+      let width = Math.min(window.innerWidth - (gutter * 2), maxWidth);
+      let height = width * (9 / 16);
+
+      const maxHeight = window.innerHeight - 156;
+      if (height > maxHeight) {
+        height = maxHeight;
+        width = height * (16 / 9);
+      }
+
+      return {
+        top: Math.round((window.innerHeight - height) / 2),
+        left: Math.round((window.innerWidth - width) / 2),
+        width: Math.round(width),
+        height: Math.round(height)
+      };
+    }
 
     // ── INLINE PREVIEW ────────────────────────────────────────────────────
 
     function activateItem(item) {
-      if (isTransitioning) return;
+      if (isTransitioning) {
+        queuedItem = item;
+        return;
+      }
       if (item.classList.contains('is-active')) return;
 
       items.forEach(el => {
@@ -126,85 +211,136 @@
       const newIndex   = item.dataset.previewIndex;
       const newTitle   = item.dataset.previewTitle;
       const newMeta    = item.dataset.previewMeta;
+      const previewEls = getPreviewElements();
+      const requestId  = ++activeRequestId;
 
       isTransitioning = true;
 
-      // Fade out current content (160ms, power2.in)
-      if (image) {
-        if (typeof gsap !== 'undefined') {
-          gsap.to(image, { opacity: 0, duration: 0.16, ease: 'power2.in', overwrite: true });
-        } else {
-          image.style.opacity = '0';
-        }
-      }
-      if (videoWrap) videoWrap.classList.remove('is-visible');
+      if (useGsap) {
+        gsap.killTweensOf([image, videoWrap].filter(Boolean));
+        gsap.killTweensOf(previewEls);
 
-      const swapDelay = 0.16;
+        gsap.to(image, {
+          opacity: 0.14,
+          duration: 0.18,
+          ease: 'power2.in',
+          overwrite: true
+        });
 
-      function swapContent() {
-        if (badge)        badge.textContent        = newIndex;
-        if (captionIndex) captionIndex.textContent = newIndex;
-        if (captionTitle) captionTitle.textContent = newTitle;
-        if (captionMeta)  captionMeta.textContent  = newMeta;
-
-        if (newVimeoId && videoFrame && videoWrap) {
-          // Thumbnail shows while video loads — no black flash
-          fetchVimeoThumb(newVimeoId).then(function (thumbUrl) {
-            if (thumbUrl && image) {
-              image.src = thumbUrl;
-              image.alt = newTitle ? newTitle + ' preview' : 'Work preview';
-              if (typeof gsap !== 'undefined') {
-                gsap.to(image, { opacity: 0.85, duration: 0.24, ease: 'power2.out', overwrite: true });
-              } else {
-                image.style.opacity = '0.85';
-              }
+        if (videoWrap) {
+          gsap.to(videoWrap, {
+            opacity: 0,
+            duration: 0.18,
+            ease: 'power2.in',
+            overwrite: true,
+            onComplete: function () {
+              videoWrap.classList.remove('is-visible');
             }
           });
-          // Video fades in on top of thumbnail via .is-visible opacity transition
-          videoFrame.src = `https://player.vimeo.com/video/${newVimeoId}?autoplay=1&loop=1&muted=1&background=1&autopause=0&dnt=1`;
-          requestAnimationFrame(() => {
-            videoWrap.classList.add('is-visible');
-            isTransitioning = false;
+        }
+
+        if (previewEls.length) {
+          gsap.to(previewEls, {
+            autoAlpha: 0.24,
+            duration: 0.16,
+            ease: 'power1.in',
+            stagger: 0.04,
+            overwrite: true
           });
-        } else if (newSrc && image) {
-          if (videoFrame) videoFrame.src = '';
-          image.src = newSrc;
-          image.alt = newTitle ? newTitle + ' preview' : 'Work preview';
-          if (typeof gsap !== 'undefined') {
-            gsap.to(image, { opacity: 0.85, duration: 0.24, ease: 'power2.out', overwrite: true });
-          } else {
-            image.style.opacity = '0.85';
-          }
-          // Reset via rAF — consistent with Vimeo path, no ticker dependency
-          requestAnimationFrame(() => { isTransitioning = false; });
-        } else {
-          isTransitioning = false;
+        }
+      } else {
+        if (image) image.style.opacity = '0.14';
+        if (videoWrap) {
+          videoWrap.classList.remove('is-visible');
+          videoWrap.style.opacity = '0';
         }
       }
 
-      if (typeof gsap !== 'undefined') {
-        gsap.delayedCall(swapDelay, swapContent);
-      } else {
-        setTimeout(swapContent, swapDelay * 1000);
-      }
+      getPosterForItem(item).then(function (posterSrc) {
+        if (requestId !== activeRequestId) return;
+
+        if (videoFrame && !newVimeoId) {
+          videoFrame.src = '';
+        }
+
+        setPreviewCopy(newIndex, newTitle, newMeta);
+
+        if (image && (posterSrc || newSrc)) {
+          image.src = posterSrc || newSrc;
+          image.alt = newTitle ? newTitle + ' preview' : 'Work preview';
+        }
+
+        if (useGsap) {
+          gsap.to(image, {
+            opacity: 0.88,
+            duration: 0.32,
+            ease: 'power2.out',
+            overwrite: true
+          });
+
+          if (previewEls.length) {
+            gsap.to(previewEls, {
+              autoAlpha: 1,
+              duration: 0.28,
+              ease: 'power2.out',
+              stagger: 0.05,
+              overwrite: true
+            });
+          }
+        } else {
+          if (image) image.style.opacity = '0.88';
+        }
+
+        if (newVimeoId) {
+          const revealDelay = useGsap ? 0.12 : 120;
+          if (useGsap) {
+            gsap.delayedCall(revealDelay, function () {
+              if (requestId === activeRequestId) revealInlineVideo(newVimeoId);
+            });
+          } else {
+            setTimeout(function () {
+              if (requestId === activeRequestId) revealInlineVideo(newVimeoId);
+            }, revealDelay);
+          }
+        } else {
+          completeTransition();
+        }
+      }).catch(function () {
+        completeTransition();
+      });
     }
 
     // ── FOCUS OVERLAY: open / close ────────────────────────────────────────
 
+    if (focusFrame && focusMedia) {
+      focusFrame.addEventListener('load', function () {
+        if (!focusOpen || !focusFrame.getAttribute('src')) return;
+        focusMedia.classList.add('is-ready');
+      });
+    }
+
     function openFocus(item) {
-      if (!overlay || !focusFrame) return;
+      if (!overlay || !focusFrame || !focusMedia) return;
       const vimeoId = item.dataset.vimeoId;
       const index   = item.dataset.previewIndex;
       const title   = item.dataset.previewTitle;
       const meta    = item.dataset.previewMeta;
+      const fromRect = plate.getBoundingClientRect();
+      const toRect = getFocusTargetRect();
+      const posterSrc = image && image.currentSrc ? image.currentSrc : image && image.src ? image.src : '';
 
       if (focusIndex) focusIndex.textContent = index || '';
       if (focusTitle) focusTitle.textContent = title || '';
       if (focusMeta)  focusMeta.textContent  = meta  || '';
 
+      focusMedia.classList.remove('is-ready');
+      focusMedia.style.backgroundImage = posterSrc ? `url("${posterSrc}")` : '';
+
       if (vimeoId) {
         // Full player with sound in focus mode
         focusFrame.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&muted=0&background=0&autopause=0&dnt=1`;
+      } else {
+        focusFrame.src = '';
       }
 
       overlay.setAttribute('aria-hidden', 'false');
@@ -212,43 +348,74 @@
       document.body.style.overflow = 'hidden';
       focusOpen = true;
 
-      if (typeof gsap === 'undefined') return;
+      if (!useGsap) {
+        focusMedia.style.top = toRect.top + 'px';
+        focusMedia.style.left = toRect.left + 'px';
+        focusMedia.style.width = toRect.width + 'px';
+        focusMedia.style.height = toRect.height + 'px';
+        return;
+      }
 
       gsap.killTweensOf([overlay, focusMedia, focusCaption, focusClose].filter(Boolean));
 
       const tl = gsap.timeline();
 
-      // Veil: overlay fades in (320ms)
-      tl.to(overlay, { autoAlpha: 1, duration: 0.32, ease: 'power2.out' });
+      gsap.set(overlay, { autoAlpha: 0 });
+      gsap.set(focusMedia, {
+        autoAlpha: 1,
+        top: fromRect.top,
+        left: fromRect.left,
+        width: fromRect.width,
+        height: fromRect.height,
+        borderRadius: 8
+      });
+      if (focusCaption) gsap.set(focusCaption, { autoAlpha: 0 });
+      if (focusClose) gsap.set(focusClose, { autoAlpha: 0 });
 
-      // Media: scale-in from 0.94 (440ms, overlaps by 180ms)
-      if (focusMedia) {
-        tl.fromTo(focusMedia,
-          { autoAlpha: 0, scale: 0.94 },
-          { autoAlpha: 1, scale: 1, duration: 0.44, ease: 'power3.out' },
-          '-=0.18'
-        );
-      }
+      tl.to(overlay, {
+        autoAlpha: 1,
+        duration: 0.28,
+        ease: 'power2.out'
+      }, 0);
 
-      // Caption: pure opacity (300ms, overlaps by 150ms)
+      tl.to(focusMedia, {
+        top: toRect.top,
+        left: toRect.left,
+        width: toRect.width,
+        height: toRect.height,
+        borderRadius: 18,
+        duration: 0.56,
+        ease: 'power3.inOut'
+      }, 0.02);
+
       if (focusCaption) {
-        tl.to(focusCaption, { autoAlpha: 1, duration: 0.3, ease: 'power2.out' }, '-=0.15');
+        tl.to(focusCaption, {
+          autoAlpha: 1,
+          duration: 0.22,
+          ease: 'power2.out'
+        }, 0.26);
       }
 
-      // Close button: arrives last (250ms, overlaps by 180ms)
       if (focusClose) {
-        tl.to(focusClose, { autoAlpha: 1, duration: 0.25, ease: 'power2.out' }, '-=0.18');
+        tl.to(focusClose, {
+          autoAlpha: 1,
+          duration: 0.24,
+          ease: 'power2.out'
+        }, 0.24);
       }
     }
 
     function closeFocus() {
-      if (!overlay || !focusFrame) return;
+      if (!overlay || !focusFrame || !focusMedia) return;
       focusOpen = false;
+      const returnRect = plate.getBoundingClientRect();
 
-      if (typeof gsap === 'undefined') {
+      if (!useGsap) {
         overlay.classList.remove('is-open');
         overlay.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+        focusMedia.classList.remove('is-ready');
+        focusMedia.style.backgroundImage = '';
         setTimeout(function () { focusFrame.src = ''; }, 440);
         return;
       }
@@ -261,8 +428,9 @@
           overlay.setAttribute('aria-hidden', 'true');
           document.body.style.overflow = '';
           focusFrame.src = '';
-          // Reset GSAP initial states ready for next open
-          if (focusMedia)   gsap.set(focusMedia, { autoAlpha: 0, scale: 0.94 });
+          focusMedia.classList.remove('is-ready');
+          focusMedia.style.backgroundImage = '';
+          if (focusMedia)   gsap.set(focusMedia, { autoAlpha: 0 });
           if (focusCaption) gsap.set(focusCaption, { autoAlpha: 0 });
           if (focusClose)   gsap.set(focusClose, { autoAlpha: 0 });
         }
@@ -274,13 +442,21 @@
         tl.to(fadeOutEls, { autoAlpha: 0, duration: 0.15, ease: 'power1.in' });
       }
 
-      // Media: scale down (260ms, overlaps by 50ms)
-      if (focusMedia) {
-        tl.to(focusMedia, { autoAlpha: 0, scale: 0.94, duration: 0.26, ease: 'power2.in' }, '-=0.05');
-      }
+      tl.to(focusMedia, {
+        top: returnRect.top,
+        left: returnRect.left,
+        width: returnRect.width,
+        height: returnRect.height,
+        borderRadius: 8,
+        duration: 0.38,
+        ease: 'power2.inOut'
+      }, '-=0.03');
 
-      // Veil: overlay fades out (280ms, overlaps by 100ms)
-      tl.to(overlay, { autoAlpha: 0, duration: 0.28, ease: 'power2.in' }, '-=0.1');
+      tl.to(overlay, {
+        autoAlpha: 0,
+        duration: 0.28,
+        ease: 'power2.in'
+      }, '-=0.22');
     }
 
     // ── EVENT LISTENERS ───────────────────────────────────────────────────
@@ -330,13 +506,127 @@
 
     var initialItem = list.querySelector('.work-item.is-active');
     if (initialItem && image) {
-      var initVimeoId = initialItem.dataset.vimeoId;
-      if (initVimeoId) {
-        fetchVimeoThumb(initVimeoId).then(function (thumbUrl) {
-          if (thumbUrl) { image.src = thumbUrl; }
+      getPosterForItem(initialItem).then(function (thumbUrl) {
+        if (thumbUrl) { image.src = thumbUrl; }
+      });
+    }
+
+    window.setTimeout(function () {
+      items.forEach(function (item) {
+        if (item.dataset.vimeoId) fetchVimeoThumb(item.dataset.vimeoId);
+      });
+    }, 500);
+
+    window.addEventListener('resize', function () {
+      if (!focusOpen || !focusMedia || !useGsap) return;
+      const rect = getFocusTargetRect();
+      gsap.set(focusMedia, {
+        top: rect.top,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height
+      });
+    });
+  }
+
+  // ─── SERVICES: Click accordion ───────────────────────────────────────────
+
+  function initServicesAccordion() {
+    const rows = Array.from(document.querySelectorAll('.service-row'));
+    if (!rows.length) return;
+
+    const useGsap = typeof gsap !== 'undefined' && !prefersReducedMotion;
+
+    if (useGsap) {
+      rows.forEach(row => {
+        const desc = row.querySelector('.service-row__desc');
+        const ext = row.querySelector('.service-row__extended');
+        if (desc) gsap.set(desc, { autoAlpha: 1 });
+        if (ext) gsap.set(ext, { autoAlpha: 0 });
+      });
+    }
+
+    function closeRow(row) {
+      const desc = row.querySelector('.service-row__desc');
+      const ext = row.querySelector('.service-row__extended');
+
+      row.classList.remove('is-open');
+      row.setAttribute('aria-expanded', 'false');
+
+      if (!useGsap) return;
+
+      gsap.killTweensOf([desc, ext].filter(Boolean));
+      if (ext) {
+        gsap.to(ext, {
+          autoAlpha: 0,
+          duration: 0.14,
+          ease: 'power1.in',
+          overwrite: true
+        });
+      }
+      if (desc) {
+        gsap.to(desc, {
+          autoAlpha: 1,
+          duration: 0.18,
+          ease: 'power2.out',
+          overwrite: true
         });
       }
     }
+
+    rows.forEach(row => {
+      const detail = row.querySelector('.service-row__detail');
+      if (!detail) return;
+
+      row.setAttribute('role', 'button');
+      row.setAttribute('tabindex', '0');
+      row.setAttribute('aria-expanded', 'false');
+
+      function toggle() {
+        const isOpen = row.classList.contains('is-open');
+        const desc = row.querySelector('.service-row__desc');
+        const ext = row.querySelector('.service-row__extended');
+
+        rows.forEach(closeRow);
+
+        if (isOpen) {
+          return;
+        }
+
+        row.classList.add('is-open');
+        row.setAttribute('aria-expanded', 'true');
+
+        if (!useGsap) return;
+
+        gsap.killTweensOf([desc, ext].filter(Boolean));
+
+        const tl = gsap.timeline();
+
+        if (desc) {
+          tl.to(desc, {
+            autoAlpha: 0.52,
+            duration: 0.18,
+            ease: 'power1.out'
+          }, 0);
+        }
+
+        if (ext) {
+          tl.fromTo(ext,
+            { autoAlpha: 0 },
+            { autoAlpha: 1, duration: 0.34, ease: 'power2.out' },
+            0.16
+          );
+        }
+      }
+
+      row.addEventListener('click', toggle);
+      row.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggle();
+        }
+      });
+    });
   }
 
   // ─── NAV: Hide on scroll down, reveal on scroll up ───────────────────────
@@ -371,71 +661,6 @@
     }, { passive: true });
   }
 
-  // ─── SERVICES: Click accordion ───────────────────────────────────────────
-
-  function initServicesAccordion() {
-    const rows = document.querySelectorAll('.service-row');
-    if (!rows.length) return;
-
-    const useGsap = typeof gsap !== 'undefined' && !prefersReducedMotion;
-
-    // Set initial opacity on all extended texts so GSAP owns the reveal
-    if (useGsap) {
-      rows.forEach(r => {
-        const ext = r.querySelector('.service-row__extended');
-        if (ext) gsap.set(ext, { autoAlpha: 0 });
-      });
-    }
-
-    rows.forEach(row => {
-      const detail = row.querySelector('.service-row__detail');
-      if (!detail) return;
-
-      row.setAttribute('role', 'button');
-      row.setAttribute('tabindex', '0');
-      row.setAttribute('aria-expanded', 'false');
-
-      function toggle() {
-        const isOpen = row.classList.contains('is-open');
-
-        // Close all rows — reset extended text immediately for all
-        rows.forEach(r => {
-          r.classList.remove('is-open');
-          r.setAttribute('aria-expanded', 'false');
-          if (useGsap) {
-            const ext = r.querySelector('.service-row__extended');
-            if (ext) { gsap.killTweensOf(ext); gsap.set(ext, { autoAlpha: 0 }); }
-          }
-        });
-
-        // Open this row if it was closed
-        if (!isOpen) {
-          row.classList.add('is-open');
-          row.setAttribute('aria-expanded', 'true');
-          if (useGsap) {
-            const ext = row.querySelector('.service-row__extended');
-            if (ext) {
-              // Delay 0.18s — CSS grid height transition starts expanding,
-              // text fades in as space opens rather than snapping visible
-              gsap.fromTo(ext,
-                { autoAlpha: 0 },
-                { autoAlpha: 1, duration: 0.38, ease: 'power2.out', delay: 0.18 }
-              );
-            }
-          }
-        }
-      }
-
-      row.addEventListener('click', toggle);
-      row.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          toggle();
-        }
-      });
-    });
-  }
-
   // ─── CONTACT: Focus states ───────────────────────────────────────────────
 
   function initContactForm() {
@@ -443,11 +668,33 @@
     if (!form) return;
 
     const fields = form.querySelectorAll('.js-field-focus');
+    const status = form.querySelector('.js-contact-form-status');
+    const btn = form.querySelector('button[type="submit"]');
+    const submitLabel = btn ? btn.textContent : '';
+
+    function showStatus(message, state) {
+      if (!status) return;
+      status.hidden = false;
+      status.textContent = message;
+      status.dataset.state = state;
+    }
+
+    function clearStatus() {
+      if (!status) return;
+      status.hidden = true;
+      status.textContent = '';
+      delete status.dataset.state;
+    }
+
     fields.forEach(field => {
       const input = field.querySelector('.form-field__input');
       if (!input) return;
 
       input.addEventListener('focus', () => field.classList.add('is-focused'));
+      input.addEventListener('input', () => {
+        field.classList.remove('is-error');
+        clearStatus();
+      });
       input.addEventListener('blur', () => {
         field.classList.remove('is-focused');
         if (input.value.trim()) field.classList.add('has-value');
@@ -455,12 +702,12 @@
       });
     });
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       let isValid = true;
       fields.forEach(field => {
         const input = field.querySelector('.form-field__input');
-        if (input && input.hasAttribute('required') && !input.value.trim()) {
+        if (input && !input.checkValidity()) {
           field.classList.add('is-error');
           isValid = false;
         } else {
@@ -468,40 +715,46 @@
         }
       });
 
-      if (isValid) {
-        const btn = form.querySelector('button[type="submit"]');
-        if (btn) {
-          const original = btn.textContent;
-          btn.textContent = 'SENT ——— ✓';
-          btn.disabled = true;
-          setTimeout(() => {
-            btn.textContent = original;
-            btn.disabled = false;
-            form.reset();
-            fields.forEach(f => f.classList.remove('has-value'));
-          }, 2500);
+      if (!isValid) {
+        showStatus('Please complete the required fields before sending your enquiry.', 'error');
+        return;
+      }
+
+      clearStatus();
+
+      if (!btn) return;
+
+      btn.disabled = true;
+      btn.textContent = 'SENDING ———';
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: {
+            Accept: 'application/json'
+          }
+        });
+
+        const result = await response.json().catch(function () { return {}; });
+
+        if (!response.ok || result.success === false) {
+          throw new Error('Submission failed');
         }
+
+        showStatus('Inquiry sent. Sebastian will reply by email once it arrives in the inbox.', 'success');
+        btn.textContent = 'SENT ——— ✓';
+        form.reset();
+        fields.forEach(f => {
+          f.classList.remove('has-value', 'is-focused', 'is-error');
+        });
+      } catch (error) {
+        showStatus('Submission is unavailable right now. Please use the email address on the left.', 'error');
+        btn.textContent = submitLabel;
+      } finally {
+        btn.disabled = false;
       }
     });
-  }
-
-  // ─── SCROLL REVEAL: IntersectionObserver ─────────────────────────────────
-
-  function initScrollReveal() {
-    const items = document.querySelectorAll('[data-reveal]');
-    if (!items.length) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const delay = parseInt(entry.target.dataset.revealDelay || '0', 10);
-          setTimeout(() => entry.target.classList.add('is-visible'), delay);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-
-    items.forEach(el => observer.observe(el));
   }
 
   // ─── NAV: Scroll spy ─────────────────────────────────────────────────────
@@ -539,7 +792,6 @@
     initWorkPreview();
     initServicesAccordion();
     initContactForm();
-    initScrollReveal();
     initNavSpy();
   });
 

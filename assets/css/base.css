@@ -54,18 +54,3 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
-
-/* ─── SMOOTH REVEAL STATE ─────────────────────────────────────────────────── */
-
-/* Placeholder for JS-driven reveal animations */
-[data-reveal] {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity var(--duration-slow) var(--ease-expo-out),
-              transform var(--duration-slow) var(--ease-expo-out);
-}
-
-[data-reveal].is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}

@@ -16,7 +16,8 @@ portfolio/
 │   │   ├── components.css   — Nav, buttons, cards, form fields, work list, preview plate
 │   │   └── sections.css     — Section-specific layout and visual styles
 │   ├── js/
-│   │   └── main.js          — Stub file with commented implementation hooks
+│   │   ├── main.js          — Interaction logic: previews, accordion, contact form, nav behavior
+│   │   └── motion.js        — GSAP entrance and section motion
 │   ├── img/                 — Place image assets here
 │   ├── icons/               — Place client logo SVGs here
 │   └── media/               — Place video poster frames here
@@ -64,24 +65,11 @@ In `index.html`, find the two `data-vimeo-id="PLACEHOLDER"` attributes:
 
 Update `href="mailto:contact@vaneickelen.com"` and the visible email address in the contact section.
 
-## JavaScript Wiring
+## Contact Form
 
-`assets/js/main.js` contains fully documented stubs for:
+The contact form is wired for static-site delivery through [FormSubmit](https://formsubmit.co/). The current endpoint sends enquiries to `contact@vaneickelen.com`.
 
-- Vimeo background video (hero + cinematic)
-- Selected work preview plate transitions on hover
-- Hero entrance animation
-- Services hover behavior
-- Cinematic parallax on scroll
-- Contact form focus states and validation
-- IntersectionObserver scroll reveals
-
-Each section is clearly commented with an implementation plan. Uncomment and fill in as needed.
-
-Dependencies required when implementing video:
-```html
-<script src="https://player.vimeo.com/api/player.js"></script>
-```
+Important: the first live submission must be confirmed from the inbox before delivery becomes active.
 
 ## Deployment
 

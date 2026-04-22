@@ -133,11 +133,15 @@
   function initCinematicParallax() {
     const section = document.querySelector('.section-cinematic');
     const media   = section && section.querySelector('.js-cinematic-media');
+    const veil    = section && section.querySelector('.cinematic-veil');
+    const grain   = section && section.querySelector('.cinematic-grain');
+    const card    = section && section.querySelector('.js-card-reveal');
+    const caption = section && section.querySelector('.cinematic-caption-bar');
 
     if (!media || prefersReducedMotion) return;
 
     gsap.to(media, {
-      y: -60,
+      y: -72,
       ease: 'none',
       scrollTrigger: {
         trigger: section,
@@ -146,6 +150,59 @@
         scrub: 1.5
       }
     });
+
+    if (veil) {
+      gsap.to(veil, {
+        y: -22,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.8
+        }
+      });
+    }
+
+    if (grain) {
+      gsap.to(grain, {
+        y: -10,
+        opacity: 0.042,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 2.1
+        }
+      });
+    }
+
+    if (card) {
+      gsap.to(card, {
+        y: -10,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.7
+        }
+      });
+    }
+
+    if (caption) {
+      gsap.to(caption, {
+        autoAlpha: 0.82,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 72%',
+          end: 'bottom top',
+          scrub: 1.4
+        }
+      });
+    }
   }
 
 
