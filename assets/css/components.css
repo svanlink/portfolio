@@ -415,23 +415,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(11, 11, 11, 0);
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
-  pointer-events: none;
-  opacity: 0;
-  transition:
-    opacity 380ms cubic-bezier(0.16, 1, 0.3, 1),
-    background 380ms ease,
-    backdrop-filter 380ms ease;
-}
-
-.work-focus-overlay.is-open {
-  opacity: 1;
-  pointer-events: auto;
   background: rgba(11, 11, 11, 0.92);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  pointer-events: none;
+  /* opacity and visibility controlled by GSAP autoAlpha */
+}
+
+.work-focus-overlay.is-open {
+  pointer-events: auto;
 }
 
 /* Centered media container — screening mode, not fullscreen */
@@ -441,12 +433,7 @@
   aspect-ratio: 16 / 9;
   border-radius: var(--radius-plate);
   overflow: hidden;
-  transform: scale(0.93) translateY(20px);
-  transition: transform 440ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.work-focus-overlay.is-open .work-focus-media {
-  transform: scale(1) translateY(0);
+  /* transform and opacity controlled by GSAP */
 }
 
 .work-focus-frame {
@@ -522,13 +509,11 @@
   align-items: center;
   justify-content: center;
   gap: 0;
-  opacity: 0;
   pointer-events: none;
-  transition: opacity 260ms ease;
+  /* opacity controlled by GSAP */
 }
 
 .work-focus-overlay.is-open .work-focus-close {
-  opacity: 1;
   pointer-events: auto;
 }
 

@@ -1,61 +1,13 @@
 /**
  * main.js — Sebastian Van Eickelen Portfolio
  * Production-ready implementation of all interactive features.
+ * Motion: hero entrance, parallax, and work reveal handled in motion.js via GSAP.
  */
 
 (function () {
   'use strict';
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function lerp(start, end, factor) {
-    return start + (end - start) * factor;
-  }
-
-  // ─── HERO: Entrance animation ────────────────────────────────────────────
-
-  function initHeroEntrance() {
-    const headline = document.querySelector('.hero-headline');
-    const kicker   = document.querySelector('.js-hero-kicker');
-    const rule     = document.querySelector('.js-hero-rule');
-    if (!kicker) return;
-
-    if (headline && !prefersReducedMotion) {
-      headline.style.opacity   = '0';
-      headline.style.transform = 'translateY(22px)';
-      headline.style.transition = 'opacity 900ms cubic-bezier(0.16, 1, 0.3, 1), transform 900ms cubic-bezier(0.16, 1, 0.3, 1)';
-    }
-
-    kicker.style.opacity   = '0';
-    kicker.style.transform = 'translateY(16px)';
-    kicker.style.transition = 'opacity 800ms cubic-bezier(0.16, 1, 0.3, 1), transform 800ms cubic-bezier(0.16, 1, 0.3, 1)';
-
-    if (rule) {
-      rule.style.transform      = 'scaleX(0)';
-      rule.style.transformOrigin = 'left center';
-      rule.style.transition     = 'transform 600ms cubic-bezier(0.16, 1, 0.3, 1)';
-    }
-
-    requestAnimationFrame(() => {
-      if (headline && !prefersReducedMotion) {
-        setTimeout(() => {
-          headline.style.opacity   = '1';
-          headline.style.transform = 'translateY(0)';
-        }, 60);
-      }
-
-      setTimeout(() => {
-        kicker.style.opacity   = '1';
-        kicker.style.transform = 'translateY(0)';
-      }, 380);
-
-      if (rule) {
-        setTimeout(() => {
-          rule.style.transform = 'scaleX(1)';
-        }, 620);
-      }
-    });
-  }
 
   // ─── VIMEO: Background video initializer ─────────────────────────────────
 
@@ -134,12 +86,22 @@
     const captionMeta  = plate.querySelector('.js-preview-caption-meta');
 
     // Focus overlay (cinematic screening mode)
-    const overlay    = document.querySelector('.js-work-focus');
-    const focusClose = document.querySelector('.js-work-focus-close');
-    const focusFrame = document.querySelector('.js-work-focus-frame');
-    const focusIndex = document.querySelector('.js-focus-index');
-    const focusTitle = document.querySelector('.js-focus-title');
-    const focusMeta  = document.querySelector('.js-focus-meta');
+    const overlay      = document.querySelector('.js-work-focus');
+    const focusClose   = document.querySelector('.js-work-focus-close');
+    const focusFrame   = document.querySelector('.js-work-focus-frame');
+    const focusMedia   = overlay && overlay.querySelector('.work-focus-media');
+    const focusCaption = overlay && overlay.querySelector('.work-focus-caption');
+    const focusIndex   = document.querySelector('.js-focus-index');
+    const focusTitle   = document.querySelector('.js-focus-title');
+    const focusMeta    = document.querySelector('.js-focus-meta');
+
+    // GSAP initial states — overlay elements hidden before any interaction
+    if (typeof gsap !== 'undefined') {
+      if (overlay)      gsap.set(overlay, { autoAlpha: 0 });
+      if (focusMedia)   gsap.set(focusMedia, { autoAlpha: 0, scale: 0.94 });
+      if (focusCaption) gsap.set(focusCaption, { autoAlpha: 0 });
+      if (focusClose)   gsap.set(focusClose, { autoAlpha: 0 });
+    }
 
     const items = list.querySelectorAll('.work-item');
     let isTransitioning = false;
@@ -167,11 +129,20 @@
 
       isTransitioning = true;
 
-      if (image)     { image.style.transition = 'opacity 150ms ease'; image.style.opacity = '0'; }
+      // Fade out current content (160ms, power2.in)
+      if (image) {
+        if (typeof gsap !== 'undefined') {
+          gsap.to(image, { opacity: 0, duration: 0.16, ease: 'power2.in', overwrite: true });
+        } else {
+          image.style.opacity = '0';
+        }
+      }
       if (videoWrap) videoWrap.classList.remove('is-visible');
 
-      setTimeout(() => {
-        if (badge)        badge.textContent       = newIndex;
+      const swapDelay = 0.16;
+
+      function swapContent() {
+        if (badge)        badge.textContent        = newIndex;
         if (captionIndex) captionIndex.textContent = newIndex;
         if (captionTitle) captionTitle.textContent = newTitle;
         if (captionMeta)  captionMeta.textContent  = newMeta;
@@ -182,8 +153,11 @@
             if (thumbUrl && image) {
               image.src = thumbUrl;
               image.alt = newTitle ? newTitle + ' preview' : 'Work preview';
-              image.style.transition = 'opacity 300ms cubic-bezier(0.16, 1, 0.3, 1)';
-              image.style.opacity = '0.85';
+              if (typeof gsap !== 'undefined') {
+                gsap.to(image, { opacity: 0.85, duration: 0.24, ease: 'power2.out', overwrite: true });
+              } else {
+                image.style.opacity = '0.85';
+              }
             }
           });
           // Video fades in on top of thumbnail via .is-visible opacity transition
@@ -196,15 +170,23 @@
           if (videoFrame) videoFrame.src = '';
           image.src = newSrc;
           image.alt = newTitle ? newTitle + ' preview' : 'Work preview';
-          requestAnimationFrame(() => {
-            image.style.transition = 'opacity 300ms cubic-bezier(0.16, 1, 0.3, 1)';
+          if (typeof gsap !== 'undefined') {
+            gsap.to(image, { opacity: 0.85, duration: 0.24, ease: 'power2.out', overwrite: true });
+          } else {
             image.style.opacity = '0.85';
-            isTransitioning = false;
-          });
+          }
+          // Reset via rAF — consistent with Vimeo path, no ticker dependency
+          requestAnimationFrame(() => { isTransitioning = false; });
         } else {
           isTransitioning = false;
         }
-      }, 150);
+      }
+
+      if (typeof gsap !== 'undefined') {
+        gsap.delayedCall(swapDelay, swapContent);
+      } else {
+        setTimeout(swapContent, swapDelay * 1000);
+      }
     }
 
     // ── FOCUS OVERLAY: open / close ────────────────────────────────────────
@@ -229,15 +211,76 @@
       overlay.classList.add('is-open');
       document.body.style.overflow = 'hidden';
       focusOpen = true;
+
+      if (typeof gsap === 'undefined') return;
+
+      gsap.killTweensOf([overlay, focusMedia, focusCaption, focusClose].filter(Boolean));
+
+      const tl = gsap.timeline();
+
+      // Veil: overlay fades in (320ms)
+      tl.to(overlay, { autoAlpha: 1, duration: 0.32, ease: 'power2.out' });
+
+      // Media: scale-in from 0.94 (440ms, overlaps by 180ms)
+      if (focusMedia) {
+        tl.fromTo(focusMedia,
+          { autoAlpha: 0, scale: 0.94 },
+          { autoAlpha: 1, scale: 1, duration: 0.44, ease: 'power3.out' },
+          '-=0.18'
+        );
+      }
+
+      // Caption: pure opacity (300ms, overlaps by 150ms)
+      if (focusCaption) {
+        tl.to(focusCaption, { autoAlpha: 1, duration: 0.3, ease: 'power2.out' }, '-=0.15');
+      }
+
+      // Close button: arrives last (250ms, overlaps by 180ms)
+      if (focusClose) {
+        tl.to(focusClose, { autoAlpha: 1, duration: 0.25, ease: 'power2.out' }, '-=0.18');
+      }
     }
 
     function closeFocus() {
       if (!overlay || !focusFrame) return;
-      overlay.classList.remove('is-open');
-      overlay.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
       focusOpen = false;
-      setTimeout(function () { if (!focusOpen) focusFrame.src = ''; }, 440);
+
+      if (typeof gsap === 'undefined') {
+        overlay.classList.remove('is-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setTimeout(function () { focusFrame.src = ''; }, 440);
+        return;
+      }
+
+      gsap.killTweensOf([overlay, focusMedia, focusCaption, focusClose].filter(Boolean));
+
+      const tl = gsap.timeline({
+        onComplete: function () {
+          overlay.classList.remove('is-open');
+          overlay.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+          focusFrame.src = '';
+          // Reset GSAP initial states ready for next open
+          if (focusMedia)   gsap.set(focusMedia, { autoAlpha: 0, scale: 0.94 });
+          if (focusCaption) gsap.set(focusCaption, { autoAlpha: 0 });
+          if (focusClose)   gsap.set(focusClose, { autoAlpha: 0 });
+        }
+      });
+
+      // Caption + close: fade out first (150ms, power1.in)
+      const fadeOutEls = [focusCaption, focusClose].filter(Boolean);
+      if (fadeOutEls.length) {
+        tl.to(fadeOutEls, { autoAlpha: 0, duration: 0.15, ease: 'power1.in' });
+      }
+
+      // Media: scale down (260ms, overlaps by 50ms)
+      if (focusMedia) {
+        tl.to(focusMedia, { autoAlpha: 0, scale: 0.94, duration: 0.26, ease: 'power2.in' }, '-=0.05');
+      }
+
+      // Veil: overlay fades out (280ms, overlaps by 100ms)
+      tl.to(overlay, { autoAlpha: 0, duration: 0.28, ease: 'power2.in' }, '-=0.1');
     }
 
     // ── EVENT LISTENERS ───────────────────────────────────────────────────
@@ -328,51 +371,21 @@
     }, { passive: true });
   }
 
-  // ─── CINEMATIC: Parallax ─────────────────────────────────────────────────
-
-  function initCinematicParallax() {
-    if (prefersReducedMotion) return;
-
-    const media = document.querySelector('.js-cinematic-media');
-    if (!media) return;
-
-    let targetOffset = 0;
-    let currentOffset = 0;
-    let rafId = null;
-    let isActive = false;
-
-    function update() {
-      currentOffset = lerp(currentOffset, targetOffset, 0.08);
-      media.style.transform = `translateY(${currentOffset}px)`;
-      if (Math.abs(currentOffset - targetOffset) > 0.05) {
-        rafId = requestAnimationFrame(update);
-      } else {
-        rafId = null;
-      }
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => { isActive = entry.isIntersecting; });
-    }, { threshold: 0 });
-
-    observer.observe(media.closest('.section-cinematic'));
-
-    window.addEventListener('scroll', () => {
-      if (!isActive) return;
-      const section = media.closest('.section-cinematic');
-      const rect = section.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const progress = Math.max(0, Math.min(1, (viewportHeight - rect.top) / (viewportHeight + rect.height)));
-      targetOffset = -80 * progress;
-      if (!rafId) rafId = requestAnimationFrame(update);
-    }, { passive: true });
-  }
-
   // ─── SERVICES: Click accordion ───────────────────────────────────────────
 
   function initServicesAccordion() {
     const rows = document.querySelectorAll('.service-row');
     if (!rows.length) return;
+
+    const useGsap = typeof gsap !== 'undefined' && !prefersReducedMotion;
+
+    // Set initial opacity on all extended texts so GSAP owns the reveal
+    if (useGsap) {
+      rows.forEach(r => {
+        const ext = r.querySelector('.service-row__extended');
+        if (ext) gsap.set(ext, { autoAlpha: 0 });
+      });
+    }
 
     rows.forEach(row => {
       const detail = row.querySelector('.service-row__detail');
@@ -384,15 +397,32 @@
 
       function toggle() {
         const isOpen = row.classList.contains('is-open');
-        // Close all rows
+
+        // Close all rows — reset extended text immediately for all
         rows.forEach(r => {
           r.classList.remove('is-open');
           r.setAttribute('aria-expanded', 'false');
+          if (useGsap) {
+            const ext = r.querySelector('.service-row__extended');
+            if (ext) { gsap.killTweensOf(ext); gsap.set(ext, { autoAlpha: 0 }); }
+          }
         });
-        // Open this one if it was closed
+
+        // Open this row if it was closed
         if (!isOpen) {
           row.classList.add('is-open');
           row.setAttribute('aria-expanded', 'true');
+          if (useGsap) {
+            const ext = row.querySelector('.service-row__extended');
+            if (ext) {
+              // Delay 0.18s — CSS grid height transition starts expanding,
+              // text fades in as space opens rather than snapping visible
+              gsap.fromTo(ext,
+                { autoAlpha: 0 },
+                { autoAlpha: 1, duration: 0.38, ease: 'power2.out', delay: 0.18 }
+              );
+            }
+          }
         }
       }
 
@@ -503,13 +533,11 @@
   // ─── INIT ─────────────────────────────────────────────────────────────────
 
   document.addEventListener('DOMContentLoaded', function () {
-    initHeroEntrance();
     initNavHide();
     initVimeoBackground('.js-hero-media .js-vimeo-target', '.js-video-fallback');
     initVimeoBackground('.js-cinematic-media .js-vimeo-target', '.js-video-fallback');
     initWorkPreview();
     initServicesAccordion();
-    initCinematicParallax();
     initContactForm();
     initScrollReveal();
     initNavSpy();
