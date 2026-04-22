@@ -4,6 +4,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
   background-color: var(--color-bone);
 }
 
@@ -16,6 +17,16 @@ body {
   line-height: 1.5;
   min-width: var(--site-width);
   overflow-x: hidden;
+}
+
+.section-hero,
+.section-work,
+.section-about,
+.section-services,
+.section-cinematic,
+.section-contact {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 /* Selection */

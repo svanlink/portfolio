@@ -93,11 +93,12 @@
   /* ─── SECTION HEIGHTS — full-screen scene structure ──────────────────── */
   --height-hero:          100vh;
   --height-selected-work: 100vh;
-  --height-worked-with:   200px;                  /* credibility strip below about */
-  --height-about:         100vh;                  /* full editorial scene         */
+  --height-about-scene:   100vh;                  /* about copy + logo band together */
+  --height-worked-with:   120px;                  /* quiet proof strip inside about scene */
+  --height-about:         calc(var(--height-about-scene) - var(--height-worked-with));
   --height-services:      100vh;
   --height-cinematic:     100vh;
-  --height-contact:       100vh;
+  --height-contact:       100vh;                  /* contact content + map + footer together */
 
   /* ─── Z-INDEX LAYERS ──────────────────────────────────────────────────── */
   --z-background: 0;
