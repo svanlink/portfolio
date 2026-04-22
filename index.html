@@ -84,6 +84,10 @@
       </div>
       <div class="work-columns">
         <div class="work-list-column">
+          <div class="work-list-intro" aria-hidden="true">
+            <span class="work-list-intro__label">Curated Selection</span>
+            <p class="work-list-intro__statement">Six projects held in a tighter editorial register. Poster first, motion second, always led by the frame.</p>
+          </div>
           <ul class="work-list js-work-list" role="list" aria-label="Selected work archive">
             <li class="work-item is-active"
                 data-preview-src="assets/img/work-placeholder.svg"
@@ -447,11 +451,35 @@
       <span class="work-focus-title js-focus-title"></span>
       <span class="work-focus-meta js-focus-meta"></span>
     </div>
+    <div class="work-focus-controls js-work-focus-controls" aria-label="Playback controls">
+      <div class="work-focus-controls__cluster">
+        <button type="button" class="work-focus-control js-focus-prev" aria-label="Previous project">Prev</button>
+        <button type="button" class="work-focus-control js-focus-play" aria-label="Pause video">Pause</button>
+        <button type="button" class="work-focus-control js-focus-mute" aria-label="Mute video">Sound On</button>
+      </div>
+      <div class="work-focus-scrub-wrap">
+        <span class="work-focus-time js-focus-current" aria-live="off">00:00</span>
+        <label class="sr-only" for="work-focus-scrub">Scrub through selected work preview</label>
+        <input id="work-focus-scrub"
+               class="work-focus-scrub js-focus-scrub"
+               type="range"
+               min="0"
+               max="1000"
+               step="1"
+               value="0"
+               aria-label="Scrub through selected work preview">
+        <span class="work-focus-time js-focus-duration" aria-live="off">00:00</span>
+      </div>
+      <div class="work-focus-controls__cluster work-focus-controls__cluster--right">
+        <button type="button" class="work-focus-control js-focus-next" aria-label="Next project">Next</button>
+      </div>
+    </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://player.vimeo.com/api/player.js"></script>
 <script src="assets/js/main.js" defer></script>
 <script src="assets/js/motion.js" defer></script>
 </body>
