@@ -63,26 +63,61 @@
     const rows = Array.from(list.querySelectorAll('.work-row'));
     if (!rows.length) return;
 
-    function activate(row) {
-      if (row.classList.contains('is-active')) return;
+    let activeRow = null;
+    let clearFrameTimer = 0;
 
+    function buildPreviewUrl(vimeoId) {
+      return 'https://player.vimeo.com/video/' + vimeoId +
+        '?autoplay=1&loop=1&muted=1&background=1&controls=0&title=0&byline=0&portrait=0&autopause=0&dnt=1';
+    }
+
+    function clearPreview() {
+      if (captionTitle) captionTitle.textContent = '';
+      if (captionMeta) captionMeta.textContent = '';
+      if (videoWrap) videoWrap.classList.remove('is-visible');
+      plate.classList.remove('has-preview');
+
+      if (clearFrameTimer) window.clearTimeout(clearFrameTimer);
+      clearFrameTimer = window.setTimeout(function () {
+        if (!activeRow && videoFrame) videoFrame.src = '';
+      }, 320);
+    }
+
+    function deactivate(row) {
+      if (row && activeRow !== row) return;
+
+      activeRow = null;
+      list.classList.remove('has-active');
       rows.forEach(function (r) {
         r.classList.remove('is-active');
-        r.setAttribute('aria-selected', 'false');
+        r.setAttribute('aria-expanded', 'false');
       });
-      row.classList.add('is-active');
-      row.setAttribute('aria-selected', 'true');
+      clearPreview();
+    }
 
-      const vimeoId = row.dataset.vimeoId;
+    function activate(row) {
+      if (activeRow === row) return;
+
+      activeRow = row;
+      list.classList.add('has-active');
+
+      rows.forEach(function (r) {
+        const active = r === row;
+        r.classList.toggle('is-active', active);
+        r.setAttribute('aria-expanded', active ? 'true' : 'false');
+      });
+
+      const vimeoId = row.dataset.previewVimeoId;
       const title   = row.dataset.previewTitle || '';
       const meta    = row.dataset.previewMeta  || '';
 
       if (captionTitle) captionTitle.textContent = title;
       if (captionMeta)  captionMeta.textContent  = meta;
+      plate.classList.add('has-preview');
 
       if (videoFrame && vimeoId) {
-        videoFrame.src = 'https://player.vimeo.com/video/' + vimeoId +
-          '?autoplay=1&loop=1&muted=1&background=1&controls=0&title=0&byline=0&portrait=0&autopause=0&dnt=1';
+        if (clearFrameTimer) window.clearTimeout(clearFrameTimer);
+        videoFrame.src = buildPreviewUrl(vimeoId);
         if (videoWrap) videoWrap.classList.add('is-visible');
       } else if (videoFrame) {
         videoFrame.src = '';
@@ -92,7 +127,9 @@
 
     rows.forEach(function (row) {
       row.addEventListener('mouseenter', function () { activate(row); });
+      row.addEventListener('mouseleave', function () { deactivate(row); });
       row.addEventListener('focus',      function () { activate(row); });
+      row.addEventListener('blur',       function () { deactivate(row); });
       row.addEventListener('click',      function () { activate(row); });
       row.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -102,16 +139,7 @@
       });
     });
 
-    // Prime the initial active row's video
-    const initial = list.querySelector('.work-row.is-active');
-    if (initial) {
-      const vimeoId = initial.dataset.vimeoId;
-      if (videoFrame && vimeoId) {
-        videoFrame.src = 'https://player.vimeo.com/video/' + vimeoId +
-          '?autoplay=1&loop=1&muted=1&background=1&controls=0&title=0&byline=0&portrait=0&autopause=0&dnt=1';
-        if (videoWrap) videoWrap.classList.add('is-visible');
-      }
-    }
+    deactivate();
   }
 
   // ─── SERVICES: Click to expand ───────────────────────────────────────────

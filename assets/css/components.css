@@ -25,7 +25,7 @@
 .nav-identity {
   position: absolute;
   top: 50%;
-  left: 128px;                          /* Figma logo center x=145, w=34 → left=128 */
+  left: 7.407vw;                        /* 128 ÷ 1728 — logo center at x=145 */
   transform: translateY(-50%);
   display: block;
   text-decoration: none;
@@ -40,11 +40,11 @@
   filter: brightness(0) invert(1);
 }
 
-/* Right cluster — nav links, right-aligned with 96 px safe-zone */
+/* Right cluster — nav links, right-aligned with content-left safe-zone */
 .nav-links {
   position: absolute;
   top: 50%;
-  right: 96px;
+  right: var(--content-left);          /* 5.556vw — 96 ÷ 1728 */
   transform: translateY(-50%);
   width: 301px;
   height: 24px;

@@ -55,7 +55,7 @@
 /* Vertical rule to the right of the catalog tab */
 .catalog-tab__rule {
   position: absolute;
-  left: 92px;     /* x=132 relative to section (40 + 92) */
+  left: 5.324vw;  /* 92 ÷ 1728 */
   top: 0;
   width: 1px;
   height: 100%;
