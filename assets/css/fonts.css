@@ -1,14 +1,74 @@
 /* ==========================================================================
-   fonts.css — Local @font-face declarations
-   HelveticaNowText → editorial / headings / body  (replaces Archivo)
-   DINPro          → utility / labels / indices     (replaces DM Mono + JetBrains Mono)
+   fonts.css — Local @font-face declarations.
+   All .ttf files live flat in /assets/fonts/.
+   Families mapped to Figma source of truth:
+     NeueHaasDisplay   — Neue Haas Grotesk Display Pro  (section headings 36/42)
+     NeueHaasUnica     — Neue Haas Unica W1G            (subtitles / service rows)
+     HelveticaNow      — Helvetica Now Text             (body 16/19.2)
+     AtkinsonMono      — Atkinson Hyperlegible Mono     (nav / meta / captions)
+     HelveticaNeue     — system fallback                (work index 01..05)
    ========================================================================== */
+
+
+/* ─── NEUE HAAS GROTESK DISPLAY PRO ──────────────────────────────────────── */
+
+@font-face {
+  font-family: 'NeueHaasDisplay';
+  src: url('../fonts/NeueHaasDisplayBold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NeueHaasDisplay';
+  src: url('../fonts/NeueHaasDisplayMediu.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NeueHaasDisplay';
+  src: url('../fonts/NeueHaasDisplayRoman.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* ─── NEUE HAAS UNICA W1G ────────────────────────────────────────────────── */
+
+@font-face {
+  font-family: 'NeueHaasUnica';
+  src: url('../fonts/Neue Haas Unica W1G Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NeueHaasUnica';
+  src: url('../fonts/Neue Haas Unica W1G Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NeueHaasUnica';
+  src: url('../fonts/Neue Haas Unica W1G Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 /* ─── HELVETICA NOW TEXT ─────────────────────────────────────────────────── */
 
 @font-face {
   font-family: 'HelveticaNow';
-  src: url('../fonts/HelveticaNowText/HelveticaNowText-Regular.ttf') format('truetype');
+  src: url('../fonts/HelveticaNowText-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -16,7 +76,7 @@
 
 @font-face {
   font-family: 'HelveticaNow';
-  src: url('../fonts/HelveticaNowText/HelveticaNowText-RegIta.ttf') format('truetype');
+  src: url('../fonts/HelveticaNowText-RegIta.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -24,7 +84,7 @@
 
 @font-face {
   font-family: 'HelveticaNow';
-  src: url('../fonts/HelveticaNowText/HelveticaNowText-Medium.ttf') format('truetype');
+  src: url('../fonts/HelveticaNowText-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -32,51 +92,43 @@
 
 @font-face {
   font-family: 'HelveticaNow';
-  src: url('../fonts/HelveticaNowText/HelveticaNowText-Bold.ttf') format('truetype');
+  src: url('../fonts/HelveticaNowText-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'HelveticaNow';
-  src: url('../fonts/HelveticaNowText/HelveticaNowText-Black.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
 
-
-/* ─── DIN PRO ────────────────────────────────────────────────────────────── */
+/* ─── ATKINSON HYPERLEGIBLE MONO ─────────────────────────────────────────── */
 
 @font-face {
-  font-family: 'DINPro';
-  src: url('../fonts/DINPro/DINPro-Regular.otf') format('opentype');
+  font-family: 'AtkinsonMono';
+  src: url('../fonts/AtkinsonHyperlegibleMono-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'DINPro';
-  src: url('../fonts/DINPro/DINPro-Medium.otf') format('opentype');
+  font-family: 'AtkinsonMono';
+  src: url('../fonts/AtkinsonHyperlegibleMono-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'DINPro';
-  src: url('../fonts/DINPro/DINPro-Bold.otf') format('opentype');
-  font-weight: 700;
+  font-family: 'AtkinsonMono';
+  src: url('../fonts/AtkinsonHyperlegibleMono-SemiBold.ttf') format('truetype');
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'DINPro';
-  src: url('../fonts/DINPro/DINPro-Black.otf') format('opentype');
-  font-weight: 900;
+  font-family: 'AtkinsonMono';
+  src: url('../fonts/AtkinsonHyperlegibleMono-Bold.ttf') format('truetype');
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }

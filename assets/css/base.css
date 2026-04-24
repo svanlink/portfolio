@@ -31,13 +31,13 @@ body {
 
 /* Selection */
 ::selection {
-  background-color: var(--color-ember);
+  background-color: var(--ink-16);
   color: var(--color-bone);
 }
 
-/* Focus-visible ring — ember-colored, keyboard only */
+/* Focus-visible ring — ink, keyboard only */
 :focus-visible {
-  outline: 2px solid var(--color-ember);
+  outline: 2px solid var(--color-ink);
   outline-offset: 3px;
 }
 

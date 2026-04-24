@@ -5,21 +5,15 @@
    ========================================================================== */
 
 
-/* ─── SITE NAV ────────────────────────────────────────────────────────────── */
+/* ─── SITE NAV — Figma 1:57 (64h, 80% black, Atkinson Bold 16/24) ────────── */
 
 .site-nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 78px;
-  background: rgba(13, 19, 22, 0.74);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 108px 0 112px;
+  height: var(--nav-height);           /* 64px */
+  background: var(--color-nav-bg);     /* rgba(0,0,0,0.80) */
   z-index: var(--z-nav);
   transition: transform var(--duration-slow) var(--ease-expo-out);
 }
@@ -29,15 +23,19 @@
 }
 
 .nav-identity {
-  display: flex;
-  align-items: center;
-  gap: 0;
+  position: absolute;
+  top: 50%;
+  left: 128px;                          /* Figma logo center x=145, w=34 → left=128 */
+  transform: translateY(-50%);
+  display: block;
   text-decoration: none;
+  width: 34px;
+  height: 31px;
 }
 
 .nav-logo {
-  width: 44px;
-  height: auto;
+  width: 34px;
+  height: 31px;
   display: block;
   filter: brightness(0) invert(1);
 }
@@ -46,26 +44,43 @@
   display: none;
 }
 
-/* Right cluster: nav links */
+/* Right cluster: nav links — absolute positions per Figma offsets
+   inside a 301px block anchored right:96 (= 1632 - 1331). */
 .nav-links {
+  position: absolute;
+  top: 50%;
+  right: 96px;
+  transform: translateY(-50%);
+  width: 301px;
+  height: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links > li {
+  position: absolute;
+  top: 0;
+  height: 24px;
   display: flex;
   align-items: center;
-  gap: 76px;
 }
 
-.nav-links__separator {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--bone-28);
-}
+.nav-links > li:nth-child(1) { left: -2px; }   /* WORK */
+.nav-links > li:nth-child(2) { left: 110px; }  /* ABOUT */
+.nav-links > li:nth-child(3) { left: 232px; }  /* CONTACT */
+
+.nav-links__separator { display: none; }
 
 .nav-link {
-  font-family: var(--font-editorial);
-  font-weight: var(--weight-bold);
-  font-size: 10px;
-  color: var(--bone-90);
-  letter-spacing: 0.045em;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--fs-nav);             /* 16 */
+  line-height: var(--lh-nav);           /* 24 */
+  letter-spacing: var(--ls-nav);        /* -0.32 */
+  color: var(--bone-100);
   text-transform: uppercase;
+  text-decoration: none;
   transition: color var(--duration-fast) var(--ease-expo-out);
   position: relative;
 }
@@ -74,7 +89,7 @@
 .arrow {
   font-family: var(--font-mono-display);
   font-weight: var(--weight-regular);
-  color: var(--color-ember);
+  color: inherit;
   font-style: normal;
   letter-spacing: 0;
 }
@@ -111,7 +126,7 @@
 }
 
 .text-link .arrow {
-  color: var(--color-ember);
+  color: var(--ink-62);
 }
 
 
@@ -119,15 +134,15 @@
 
 .cta-ghost-button {
   display: inline-block;
-  border: 1px solid var(--ember-55);
+  border: 1px solid var(--ink-56);
   background: transparent;
-  color: var(--ember-90);
+  color: var(--ink-90);
   font-family: var(--font-mono);
   font-size: 10px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 11px 14px;
-  border-radius: 4px;
+  border-radius: 0;
   cursor: pointer;
   transition:
     border-color var(--duration-normal) var(--ease-expo-out),
@@ -136,9 +151,20 @@
 }
 
 .cta-ghost-button:hover {
-  border-color: var(--color-ember);
-  color: var(--color-ember);
-  background-color: rgba(215, 90, 47, 0.06);
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+  background-color: transparent;
+}
+
+/* Ghost CTA on dark background — cinematic section */
+.section-cinematic .cta-ghost-button {
+  border-color: var(--bone-44);
+  color: var(--bone-90);
+}
+
+.section-cinematic .cta-ghost-button:hover {
+  border-color: var(--bone-100);
+  color: var(--bone-100);
 }
 
 
@@ -580,9 +606,9 @@
 }
 
 .work-focus-control:hover:not(:disabled) {
-  border-color: rgba(215, 90, 47, 0.50);
-  color: var(--ember-90);
-  background-color: rgba(215, 90, 47, 0.08);
+  border-color: var(--bone-44);
+  color: var(--bone-100);
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 .work-focus-control:disabled {
@@ -616,7 +642,7 @@
   width: 100%;
   height: 2px;
   border-radius: 999px;
-  background: linear-gradient(to right, var(--ember-80) var(--focus-scrub-progress, 0%), rgba(242, 240, 236, 0.16) var(--focus-scrub-progress, 0%));
+  background: linear-gradient(to right, var(--bone-90) var(--focus-scrub-progress, 0%), rgba(255, 255, 255, 0.16) var(--focus-scrub-progress, 0%));
   outline: none;
   cursor: pointer;
 }
@@ -730,13 +756,13 @@
   right: 28px;
   font-family: var(--font-mono);
   font-size: 11px;
-  color: var(--ember-72);
+  color: var(--ink-40);
   letter-spacing: 0;
   transition: color var(--duration-fast) var(--ease-expo-out);
 }
 
 .service-plate:hover .service-plate__index {
-  color: var(--color-ember);
+  color: var(--color-ink);
 }
 
 .service-plate__title {
@@ -840,7 +866,7 @@
   font-family: var(--font-mono);
   font-size: 10px;
   line-height: 20px;
-  color: var(--ember-80);
+  color: var(--bone-50);
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
@@ -915,7 +941,7 @@
 }
 
 .form-field:focus-within .form-field__label {
-  color: var(--color-ember);
+  color: var(--color-ink);
 }
 
 .form-field__input {
@@ -935,7 +961,7 @@
 
 .form-field__input:focus {
   outline: none;
-  border-bottom-color: var(--color-ember);
+  border-bottom-color: var(--color-ink);
 }
 
 .form-field__input::placeholder {
