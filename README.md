@@ -92,3 +92,24 @@ All tokens are in `assets/css/variables.css`. Key values:
 - `--color-bone: #F6F2EE` — warm off-white
 - `--color-ember: #D75A2F` — orange-red accent
 - Site canvas: 1440px minimum width (desktop-first, no responsive breakpoints yet)
+
+---
+
+## Working with Claude
+
+The project has a Claude Code skill system at `.claude/`. Read `CLAUDE.md` at the root before starting any session — it routes to the design truth, spec files, and skills.
+
+**Skills** (`.claude/skills/`) govern how Claude approaches each task type:
+
+| Skill | Use when |
+|---|---|
+| `prompt-rewriter` | Sharpening a rough instruction before acting on it |
+| `figma-fidelity` | Translating Figma nodes to CSS with measured accuracy |
+| `design-critic` | Auditing design, typography, spacing, or visual hierarchy |
+| `frontend-implementer` | Writing or refactoring HTML/CSS/JS |
+
+**Prompt templates** (`.claude/prompts/`) are ready-to-use starting points for common tasks. Fill in the brackets and run:
+
+`design-critique.md`, `figma-audit.md`, `figma-to-code.md`, `frontend-refactor.md`, `layout-system.md`, `typography-review.md`, `spacing-review.md`, `responsive-audit.md`, `copy-refinement.md`, `strategy-review.md`, `prompt-rewriter.md`
+
+**Knowledge base** (`docs/knowledge/`) contains `CLAUDE-BRIEF.md` (full operating manual), `SYNTHESIS.md` (cross-source synthesis), and 12 per-source reference files covering CSS architecture, responsive design, design systems, Figma handoff, and prompt engineering.

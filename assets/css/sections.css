@@ -1,7 +1,6 @@
 /* ==========================================================================
    sections.css — Section-specific layout and visual styles
-   Each section block lives here: hero, work, worked-with, about,
-   services, cinematic, contact
+   Sections retained: hero (§01), selected-work (§02), services (§03).
    ========================================================================== */
 
 
@@ -14,15 +13,8 @@
   overflow: hidden;
 }
 
-/* Cinematic: bone outer, dark still-plate inner */
-.section-cinematic {
-  background-color: var(--color-bone);
-  position: relative;
-  overflow: hidden;
-}
 
-
-/* ─── MEDIA LAYER (hero + cinematic shared pattern) ──────────────────────── */
+/* ─── MEDIA LAYER (hero) ─────────────────────────────────────────────────── */
 
 .hero-media {
   position: absolute;
@@ -30,20 +22,7 @@
   z-index: var(--z-media);
 }
 
-/* Cinematic media extends 80px beyond the plate in both directions so the
-   parallax translateY() has room to move without revealing gaps at the edges */
-.cinematic-media {
-  position: absolute;
-  top: -80px;
-  bottom: -80px;
-  left: 0;
-  right: 0;
-  z-index: var(--z-media);
-  will-change: transform;
-}
-
-.hero-video,
-.cinematic-video {
+.hero-video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -52,7 +31,7 @@
 }
 
 /* Hero: always fills 100vw × 100vh — zoom whichever axis is larger.
-   scale(1.25) pushes past any Vimeo letterbox bars at the edges. */
+   scale(1.4) pushes past any Vimeo letterbox bars at the edges. */
 .hero-video iframe {
   position: absolute;
   top: 50%;
@@ -63,79 +42,13 @@
   pointer-events: none;
 }
 
-/* Cinematic: fills its fixed-height plate.
-   scale(1.2) eliminates sidebar bars from Vimeo's player. */
-.cinematic-video iframe {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 177.78vh;
-  min-width: 100%;
-  height: 100%;
-  min-height: 56.25vw;
-  transform: translate(-50%, -50%) scale(1.4);
-  pointer-events: none;
-}
-
 .video-fallback {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Sits above the iframe (z-index: auto) but below veil overlay (z-index: 2).
-     Fallback is visible locally; Vimeo hides it via play-event in main.js. */
   z-index: 1;
-}
-
-/* Gradient veil — bottom-to-top fade */
-.hero-veil,
-.cinematic-veil {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: var(--z-veil);
-}
-
-.hero-veil {
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(11, 16, 18, 0.52) 0%,
-      rgba(11, 16, 18, 0.36) 9%,
-      rgba(11, 16, 18, 0.14) 18%,
-      rgba(11, 16, 18, 0.02) 31%,
-      transparent 44%
-    );
-}
-
-.cinematic-veil {
-  background:
-    linear-gradient(
-      to top,
-      rgba(11, 11, 11, 0.85) 0%,
-      rgba(11, 11, 11, 0.40) 40%,
-      rgba(11, 11, 11, 0.20) 100%
-    ),
-    linear-gradient(
-      to right,
-      transparent 20%,
-      rgba(11, 11, 11, 0.96) 100%
-    );
-}
-
-/* CSS grain texture pseudo-element */
-.hero-grain,
-.cinematic-grain {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: var(--z-grain);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.055'/%3E%3C/svg%3E");
-  opacity: 0.032;
-  /* Bone-tinted: mix-blend-mode screen softens the grain */
-  mix-blend-mode: screen;
-  will-change: transform, opacity;
 }
 
 
@@ -148,16 +61,7 @@
 
 
 /* ─── SECTION 2: SELECTED WORK ────────────────────────────────────────────── */
-/* Figma 1:65 — 1728×1000, bone bg
-   Heading: NHGD Bold 36/42 -0.72  at (96, 120) top
-   Index column: Helvetica Neue Bold 24/32 -0.48  at x=96
-   Title column: Unica Bold 24/32 -0.48  at x=152
-   Meta row:    Atkinson 12/12 -0.24 #a7a7a7 gap 28px  at x=152
-   Body (active only): HelveticaNow 16/19.2  width ~392 at x=152
-   Rules at y: 217, 416, 505, 594, 683, 772 (hairlines)
-   Inactive rows: 0.30 ink opacity
-   Active index color: #61757c
-   Player: 1013×570 at x=619, centered vertically */
+/* Figma 1:65 — 1728×1000, bone bg */
 
 .section-work {
   height: var(--height-selected-work);
@@ -203,7 +107,7 @@
   position: absolute;
   top: 0;
   left: var(--content-left);
-  width: 523px;
+  width: 447px;
   margin: 0;
   border: 0;
   border-top: var(--rule-weight) solid var(--ink-10);
@@ -308,6 +212,12 @@
 
 .work-player__video {
   z-index: 2;
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-expo-out);
+}
+
+.work-player__video.is-visible {
+  opacity: 1;
 }
 
 .work-player__frame {
@@ -350,205 +260,8 @@
 }
 
 
-/* ─── SECTION 3: WORKED WITH ──────────────────────────────────────────────── */
-
-.section-worked-with {
-  height: var(--height-worked-with);
-  background-color: var(--color-ink-soft);
-  position: relative;
-}
-
-.worked-with-inner {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  padding: 0 var(--content-left);
-}
-
-.worked-with-logos {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.client-logo {
-  display: flex;
-  align-items: center;
-  height: auto;
-  opacity: .75;
-  transition: opacity var(--duration-fast) var(--ease-expo-out);
-  filter: grayscale(100%) invert(1);
-}
-
-.client-logo:hover {
-  opacity: 0.8;
-}
-
-.client-logo img {
-  width: auto;
-  display: block;
-}
-
-/* Optical balancing — sized by visual weight, not mathematical equality.
-   Delicate marks (Cartier) sit small; bold marks (Mammut) read large. */
-.client-logo[title="Richemont"] img  { height: 18px; }
-.client-logo[title="Decathlon"] img  { height: 26px; }
-.client-logo[title="Mammut"] img     { height: 21px; }
-.client-logo[title="Cartier"] img    { height: 36px; }
-.client-logo[title="EPFL"] img       { height: 28px; }
-.client-logo[title="SWISStours"] img { height: 26px; }
-
-/* Text fallback when SVG is absent */
-.client-logo__fallback {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--ink-72);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-
-/* ─── SECTION 4: ABOUT ────────────────────────────────────────────────────── */
-
-.section-about {
-  height: var(--height-about);
-  background-color: var(--color-bone);
-  position: relative;
-}
-
-.about-columns {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-}
-
-.about-text-column {
-  position: absolute;
-  left: 306px;
-  width: 460px;
-  top: 130px;
-}
-
-/* Short identity preface — sits above main paragraph */
-.about-identity {
-  display: block;
-  font-family: var(--font-mono);
-  font-weight: var(--weight-regular);
-  font-size: 9px;
-  color: var(--ink-40);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  margin-bottom: 22px;
-}
-
-.about-bio-primary {
-  font-family: var(--font-editorial);
-  font-weight: var(--weight-regular);
-  font-size: 20px;
-  color: var(--ink-88);
-  line-height: 1.68;
-  letter-spacing: -0.01em;
-}
-
-.about-bio-secondary {
-  font-family: var(--font-editorial);
-  font-weight: var(--weight-regular);
-  font-size: 14px;
-  color: var(--ink-50);
-  line-height: 1.55;
-  letter-spacing: 0;
-  margin-top: 32px;
-}
-
-/* Editorial CTA — typographic with top-rule authority */
-.about-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  width: 220px;
-  margin-top: 52px;
-  padding-top: 16px;
-  border-top: 1px solid var(--ink-14);
-  font-family: var(--font-editorial);
-  font-weight: var(--weight-medium);
-  font-size: 11px;
-  color: var(--ink-62);
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  transition:
-    color var(--duration-fast) var(--ease-expo-out),
-    border-color var(--duration-fast) var(--ease-expo-out);
-}
-
-.about-cta .arrow {
-  color: var(--ink-62);
-  transition: transform var(--duration-fast) var(--ease-expo-out);
-}
-
-.about-cta:hover {
-  color: var(--color-ink);
-  border-top-color: var(--ink-28);
-}
-
-.about-cta:hover .arrow {
-  transform: translateX(3px);
-}
-
-.about-portrait-column {
-  position: absolute;
-  right: 160px;
-  width: 800px;
-  top: 80px;
-  bottom: 80px;
-}
-
-.about-portrait-placeholder {
-  width: 75%;
-  height: 75%;
-  background-color: var(--color-bone);
-  border-radius: var(--radius-card);
-  position: relative;
-  overflow: hidden;
-}
-
-.about-portrait-label {
-  position: absolute;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--font-mono);
-  font-size: 8px;
-  color: var(--bone-28);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  z-index: 4;
-}
-
-.about-portrait-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-}
-
-
-/* ─── SECTION 3 (display order): SERVICES ─────────────────────────────────── */
-/* Figma 11:176 — 1728×1000, bone bg
-   Heading: NHGD Bold 36/42 -0.72  at (96, 120)
-   Rows at y: 217, 310, 403, 496, 589, 682, 775 (hairlines, 7 = 6 rows + close)
-   Row height 93px, title at left:97, top=+28 within row
-   Title: Unica Regular 36/40 -0.72
-   Inactive opacity 0.20, active opacity 1.0
-   Arrow: 32×32 at x=1554 (right:142 within 1728 frame) on inactive only
-   Body (active only): HelveticaNow 16/19.2 width 1275 at left:97, below title */
+/* ─── SECTION 3: SERVICES ─────────────────────────────────────────────────── */
+/* Figma 11:176 — 1728×1000, bone bg */
 
 .section-services {
   height: var(--height-services);
@@ -626,7 +339,7 @@
 
 .service-row__body {
   position: absolute;
-  top: 82px;
+  top: 90px;
   left: 96px;
   width: 1275px;
   margin: 0;
@@ -635,6 +348,11 @@
   font-size: var(--fs-body);
   line-height: var(--lh-body);
   color: var(--color-ink);
+  display: none;
+}
+
+.service-row.is-active .service-row__body {
+  display: block;
 }
 
 .service-row__arrow {
@@ -648,6 +366,11 @@
   justify-content: center;
   color: var(--color-ink);
   pointer-events: none;
+  transition: opacity var(--duration-fast) var(--ease-expo-out);
+}
+
+.service-row.is-active .service-row__arrow {
+  opacity: 0;
 }
 
 .service-row__arrow svg {
@@ -664,361 +387,4 @@
   margin: 0;
   border: 0;
   border-top: var(--rule-weight) solid var(--ink-10);
-}
-
-
-/* ─── SECTION 6: CINEMATIC ────────────────────────────────────────────────── */
-
-.section-cinematic {
-  height: var(--height-cinematic);
-  position: relative;
-}
-
-/* Dark inner plate — fills the full 100vh cinematic scene */
-.cinematic-still-plate {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-  background-color: var(--color-ink);
-}
-
-.cinematic-section-index {
-  position: absolute;
-  top: var(--space-9);
-  right: var(--content-left);
-  font-family: var(--font-mono);
-  font-weight: var(--weight-regular);
-  font-size: 11px;
-  color: var(--bone-44);
-  letter-spacing: 0.06em;
-  z-index: var(--z-content);
-}
-
-/* Caption bar — bottom of cinematic section */
-.cinematic-caption-bar {
-  position: absolute;
-  bottom: 40px;
-  left: var(--content-left);
-  right: var(--content-left);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: var(--z-content);
-}
-
-.cinematic-caption-bar__left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.cinematic-caption-bar__index {
-  font-family: var(--font-mono);
-  font-weight: var(--weight-regular);
-  font-size: 11px;
-  color: var(--bone-44);
-  letter-spacing: 0.06em;
-}
-
-.cinematic-caption-bar__hairline {
-  width: 1px;
-  height: 12px;
-  background-color: var(--bone-28);
-}
-
-.cinematic-caption-bar__still {
-  font-family: var(--font-mono-display);
-  font-weight: var(--weight-regular);
-  font-size: 10px;
-  color: var(--bone-42);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.cinematic-caption-bar__right {
-  font-family: var(--font-mono-display);
-  font-weight: var(--weight-regular);
-  font-size: 10px;
-  color: var(--bone-32);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-
-/* ─── SECTION 7: CONTACT ──────────────────────────────────────────────────── */
-
-.section-contact {
-  height: var(--height-contact);
-  background-color: var(--color-contact-bg);
-  position: relative;
-  --contact-footer-height: 60px;
-  --contact-map-height: 172px;
-  --contact-content-bottom: calc(var(--contact-footer-height) + var(--contact-map-height) + 36px);
-}
-
-/* Horizontal map band — sits between contact content and footer */
-.contact-map-wrap {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: var(--contact-footer-height);
-  height: var(--contact-map-height);
-  z-index: 1;
-  overflow: hidden;
-  pointer-events: auto;
-  border-top: 1px solid var(--ink-10);
-  border-bottom: 1px solid var(--ink-8);
-}
-
-.contact-map-link {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.contact-map-frame {
-  width: 100%;
-  height: 100%;
-  border: none;
-  filter: grayscale(100%) contrast(0.72) brightness(1.02);
-  display: block;
-  opacity: 0.58;
-}
-
-.contact-layout {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: var(--contact-content-bottom);
-  display: flex;
-  z-index: 2;
-}
-
-/* Left column */
-.contact-left {
-  position: absolute;
-  left: var(--content-left);
-  width: 576px;
-  top: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  padding-top: 120px;
-}
-
-.contact-index {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--ink-36);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.contact-heading {
-  font-family: var(--font-editorial);
-  font-weight: var(--weight-medium);
-  font-size: 52px;
-  color: var(--ink-90);
-  line-height: 1.08;
-  letter-spacing: -0.01em;
-  margin-top: 20px;
-}
-
-.contact-statement {
-  font-family: var(--font-editorial);
-  font-weight: var(--weight-regular);
-  font-size: 14px;
-  color: var(--ink-62);
-  line-height: 1.65;
-  margin-top: 56px;
-  max-width: 360px;
-  white-space: pre-line;
-}
-
-.contact-details {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  max-width: 340px;
-  margin-top: 72px;
-}
-
-.contact-email {
-  display: inline-block;
-  font-family: var(--font-editorial);
-  font-weight: var(--weight-regular);
-  font-size: 24px;
-  color: var(--ink-90);
-  line-height: 1.1;
-  transition: color var(--duration-fast) var(--ease-expo-out);
-}
-
-.contact-email:hover {
-  color: var(--color-ink);
-}
-
-.contact-address {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--ink-32);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  margin-top: 24px;
-  padding-top: 18px;
-  border-top: 1px solid var(--ink-10);
-  font-style: normal;
-  line-height: 1.9;
-}
-
-/* Vertical divider */
-.contact-divider {
-  position: absolute;
-  left: 736px;
-  top: 120px;
-  width: 1px;
-  bottom: 24px;
-  background-color: var(--ink-10);
-}
-
-/* Right column */
-.contact-right {
-  position: absolute;
-  left: 776px;
-  width: 460px;
-  top: 0;
-  padding-top: 120px;
-  z-index: 2;
-  padding-right: 0;
-}
-
-.contact-form {
-  width: 100%;
-  max-width: 420px;
-  padding-top: 18px;
-  border-top: 1px solid var(--ink-10);
-}
-
-.contact-form__trap {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-  inset: auto;
-}
-
-.contact-submit-wrap {
-  margin-top: 48px;
-}
-
-.contact-form-status {
-  margin-top: 18px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.contact-form-status[data-state="success"] {
-  color: var(--ink-50);
-}
-
-.contact-form-status[data-state="error"] {
-  color: var(--ink-60);
-}
-
-
-/* ─── FOOTER — embedded at bottom of contact section ─────────────────────── */
-
-.site-footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: transparent;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 var(--content-left);
-  z-index: 3;
-}
-
-.footer-copyright {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  color: var(--ink-36);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-.footer-social {
-  display: flex;
-  gap: 20px;
-}
-
-.footer-social__link,
-.footer-social__text {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  color: var(--ink-44);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.footer-social__link {
-  transition: color var(--duration-fast) var(--ease-expo-out);
-}
-
-.footer-social__link:hover {
-  color: var(--color-ink);
-}
-
-.footer-disciplines {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  color: var(--ink-36);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-
-/* ==========================================================================
-   Asset integration additions — portrait treatment & form states
-   ========================================================================== */
-
-/* Scale-in crop + horizontal flip */
-.about-portrait-image {
-  transform: scale(1.02) scaleX(-1);
-  transform-origin: center top;
-}
-
-.form-field.is-error .form-field__input {
-  border-bottom-color: var(--color-ink);
-}
-
-.form-field.is-error .form-field__label {
-  color: var(--color-ink);
-}
-
-.form-field.has-value .form-field__label,
-.form-field.is-focused .form-field__label {
-  color: var(--color-ink);
-}
-
-/* No full-bleed overrides needed — .site-wrapper is unconstrained (100% viewport) */
-
-.cinematic-video.is-ready .video-fallback {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.preview-plate__image {
-  opacity: 0.85;
-}
-
-.service-plate__arrow {
-  will-change: transform, opacity;
 }
