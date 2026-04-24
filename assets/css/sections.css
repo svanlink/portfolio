@@ -83,6 +83,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Sits above the iframe (z-index: auto) but below veil overlay (z-index: 2).
+     Fallback is visible locally; Vimeo hides it via play-event in main.js. */
+  z-index: 1;
 }
 
 /* Gradient veil — bottom-to-top fade */
@@ -98,14 +101,11 @@
   background:
     linear-gradient(
       to bottom,
-      rgba(11, 11, 11, 0.65) 0%,
-      rgba(11, 11, 11, 0.20) 35%,
-      transparent 55%
-    ),
-    linear-gradient(
-      to top,
-      rgba(11, 11, 11, 0.72) 0%,
-      transparent 40%
+      rgba(11, 16, 18, 0.52) 0%,
+      rgba(11, 16, 18, 0.36) 9%,
+      rgba(11, 16, 18, 0.14) 18%,
+      rgba(11, 16, 18, 0.02) 31%,
+      transparent 44%
     );
 }
 
@@ -145,128 +145,6 @@
   height: var(--height-hero);
 }
 
-/* Full-height content layer — anchors headline top and kicker bottom */
-.hero-content {
-  position: absolute;
-  left: var(--content-left);
-  right: var(--content-left);
-  top: 0;
-  bottom: 0;
-  z-index: var(--z-content);
-}
-
-/* Display headline — upper compositional zone */
-.hero-headline {
-  position: absolute;
-  top: 148px;
-  left: 0;
-}
-
-.hero-headline__name {
-  display: block;
-  font-family: var(--font-editorial);
-  font-weight: var(--weight-medium);
-  font-size: clamp(72px, 7vw, 120px);
-  color: var(--bone-100);
-  line-height: 1.0;
-  letter-spacing: -0.03em;
-}
-
-.hero-headline__sub {
-  display: block;
-  font-family: var(--font-mono-display);
-  font-weight: var(--weight-regular);
-  font-size: 12px;
-  color: var(--bone-62);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-top: 24px;
-}
-
-/* Kicker cluster — fixed lower-third position, works at any viewport height */
-.hero-kicker {
-  position: absolute;
-  bottom: 214px;
-  left: 0;
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-
-.hero-kicker__index {
-  font-family: var(--font-mono-display);
-  font-weight: var(--weight-medium);
-  font-size: 10px;
-  color: var(--bone-20);
-  letter-spacing: 0.06em;
-}
-
-.hero-kicker__accent-line {
-  display: block;
-  width: 72px;
-  height: 1px;
-  background-color: var(--bone-16);
-}
-
-.hero-kicker__tagline {
-  font-family: var(--font-mono-display);
-  font-weight: var(--weight-regular);
-  font-size: 10px;
-  color: var(--bone-20);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  line-height: 1.35;
-}
-
-/* Thin horizontal rule below kicker */
-.hero-thin-rule {
-  position: absolute;
-  bottom: 186px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-color: var(--bone-14);
-}
-
-/* Footer metadata strip */
-.hero-footer-strip {
-  position: absolute;
-  bottom: 44px;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.hero-footer-strip__reel {
-  font-family: var(--font-mono-display);
-  font-weight: var(--weight-regular);
-  font-size: 10px;
-  color: var(--bone-16);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.hero-footer-strip__scroll {
-  font-family: var(--font-editorial);
-  font-weight: var(--weight-medium);
-  font-size: 10px;
-  color: var(--bone-24);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: color var(--duration-fast) var(--ease-expo-out);
-}
-
-.hero-footer-strip__scroll:hover {
-  color: var(--bone-50);
-}
-
-.hero-footer-strip__scroll .arrow {
-  color: var(--bone-28);
-}
-
 
 /* ─── SECTION 2: SELECTED WORK ────────────────────────────────────────────── */
 
@@ -274,13 +152,7 @@
   height: var(--height-selected-work);
   background-color: var(--color-bone);
   position: relative;
-}
-
-.work-section-header {
-  position: absolute;
-  top: var(--space-9);
-  right: var(--content-left);
-  z-index: var(--z-content);
+  overflow: hidden;
 }
 
 .work-archive-link {
@@ -301,7 +173,26 @@
   color: var(--ink-36);
 }
 
-/* Two-column layout container */
+.section-work .work-section-label {
+  top: 106px;
+  left: 114px;
+  gap: 0;
+}
+
+.section-work .work-section-title {
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-black);
+  font-size: 76px;
+  line-height: 0.98;
+  color: var(--ink-100);
+  letter-spacing: -0.065em;
+  text-transform: none;
+}
+
+.section-work .work-section-index {
+  display: none;
+}
+
 .work-columns {
   position: absolute;
   top: 0;
@@ -312,24 +203,25 @@
 
 .work-list-column {
   position: absolute;
-  top: 264px;
-  left: var(--catalog-left);
-  width: 440px;
+  top: 256px;
+  left: 112px;
+  width: 32.8%;
+  max-width: 476px;
 }
 
 .work-preview-column {
   position: absolute;
-  top: 264px;
-  left: 528px;
-  right: 56px;
-  bottom: calc(100vh - 864px);
+  top: 254px;
+  left: 47.6%;
+  right: 112px;
+  bottom: 86px;
 }
 
 /* Preview plate fills the column — height adapts to viewport */
 .section-work .preview-plate {
   width: 100%;
   height: 100%;
-  min-height: 520px;
+  min-height: 0;
 }
 
 
@@ -611,32 +503,34 @@
   color: var(--ink-56);
 }
 
-/* Toggle icon — plus rotates 45° to form × on open */
+/* Toggle icon — circular arrow, rotates 90° clockwise on open */
 .service-row__toggle {
   justify-self: end;
-  width: 20px;
-  height: 20px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-editorial);
-  font-weight: var(--weight-regular);
-  font-size: 20px;
-  line-height: 1;
-  color: var(--ink-36);
+  color: var(--ink-28);
   transition:
     transform 360ms cubic-bezier(0.16, 1, 0.3, 1),
-    color var(--duration-fast) var(--ease-expo-out),
-    opacity var(--duration-fast) var(--ease-expo-out);
+    color var(--duration-fast) var(--ease-expo-out);
   user-select: none;
+  flex-shrink: 0;
+}
+
+.toggle-icon {
+  display: block;
+  width: 36px;
+  height: 36px;
 }
 
 .service-row:hover .service-row__toggle {
-  color: var(--ink-56);
+  color: var(--ink-44);
 }
 
 .service-row.is-open .service-row__toggle {
-  transform: rotate(45deg);
+  transform: rotate(90deg);
   color: var(--color-ember);
 }
 
@@ -671,6 +565,26 @@
   max-width: 600px;
   opacity: 0;
   will-change: opacity;
+}
+
+/* Services heading — large editorial title, no section index */
+.section-services .section-label-title {
+  font-family: var(--font-editorial);
+  font-weight: var(--weight-black);
+  font-size: 72px;
+  line-height: 0.97;
+  color: var(--ink-100);
+  letter-spacing: -0.055em;
+  text-transform: none;
+}
+
+.section-services .section-label-index {
+  display: none;
+}
+
+/* Shift list down to clear the larger heading */
+.section-services .services-list {
+  top: 240px;
 }
 
 

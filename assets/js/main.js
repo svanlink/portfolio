@@ -19,13 +19,38 @@
     const params = target.dataset.vimeoParams || '';
     if (!vimeoId) return;
 
+    // Fallback lives as a sibling in the parent container (.hero-media / .cinematic-media)
+    const container = target.parentElement || target;
+
+    function hideFallback() {
+      target.classList.add('is-ready');
+      const fallback = container.querySelector(fallbackSelector);
+      if (fallback) {
+        fallback.style.transition = 'opacity 600ms ease';
+        fallback.style.opacity = '0';
+        setTimeout(function () {
+          if (fallback.parentNode) fallback.parentNode.removeChild(fallback);
+        }, 620);
+      }
+    }
+
     const iframe = target.querySelector('iframe');
     if (iframe) {
-      iframe.addEventListener('load', () => {
-        target.classList.add('is-ready');
-        const fallback = target.querySelector(fallbackSelector);
-        if (fallback) fallback.style.opacity = '0';
-      });
+      // Use Vimeo Player API play event — only hides fallback when video actually starts.
+      // Falls back to iframe load event if Vimeo API is unavailable.
+      if (typeof window.Vimeo !== 'undefined') {
+        try {
+          var player = new window.Vimeo.Player(iframe);
+          var played = false;
+          player.on('play', function () {
+            if (!played) { played = true; hideFallback(); }
+          });
+        } catch (e) {
+          iframe.addEventListener('load', hideFallback);
+        }
+      } else {
+        iframe.addEventListener('load', hideFallback);
+      }
       return;
     }
 
@@ -40,13 +65,19 @@
 
     target.appendChild(iframeEl);
 
-    iframeEl.addEventListener('load', () => {
-      target.classList.add('is-ready');
-      const fallback = target.querySelector(fallbackSelector);
-      if (fallback) {
-        fallback.style.transition = 'opacity 600ms ease';
-        fallback.style.opacity = '0';
-        setTimeout(() => fallback.remove(), 600);
+    iframeEl.addEventListener('load', function () {
+      if (typeof window.Vimeo !== 'undefined') {
+        try {
+          var player = new window.Vimeo.Player(iframeEl);
+          var played = false;
+          player.on('play', function () {
+            if (!played) { played = true; hideFallback(); }
+          });
+        } catch (e) {
+          hideFallback();
+        }
+      } else {
+        hideFallback();
       }
     });
   }
@@ -80,40 +111,137 @@
     const image        = plate.querySelector('.js-preview-image');
     const videoWrap    = plate.querySelector('.js-preview-video');
     const videoFrame   = plate.querySelector('.js-preview-frame');
-    const badge        = plate.querySelector('.js-preview-badge');
     const captionLeft  = plate.querySelector('.preview-plate__caption-left');
-    const captionIndex = plate.querySelector('.js-preview-caption-index');
     const captionTitle = plate.querySelector('.js-preview-caption-title');
     const captionMeta  = plate.querySelector('.js-preview-caption-meta');
 
-    // Focus overlay (cinematic screening mode)
     const overlay      = document.querySelector('.js-work-focus');
     const focusClose   = document.querySelector('.js-work-focus-close');
     const focusFrame   = document.querySelector('.js-work-focus-frame');
     const focusMedia   = overlay && overlay.querySelector('.work-focus-media');
     const focusCaption = overlay && overlay.querySelector('.work-focus-caption');
-    const focusIndex   = document.querySelector('.js-focus-index');
+    const focusControls = overlay && overlay.querySelector('.js-work-focus-controls');
     const focusTitle   = document.querySelector('.js-focus-title');
     const focusMeta    = document.querySelector('.js-focus-meta');
+    const focusPlay    = document.querySelector('.js-focus-play');
+    const focusMute    = document.querySelector('.js-focus-mute');
+    const focusPrev    = document.querySelector('.js-focus-prev');
+    const focusNext    = document.querySelector('.js-focus-next');
+    const focusScrub   = document.querySelector('.js-focus-scrub');
+    const focusCurrent = document.querySelector('.js-focus-current');
+    const focusDurationEl = document.querySelector('.js-focus-duration');
 
-    // GSAP initial states — overlay elements hidden before any interaction
     if (typeof gsap !== 'undefined') {
-      if (overlay)      gsap.set(overlay, { autoAlpha: 0 });
-      if (focusMedia)   gsap.set(focusMedia, { autoAlpha: 0 });
-      if (focusCaption) gsap.set(focusCaption, { autoAlpha: 0 });
-      if (focusClose)   gsap.set(focusClose, { autoAlpha: 0 });
+      if (overlay)       gsap.set(overlay, { autoAlpha: 0 });
+      if (focusMedia)    gsap.set(focusMedia, { autoAlpha: 0 });
+      if (focusCaption)  gsap.set(focusCaption, { autoAlpha: 0 });
+      if (focusClose)    gsap.set(focusClose, { autoAlpha: 0 });
+      if (focusControls) gsap.set(focusControls, { autoAlpha: 1 });
     }
 
     const items = Array.from(list.querySelectorAll('.work-item'));
     const useGsap = typeof gsap !== 'undefined' && !prefersReducedMotion;
     let isTransitioning = false;
-    let focusOpen       = false;
-    let autoStarted     = false;
     let activeRequestId = 0;
     let queuedItem      = null;
+    let focusOpen       = false;
+    let currentFocusIndex = 0;
+    let focusPlayer     = null;
+    let focusDuration   = 0;
+    let focusIsPaused   = true;
+    let focusIsMuted    = false;
+    let isScrubbing     = false;
+    let controlsIdleTimer = null;
+    let scrubCommitTimer = null;
+    let focusLoadToken  = 0;
+
+    if (focusFrame) {
+      focusFrame.addEventListener('load', function () {
+        if (!focusOpen || !focusMedia) return;
+        if (typeof window.Vimeo === 'undefined') {
+          focusMedia.classList.add('is-ready');
+        }
+      });
+    }
 
     function getPreviewElements() {
-      return [badge, captionLeft, captionMeta].filter(Boolean);
+      return [captionLeft, captionMeta].filter(Boolean);
+    }
+
+    function formatTime(seconds) {
+      const safe = Math.max(0, Math.floor(seconds || 0));
+      const mins = Math.floor(safe / 60);
+      const secs = safe % 60;
+      return String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+    }
+
+    function updateScrubVisual(value) {
+      if (!focusScrub) return;
+      const numeric = Number(value) || 0;
+      const progress = Math.max(0, Math.min(100, (numeric / 1000) * 100));
+      focusScrub.style.setProperty('--focus-scrub-progress', progress + '%');
+    }
+
+    function updateFocusTimeline(current, duration) {
+      const total = duration || focusDuration || 0;
+      const seconds = Math.max(0, current || 0);
+
+      if (focusCurrent) focusCurrent.textContent = formatTime(seconds);
+      if (focusDurationEl) focusDurationEl.textContent = formatTime(total);
+
+      if (!focusScrub) return;
+
+      const ratio = total > 0 ? Math.min(1, seconds / total) : 0;
+      const value = Math.round(ratio * 1000);
+      focusScrub.value = String(value);
+      focusScrub.disabled = total <= 0;
+      focusScrub.setAttribute('aria-valuetext', formatTime(seconds) + ' of ' + formatTime(total));
+      updateScrubVisual(value);
+    }
+
+    function setPlayButtonState(paused) {
+      focusIsPaused = paused;
+      if (!focusPlay) return;
+      focusPlay.textContent = paused ? 'Play' : 'Pause';
+      focusPlay.setAttribute('aria-label', paused ? 'Play video' : 'Pause video');
+    }
+
+    function setMuteButtonState(muted) {
+      focusIsMuted = muted;
+      if (!focusMute) return;
+      focusMute.textContent = muted ? 'Unmute' : 'Mute';
+      focusMute.setAttribute('aria-label', muted ? 'Unmute video' : 'Mute video');
+    }
+
+    function clearControlsTimer() {
+      if (controlsIdleTimer) {
+        clearTimeout(controlsIdleTimer);
+        controlsIdleTimer = null;
+      }
+    }
+
+    function scheduleControlsHide() {
+      clearControlsTimer();
+      if (!overlay || !focusOpen || isScrubbing || focusIsPaused) return;
+      controlsIdleTimer = setTimeout(function () {
+        overlay.classList.remove('is-controls-visible');
+      }, 1800);
+    }
+
+    function showControls(persist) {
+      if (!overlay) return;
+      overlay.classList.add('is-controls-visible');
+      clearControlsTimer();
+      if (!persist) scheduleControlsHide();
+    }
+
+    function updateFocusNav() {
+      if (focusPrev) focusPrev.disabled = currentFocusIndex <= 0;
+      if (focusNext) focusNext.disabled = currentFocusIndex >= items.length - 1;
+    }
+
+    function isCurrentFocusLoad(loadToken) {
+      return loadToken === focusLoadToken && focusOpen;
     }
 
     function completeTransition() {
@@ -128,8 +256,6 @@
     }
 
     function setPreviewCopy(index, title, meta) {
-      if (badge)        badge.textContent        = index;
-      if (captionIndex) captionIndex.textContent = index;
       if (captionTitle) captionTitle.textContent = title;
       if (captionMeta)  captionMeta.textContent  = meta;
     }
@@ -144,13 +270,21 @@
       });
     }
 
+    function getFocusPosterSource(item) {
+      if (!item) return '';
+      if (item.classList.contains('is-active') && image) {
+        return image.currentSrc || image.src || item.dataset.previewSrc || '';
+      }
+      return item.dataset.previewSrc || '';
+    }
+
     function revealInlineVideo(vimeoId) {
       if (!videoFrame || !videoWrap || !vimeoId) {
         completeTransition();
         return;
       }
 
-      videoFrame.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&muted=1&background=1&autopause=0&dnt=1`;
+      videoFrame.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&muted=1&background=1&controls=0&title=0&byline=0&portrait=0&autopause=0&dnt=1`;
       videoWrap.classList.add('is-visible');
 
       if (useGsap) {
@@ -190,7 +324,120 @@
       };
     }
 
-    // ── INLINE PREVIEW ────────────────────────────────────────────────────
+    function buildFocusPlayerUrl(vimeoId) {
+      return `https://player.vimeo.com/video/${vimeoId}?autoplay=1&muted=0&controls=0&title=0&byline=0&portrait=0&autopause=0&dnt=1`;
+    }
+
+    function syncFocusPlayerState() {
+      if (!focusPlayer) return Promise.resolve();
+
+      return Promise.all([
+        focusPlayer.getDuration().catch(function () { return 0; }),
+        focusPlayer.getCurrentTime().catch(function () { return 0; }),
+        focusPlayer.getPaused().catch(function () { return true; }),
+        focusPlayer.getMuted().catch(function () { return false; })
+      ]).then(function (values) {
+        focusDuration = values[0] || 0;
+        updateFocusTimeline(values[1] || 0, focusDuration);
+        setPlayButtonState(Boolean(values[2]));
+        setMuteButtonState(Boolean(values[3]));
+      });
+    }
+
+    function attachFocusPlayerEvents(player) {
+      if (!player) return;
+
+      player.on('timeupdate', function (data) {
+        if (!focusOpen) return;
+        if (data && data.duration) focusDuration = data.duration;
+        if (!isScrubbing) {
+          updateFocusTimeline(data.seconds || 0, data.duration || focusDuration);
+        }
+      });
+
+      player.on('play', function () {
+        if (!focusOpen) return;
+        focusMedia.classList.add('is-ready');
+        setPlayButtonState(false);
+        showControls(false);
+      });
+
+      player.on('pause', function () {
+        if (!focusOpen) return;
+        setPlayButtonState(true);
+        showControls(true);
+      });
+
+      player.on('ended', function () {
+        if (!focusOpen) return;
+        setPlayButtonState(true);
+        showControls(true);
+      });
+
+      player.on('volumechange', function (data) {
+        if (!focusOpen) return;
+        const muted = Boolean(data && (data.muted || data.volume === 0));
+        setMuteButtonState(muted);
+      });
+    }
+
+    function createFocusPlayer(vimeoId, loadToken) {
+      if (!focusFrame || typeof window.Vimeo === 'undefined' || !vimeoId) return Promise.resolve();
+
+      focusFrame.src = buildFocusPlayerUrl(vimeoId);
+      focusPlayer = new window.Vimeo.Player(focusFrame);
+      attachFocusPlayerEvents(focusPlayer);
+
+      return focusPlayer.ready()
+        .then(function () {
+          if (!isCurrentFocusLoad(loadToken)) return null;
+          return syncFocusPlayerState();
+        })
+        .then(function () {
+          if (!isCurrentFocusLoad(loadToken)) return null;
+          return focusPlayer.play().catch(function () {});
+        })
+        .then(function () {
+          if (!isCurrentFocusLoad(loadToken)) return null;
+          return syncFocusPlayerState();
+        });
+    }
+
+    function loadFocusVideo(vimeoId, loadToken) {
+      if (!focusFrame || !vimeoId) return Promise.resolve();
+
+      if (typeof window.Vimeo === 'undefined') {
+        focusFrame.src = buildFocusPlayerUrl(vimeoId);
+        return Promise.resolve();
+      }
+
+      if (!focusPlayer) {
+        return createFocusPlayer(vimeoId, loadToken);
+      }
+
+      return focusPlayer.loadVideo(Number(vimeoId))
+        .then(function () {
+          if (!isCurrentFocusLoad(loadToken)) return null;
+          return focusPlayer.setMuted(false).catch(function () {});
+        })
+        .then(function () {
+          if (!isCurrentFocusLoad(loadToken)) return null;
+          return focusPlayer.play().catch(function () {});
+        })
+        .then(function () {
+          if (!isCurrentFocusLoad(loadToken)) return null;
+          return syncFocusPlayerState();
+        });
+    }
+
+    function setActiveItemState(item) {
+      items.forEach(function (el) {
+        el.classList.remove('is-active');
+        el.setAttribute('aria-selected', 'false');
+      });
+      item.classList.add('is-active');
+      item.setAttribute('aria-selected', 'true');
+    }
 
     function activateItem(item) {
       if (isTransitioning) {
@@ -199,18 +446,13 @@
       }
       if (item.classList.contains('is-active')) return;
 
-      items.forEach(el => {
-        el.classList.remove('is-active');
-        el.setAttribute('aria-selected', 'false');
-      });
-      item.classList.add('is-active');
-      item.setAttribute('aria-selected', 'true');
+      setActiveItemState(item);
 
       const newSrc     = item.dataset.previewSrc;
       const newVimeoId = item.dataset.vimeoId;
       const newIndex   = item.dataset.previewIndex;
       const newTitle   = item.dataset.previewTitle;
-      const newMeta    = item.dataset.previewMeta;
+      const newMeta    = item.dataset.previewCaptionMeta || item.dataset.previewMeta;
       const previewEls = getPreviewElements();
       const requestId  = ++activeRequestId;
 
@@ -287,8 +529,8 @@
               overwrite: true
             });
           }
-        } else {
-          if (image) image.style.opacity = '0.88';
+        } else if (image) {
+          image.style.opacity = '0.88';
         }
 
         if (newVimeoId) {
@@ -310,50 +552,88 @@
       });
     }
 
-    // ── FOCUS OVERLAY: open / close ────────────────────────────────────────
+    function setFocusCopyFromItem(item) {
+      if (!item) return;
+      currentFocusIndex = Math.max(items.indexOf(item), 0);
+      updateFocusNav();
 
-    if (focusFrame && focusMedia) {
-      focusFrame.addEventListener('load', function () {
-        if (!focusOpen || !focusFrame.getAttribute('src')) return;
-        focusMedia.classList.add('is-ready');
+      if (focusTitle) focusTitle.textContent = item.dataset.previewTitle || '';
+      if (focusMeta)  focusMeta.textContent  = item.dataset.previewMeta || '';
+
+      focusDuration = 0;
+      updateFocusTimeline(0, 0);
+      setPlayButtonState(true);
+      setMuteButtonState(false);
+
+      const immediatePoster = getFocusPosterSource(item);
+      focusMedia.classList.remove('is-ready');
+      focusMedia.style.backgroundImage = immediatePoster ? `url("${immediatePoster}")` : '';
+
+      getPosterForItem(item).then(function (posterSrc) {
+        if (!focusOpen || items[currentFocusIndex] !== item || !posterSrc) return;
+        focusMedia.style.backgroundImage = `url("${posterSrc}")`;
       });
     }
 
-    function openFocus(item) {
-      if (!overlay || !focusFrame || !focusMedia) return;
-      const vimeoId = item.dataset.vimeoId;
-      const index   = item.dataset.previewIndex;
-      const title   = item.dataset.previewTitle;
-      const meta    = item.dataset.previewMeta;
+    function commitScrubValue(rawValue) {
+      if (!focusPlayer || !focusDuration) return;
+      const ratio = (Number(rawValue) || 0) / 1000;
+      const targetSeconds = ratio * focusDuration;
+      focusPlayer.setCurrentTime(targetSeconds).catch(function () {});
+    }
+
+    function queueScrubCommit(rawValue) {
+      if (scrubCommitTimer) clearTimeout(scrubCommitTimer);
+      scrubCommitTimer = setTimeout(function () {
+        commitScrubValue(rawValue);
+      }, 80);
+    }
+
+    function showFocusItem(item, options) {
+      if (!overlay || !focusMedia) return;
+
+      const config = options || {};
+      const preserveOverlay = Boolean(config.preserveOverlay);
       const fromRect = plate.getBoundingClientRect();
       const toRect = getFocusTargetRect();
-      const posterSrc = image && image.currentSrc ? image.currentSrc : image && image.src ? image.src : '';
+      const loadToken = ++focusLoadToken;
 
-      if (focusIndex) focusIndex.textContent = index || '';
-      if (focusTitle) focusTitle.textContent = title || '';
-      if (focusMeta)  focusMeta.textContent  = meta  || '';
+      setFocusCopyFromItem(item);
 
-      focusMedia.classList.remove('is-ready');
-      focusMedia.style.backgroundImage = posterSrc ? `url("${posterSrc}")` : '';
-
-      if (vimeoId) {
-        // Full player with sound in focus mode
-        focusFrame.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&muted=0&background=0&autopause=0&dnt=1`;
+      if (!preserveOverlay) {
+        overlay.setAttribute('aria-hidden', 'false');
+        overlay.classList.add('is-open', 'is-controls-visible');
+        document.body.style.overflow = 'hidden';
+        focusOpen = true;
       } else {
-        focusFrame.src = '';
+        overlay.classList.add('is-controls-visible');
       }
 
-      overlay.setAttribute('aria-hidden', 'false');
-      overlay.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-      focusOpen = true;
+      if (videoFrame) videoFrame.src = '';
+      if (videoWrap) {
+        videoWrap.classList.remove('is-visible');
+        videoWrap.style.opacity = '0';
+      }
+
+      const loadVideoPromise = loadFocusVideo(item.dataset.vimeoId, loadToken).catch(function () {});
+
+      if (preserveOverlay) {
+        if (useGsap && focusCaption) {
+          gsap.fromTo(focusCaption,
+            { autoAlpha: 0.34 },
+            { autoAlpha: 1, duration: 0.24, ease: 'power2.out', overwrite: true }
+          );
+        }
+        showControls(true);
+        return loadVideoPromise;
+      }
 
       if (!useGsap) {
         focusMedia.style.top = toRect.top + 'px';
         focusMedia.style.left = toRect.left + 'px';
         focusMedia.style.width = toRect.width + 'px';
         focusMedia.style.height = toRect.height + 'px';
-        return;
+        return loadVideoPromise;
       }
 
       gsap.killTweensOf([overlay, focusMedia, focusCaption, focusClose].filter(Boolean));
@@ -403,12 +683,45 @@
           ease: 'power2.out'
         }, 0.24);
       }
+
+      return loadVideoPromise;
+    }
+
+    function openFocus(item) {
+      if (!item) return;
+      activateItem(item);
+      showFocusItem(item, { preserveOverlay: focusOpen });
+    }
+
+    function openFocusByIndex(index) {
+      const item = items[index];
+      if (!item) return;
+      openFocus(item);
     }
 
     function closeFocus() {
-      if (!overlay || !focusFrame || !focusMedia) return;
+      if (!overlay || !focusMedia) return;
+
       focusOpen = false;
+      focusLoadToken += 1;
+      clearControlsTimer();
+      if (scrubCommitTimer) {
+        clearTimeout(scrubCommitTimer);
+        scrubCommitTimer = null;
+      }
+      isScrubbing = false;
       const returnRect = plate.getBoundingClientRect();
+
+      if (focusPlayer) {
+        focusPlayer.pause().catch(function () {});
+        focusPlayer.unload().catch(function () {});
+      }
+
+      overlay.classList.remove('is-controls-visible');
+      focusDuration = 0;
+      updateFocusTimeline(0, 0);
+      setPlayButtonState(true);
+      setMuteButtonState(false);
 
       if (!useGsap) {
         overlay.classList.remove('is-open');
@@ -416,7 +729,6 @@
         document.body.style.overflow = '';
         focusMedia.classList.remove('is-ready');
         focusMedia.style.backgroundImage = '';
-        setTimeout(function () { focusFrame.src = ''; }, 440);
         return;
       }
 
@@ -427,16 +739,14 @@
           overlay.classList.remove('is-open');
           overlay.setAttribute('aria-hidden', 'true');
           document.body.style.overflow = '';
-          focusFrame.src = '';
           focusMedia.classList.remove('is-ready');
           focusMedia.style.backgroundImage = '';
-          if (focusMedia)   gsap.set(focusMedia, { autoAlpha: 0 });
+          gsap.set(focusMedia, { autoAlpha: 0 });
           if (focusCaption) gsap.set(focusCaption, { autoAlpha: 0 });
-          if (focusClose)   gsap.set(focusClose, { autoAlpha: 0 });
+          if (focusClose) gsap.set(focusClose, { autoAlpha: 0 });
         }
       });
 
-      // Caption + close: fade out first (150ms, power1.in)
       const fadeOutEls = [focusCaption, focusClose].filter(Boolean);
       if (fadeOutEls.length) {
         tl.to(fadeOutEls, { autoAlpha: 0, duration: 0.15, ease: 'power1.in' });
@@ -459,15 +769,19 @@
       }, '-=0.22');
     }
 
-    // ── EVENT LISTENERS ───────────────────────────────────────────────────
-
-    items.forEach(item => {
-      item.addEventListener('mouseenter', () => activateItem(item));
-      item.addEventListener('focus',      () => activateItem(item));
-      item.addEventListener('click',      () => openFocus(item));
-      item.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') { e.preventDefault(); activateItem(item); openFocus(item); }
-        if (e.key === ' ')     { e.preventDefault(); activateItem(item); }
+    items.forEach(function (item) {
+      item.addEventListener('mouseenter', function () { activateItem(item); });
+      item.addEventListener('focus', function () { activateItem(item); });
+      item.addEventListener('click', function () { openFocus(item); });
+      item.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          openFocus(item);
+        }
+        if (e.key === ' ') {
+          e.preventDefault();
+          activateItem(item);
+        }
       });
     });
 
@@ -476,33 +790,96 @@
     }
 
     if (overlay) {
-      overlay.addEventListener('click', (e) => { if (e.target === overlay) closeFocus(); });
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeFocus();
+      });
+
+      ['mousemove', 'mouseenter', 'focusin'].forEach(function (eventName) {
+        overlay.addEventListener(eventName, function () {
+          showControls(false);
+        });
+      });
     }
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && focusOpen) closeFocus();
+    if (focusPlay) {
+      focusPlay.addEventListener('click', function () {
+        if (!focusPlayer) return;
+        showControls(true);
+        if (focusIsPaused) {
+          focusPlayer.play().catch(function () {});
+        } else {
+          focusPlayer.pause().catch(function () {});
+        }
+      });
+    }
+
+    if (focusMute) {
+      focusMute.addEventListener('click', function () {
+        if (!focusPlayer) return;
+        showControls(true);
+        focusPlayer.setMuted(!focusIsMuted).catch(function () {});
+      });
+    }
+
+    if (focusPrev) {
+      focusPrev.addEventListener('click', function () {
+        if (currentFocusIndex > 0) openFocusByIndex(currentFocusIndex - 1);
+      });
+    }
+
+    if (focusNext) {
+      focusNext.addEventListener('click', function () {
+        if (currentFocusIndex < items.length - 1) openFocusByIndex(currentFocusIndex + 1);
+      });
+    }
+
+    if (focusScrub) {
+      updateScrubVisual(focusScrub.value);
+
+      focusScrub.addEventListener('pointerdown', function () {
+        isScrubbing = true;
+        showControls(true);
+      });
+
+      focusScrub.addEventListener('focus', function () {
+        isScrubbing = true;
+        showControls(true);
+      });
+
+      focusScrub.addEventListener('input', function (e) {
+        const rawValue = e.target.value;
+        const previewTime = focusDuration ? (Number(rawValue) / 1000) * focusDuration : 0;
+        updateFocusTimeline(previewTime, focusDuration);
+        queueScrubCommit(rawValue);
+      });
+
+      focusScrub.addEventListener('change', function (e) {
+        commitScrubValue(e.target.value);
+        isScrubbing = false;
+        scheduleControlsHide();
+      });
+
+      focusScrub.addEventListener('blur', function () {
+        isScrubbing = false;
+        scheduleControlsHide();
+      });
+    }
+
+    document.addEventListener('pointerup', function () {
+      if (!isScrubbing) return;
+      isScrubbing = false;
+      scheduleControlsHide();
     });
 
-    // ── AUTO-START: video plays when section scrolls into view ─────────────
+    document.addEventListener('pointercancel', function () {
+      if (!isScrubbing) return;
+      isScrubbing = false;
+      scheduleControlsHide();
+    });
 
-    const workSection = list.closest('section');
-    if (workSection && videoFrame && videoWrap && !prefersReducedMotion) {
-      const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && !autoStarted) {
-            const active = list.querySelector('.work-item.is-active');
-            if (active && active.dataset.vimeoId) {
-              videoFrame.src = `https://player.vimeo.com/video/${active.dataset.vimeoId}?autoplay=1&loop=1&muted=1&background=1&autopause=0&dnt=1`;
-              requestAnimationFrame(() => { videoWrap.classList.add('is-visible'); });
-              autoStarted = true;
-            }
-          }
-        });
-      }, { threshold: 0.3 });
-      sectionObserver.observe(workSection);
-    }
-
-    // ── INITIAL THUMBNAIL: plate is alive from first paint ─────────────────
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && focusOpen) closeFocus();
+    });
 
     var initialItem = list.querySelector('.work-item.is-active');
     if (initialItem && image) {

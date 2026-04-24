@@ -20,14 +20,13 @@
 
   <header>
     <nav class="site-nav" aria-label="Main navigation">
-      <div class="nav-identity">
-        <span class="nav-monogram">S.</span>
-        <span class="nav-name">Sebastian Van Eickelen</span>
-      </div>
+      <a href="#hero" class="nav-identity" aria-label="Sebastian Van Eickelen home">
+        <img src="assets/img/logo.svg" alt="" class="nav-logo">
+      </a>
       <ul class="nav-links" role="list">
-        <li><a href="#work" class="nav-link nav-link--dot-before is-active" data-section="work" aria-current="page">WORK</a></li>
+        <li><a href="#work" class="nav-link is-active" data-section="work" aria-current="page">WORK</a></li>
         <li><a href="#about" class="nav-link" data-section="about">ABOUT</a></li>
-        <li><a href="#contact" class="nav-link" data-section="contact">CONTACT <span class="nav-arrow" aria-hidden="true">→</span></a></li>
+        <li><a href="#contact" class="nav-link" data-section="contact">CONTACT</a></li>
       </ul>
     </nav>
   </header>
@@ -37,6 +36,12 @@
     <!-- SECTION 1: HERO -->
     <section class="section-inner section-hero" aria-labelledby="hero-name" id="hero">
       <div class="hero-media js-hero-media" aria-hidden="true">
+        <img class="video-fallback js-video-fallback"
+             src="assets/img/img placeholders/1589596603-9ec54167c749d3c579b1df00d7c890f3b2978bc99f9bfa82ac16fb04baddc32a-d_1920x1080.avif"
+             alt=""
+             fetchpriority="high"
+             loading="eager"
+             aria-hidden="true">
         <div class="hero-video js-vimeo-target"
              data-vimeo-id="762064959"
              data-vimeo-params="autoplay=1&loop=1&muted=1&background=1&autopause=0&dnt=1"
@@ -52,120 +57,159 @@
         <div class="hero-veil" aria-hidden="true"></div>
         <div class="hero-grain" aria-hidden="true"></div>
       </div>
-
-      <div class="hero-content">
-        <div class="hero-headline">
-          <h1 id="hero-name" class="hero-headline__name">Sebastian<br>Van Eickelen</h1>
-          <span class="hero-headline__sub" aria-hidden="true">Filmmaker &amp; Photographer · Geneva</span>
-        </div>
-        <div class="hero-kicker js-hero-kicker">
-          <span class="hero-kicker__index">N° 001</span>
-          <span class="hero-kicker__accent-line js-hero-rule" aria-hidden="true"></span>
-          <p id="hero-tagline" class="hero-kicker__tagline">An Archive of Moving Images and Still Frames</p>
-        </div>
-        <div class="hero-thin-rule" aria-hidden="true"></div>
-        <div class="hero-footer-strip">
-          <span class="hero-footer-strip__reel">Reel · 00:00:12 / 00:00:24</span>
-          <a href="#work" class="hero-footer-strip__scroll" aria-label="Scroll to selected work">
-            Selected Work ——— <span class="arrow" aria-hidden="true">↓</span>
-          </a>
-        </div>
-      </div>
+      <h1 id="hero-name" class="sr-only">Sebastian Van Eickelen</h1>
     </section>
 
     <!-- SECTION 2: SELECTED WORK -->
     <section class="section-inner section-work" aria-labelledby="work-heading" id="work">
-      <div class="work-section-label" aria-hidden="true">
+      <div class="work-section-label">
         <span class="work-section-index">01</span>
         <span class="work-section-title" id="work-heading">Selected Work</span>
       </div>
-      <div class="work-section-header">
-        <span class="work-archive-link work-archive-link--static" aria-label="Full archive available on request">Archive Available on Request</span>
-      </div>
       <div class="work-columns">
         <div class="work-list-column">
-          <div class="work-list-intro" aria-hidden="true">
-            <span class="work-list-intro__label">Curated Selection</span>
-            <p class="work-list-intro__statement">Six projects held in a tighter editorial register. Poster first, motion second, always led by the frame.</p>
-          </div>
           <ul class="work-list js-work-list" role="list" aria-label="Selected work archive">
             <li class="work-item is-active"
                 data-preview-src="assets/img/work-placeholder.svg"
-                data-vimeo-id="76979871"
+                data-vimeo-id="832000768"
                 data-preview-index="N° 001"
+                data-preview-title="DECATHLON SWITZERLAND"
+                data-preview-meta="CAMPAIGN · DECATHLON · BERN · 2026"
+                data-preview-caption-meta="2026"
+                role="button" tabindex="0" aria-selected="true">
+              <span class="work-item__index" aria-hidden="true">01</span>
+              <div class="work-item__body">
+                <span class="work-item__title">Decathlon Switzerland</span>
+                <span class="work-item__client">Campaign</span>
+                <span class="work-item__client">Decathlon</span>
+                <span class="work-item__client">Bern</span>
+                <span class="work-item__client">2026</span>
+                <div class="work-item__detail">
+                  <p class="work-item__summary">A clean commercial frame built around energy, clarity, and graphic movement.</p>
+                  <dl class="work-item__credits">
+                    <div class="work-item__credit">
+                      <dt>Direction</dt>
+                      <dd>Sebastian Van Eickelen</dd>
+                    </div>
+                    <div class="work-item__credit">
+                      <dt>Director of Photography</dt>
+                      <dd>Jay Burton</dd>
+                    </div>
+                    <div class="work-item__credit">
+                      <dt>Edit &amp; Colour Grading</dt>
+                      <dd>Nicolas Desmurs</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </li>
+            <li class="work-item"
+                data-preview-src="assets/img/work-placeholder.svg"
+                data-vimeo-id="790103616"
+                data-preview-index="N° 002"
                 data-preview-title="WATCHES &amp; WONDERS"
                 data-preview-meta="CAMPAIGN · FHH · GENEVA · 2026"
-                role="button" tabindex="0" aria-selected="true">
-              <span class="work-item__index">001</span>
-              <span class="work-item__title">Watches &amp; Wonders</span>
-              <span class="work-item__client">FHH · Geneva</span>
-              <span class="work-item__category">Campaign</span>
+                data-preview-caption-meta="2026"
+                role="button" tabindex="0">
+              <span class="work-item__index" aria-hidden="true">02</span>
+              <div class="work-item__body">
+                <span class="work-item__title">Watches &amp; Wonders</span>
+                <span class="work-item__client">Campaign</span>
+                <span class="work-item__client">FHH</span>
+                <span class="work-item__client">Geneva</span>
+                <span class="work-item__client">2026</span>
+                <div class="work-item__detail">
+                  <p class="work-item__summary">A polished campaign study shaped by precision, surfaces, and controlled motion.</p>
+                  <dl class="work-item__credits">
+                    <div class="work-item__credit">
+                      <dt>Direction</dt>
+                      <dd>Sebastian Van Eickelen</dd>
+                    </div>
+                    <div class="work-item__credit">
+                      <dt>Cinematography</dt>
+                      <dd>Sebastian Van Eickelen</dd>
+                    </div>
+                    <div class="work-item__credit">
+                      <dt>Color</dt>
+                      <dd>Nicolas Desmurs</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
             </li>
             <li class="work-item"
                 data-preview-src="assets/img/work-placeholder.svg"
-                data-vimeo-id="22439234"
-                data-preview-index="N° 002"
+                data-vimeo-id="856712536"
+                data-preview-index="N° 003"
                 data-preview-title="THE DOLOMITE SESSIONS"
                 data-preview-meta="EDITORIAL · 2025"
+                data-preview-caption-meta="2025"
                 role="button" tabindex="0">
-              <span class="work-item__index">002</span>
-              <span class="work-item__title">The Dolomite Sessions</span>
-              <span class="work-item__client">Editorial</span>
-              <span class="work-item__category">2025</span>
+              <span class="work-item__index" aria-hidden="true">03</span>
+              <div class="work-item__body">
+                <span class="work-item__title">The Dolomite Sessions</span>
+                <span class="work-item__client">Editorial</span>
+                <span class="work-item__client">Mountain</span>
+                <span class="work-item__client">Italy</span>
+                <span class="work-item__client">2025</span>
+                <div class="work-item__detail">
+                  <p class="work-item__summary">An editorial mountain portrait balancing atmosphere, scale, and quiet human presence.</p>
+                  <dl class="work-item__credits">
+                    <div class="work-item__credit">
+                      <dt>Direction</dt>
+                      <dd>Sebastian Van Eickelen</dd>
+                    </div>
+                    <div class="work-item__credit">
+                      <dt>Edit</dt>
+                      <dd>Sebastian Van Eickelen</dd>
+                    </div>
+                    <div class="work-item__credit">
+                      <dt>Color</dt>
+                      <dd>Nicolas Desmurs</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
             </li>
             <li class="work-item"
                 data-preview-src="assets/img/work-placeholder.svg"
-                data-vimeo-id="125095515"
-                data-preview-index="N° 003"
-                data-preview-title="DECATHLON SWITZERLAND"
-                data-preview-meta="CAMPAIGN · DECATHLON · 2026"
-                role="button" tabindex="0">
-              <span class="work-item__index">003</span>
-              <span class="work-item__title">Decathlon Switzerland</span>
-              <span class="work-item__client">Decathlon</span>
-              <span class="work-item__category">Campaign</span>
-            </li>
-            <li class="work-item"
-                data-preview-src="assets/img/work-placeholder.svg"
-                data-vimeo-id="93951774"
+                data-vimeo-id="1082236427"
                 data-preview-index="N° 004"
                 data-preview-title="STILL FRAME SERIES"
                 data-preview-meta="PERSONAL · 2024"
+                data-preview-caption-meta="2024"
                 role="button" tabindex="0">
-              <span class="work-item__index">004</span>
-              <span class="work-item__title">Still Frame Series</span>
-              <span class="work-item__client">Personal</span>
-              <span class="work-item__category">2024</span>
-            </li>
-            <li class="work-item"
-                data-preview-src="assets/img/work-placeholder.svg"
-                data-vimeo-id="45878034"
-                data-preview-index="N° 005"
-                data-preview-title="MOUNTAIN ARCHITECTURE"
-                data-preview-meta="SELF-COMMISSIONED · 2025"
-                role="button" tabindex="0">
-              <span class="work-item__index">005</span>
-              <span class="work-item__title">Mountain Architecture</span>
-              <span class="work-item__client">Self-Commissioned</span>
-              <span class="work-item__category">2025</span>
-            </li>
-            <li class="work-item"
-                data-preview-src="assets/img/work-placeholder.svg"
-                data-vimeo-id="32001208"
-                data-preview-index="N° 006"
-                data-preview-title="GENEVA LIGHT STUDY"
-                data-preview-meta="PERSONAL · 2024"
-                role="button" tabindex="0">
-              <span class="work-item__index">006</span>
-              <span class="work-item__title">Geneva Light Study</span>
-              <span class="work-item__client">Personal</span>
-              <span class="work-item__category">2024</span>
+              <span class="work-item__index" aria-hidden="true">04</span>
+              <div class="work-item__body">
+                <span class="work-item__title">Still Frame Series</span>
+                <span class="work-item__client">Personal</span>
+                <span class="work-item__client">Observational</span>
+                <span class="work-item__client">Geneva</span>
+                <span class="work-item__client">2024</span>
+                <div class="work-item__detail">
+                  <p class="work-item__summary">Personal observations collected as restrained studies of light, texture, and pause.</p>
+                  <dl class="work-item__credits">
+                    <div class="work-item__credit">
+                      <dt>Direction</dt>
+                      <dd>Sebastian Van Eickelen</dd>
+                    </div>
+                    <div class="work-item__credit">
+                      <dt>Photography</dt>
+                      <dd>Sebastian Van Eickelen</dd>
+                    </div>
+                    <div class="work-item__credit">
+                      <dt>Color</dt>
+                      <dd>Nicolas Desmurs</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
             </li>
           </ul>
         </div>
         <div class="work-preview-column">
           <figure class="preview-plate js-preview-plate">
-            <img src="assets/img/work-placeholder.svg" alt="Selected work placeholder — still frame coming soon" class="preview-plate__image js-preview-image" loading="eager">
+            <img src="assets/img/work-placeholder.svg" alt="Selected work placeholder poster frame" class="preview-plate__image js-preview-image" loading="eager">
             <div class="preview-plate__video js-preview-video" aria-hidden="true">
               <iframe class="preview-plate__video-frame js-preview-frame"
                       src=""
@@ -174,14 +218,11 @@
                       title="Work preview video"
                       aria-hidden="true"></iframe>
             </div>
-            <span class="preview-plate__badge js-preview-badge" aria-hidden="true">N° 001</span>
             <figcaption class="preview-plate__caption">
               <div class="preview-plate__caption-left">
-                <span class="preview-plate__caption-index js-preview-caption-index">N° 001</span>
-                <span class="preview-plate__caption-hairline" aria-hidden="true"></span>
-                <span class="preview-plate__caption-title js-preview-caption-title">Watches &amp; Wonders</span>
+                <span class="preview-plate__caption-title js-preview-caption-title">Decathlon Switzerland</span>
               </div>
-              <span class="preview-plate__caption-meta js-preview-caption-meta">Campaign · FHH · Geneva · 2026</span>
+              <span class="preview-plate__caption-meta js-preview-caption-meta">2026</span>
             </figcaption>
           </figure>
         </div>
@@ -248,7 +289,12 @@
             <span class="service-row__index" aria-hidden="true">01</span>
             <h3 class="service-row__title">Creative Direction</h3>
             <p class="service-row__desc">Concept, treatment, and visual direction from first frame to final cut.</p>
-            <span class="service-row__toggle" aria-hidden="true">+</span>
+            <span class="service-row__toggle" aria-hidden="true">
+              <svg class="toggle-icon" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="18" r="17" stroke="currentColor" stroke-width="1"/>
+                <path d="M14 22L22 14M22 14H15.5M22 14V20.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
           </div>
           <div class="service-row__detail" aria-hidden="true">
             <div class="service-row__detail-inner">
@@ -261,7 +307,12 @@
             <span class="service-row__index" aria-hidden="true">02</span>
             <h3 class="service-row__title">Direction</h3>
             <p class="service-row__desc">Brand films, documentary portraits, and campaign narratives with clear authorship.</p>
-            <span class="service-row__toggle" aria-hidden="true">+</span>
+            <span class="service-row__toggle" aria-hidden="true">
+              <svg class="toggle-icon" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="18" r="17" stroke="currentColor" stroke-width="1"/>
+                <path d="M14 22L22 14M22 14H15.5M22 14V20.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
           </div>
           <div class="service-row__detail" aria-hidden="true">
             <div class="service-row__detail-inner">
@@ -274,7 +325,12 @@
             <span class="service-row__index" aria-hidden="true">03</span>
             <h3 class="service-row__title">Cinematography</h3>
             <p class="service-row__desc">Camera, lenses, light, and movement handled with a disciplined visual system.</p>
-            <span class="service-row__toggle" aria-hidden="true">+</span>
+            <span class="service-row__toggle" aria-hidden="true">
+              <svg class="toggle-icon" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="18" r="17" stroke="currentColor" stroke-width="1"/>
+                <path d="M14 22L22 14M22 14H15.5M22 14V20.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
           </div>
           <div class="service-row__detail" aria-hidden="true">
             <div class="service-row__detail-inner">
@@ -287,7 +343,12 @@
             <span class="service-row__index" aria-hidden="true">04</span>
             <h3 class="service-row__title">Photography</h3>
             <p class="service-row__desc">Editorial and commercial stills with the same tonal discipline as the motion work.</p>
-            <span class="service-row__toggle" aria-hidden="true">+</span>
+            <span class="service-row__toggle" aria-hidden="true">
+              <svg class="toggle-icon" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="18" r="17" stroke="currentColor" stroke-width="1"/>
+                <path d="M14 22L22 14M22 14H15.5M22 14V20.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
           </div>
           <div class="service-row__detail" aria-hidden="true">
             <div class="service-row__detail-inner">
@@ -300,7 +361,12 @@
             <span class="service-row__index" aria-hidden="true">05</span>
             <h3 class="service-row__title">Editorial Post</h3>
             <p class="service-row__desc">Structure, pacing, sound, and finishing shaped into a coherent final piece.</p>
-            <span class="service-row__toggle" aria-hidden="true">+</span>
+            <span class="service-row__toggle" aria-hidden="true">
+              <svg class="toggle-icon" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="18" r="17" stroke="currentColor" stroke-width="1"/>
+                <path d="M14 22L22 14M22 14H15.5M22 14V20.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
           </div>
           <div class="service-row__detail" aria-hidden="true">
             <div class="service-row__detail-inner">
@@ -313,7 +379,12 @@
             <span class="service-row__index" aria-hidden="true">06</span>
             <h3 class="service-row__title">Color Finishing</h3>
             <p class="service-row__desc">Final grade and tonal continuity calibrated to medium, story, and delivery.</p>
-            <span class="service-row__toggle" aria-hidden="true">+</span>
+            <span class="service-row__toggle" aria-hidden="true">
+              <svg class="toggle-icon" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="18" r="17" stroke="currentColor" stroke-width="1"/>
+                <path d="M14 22L22 14M22 14H15.5M22 14V20.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
           </div>
           <div class="service-row__detail" aria-hidden="true">
             <div class="service-row__detail-inner">
@@ -328,6 +399,11 @@
     <section class="section-inner section-cinematic" aria-labelledby="cinematic-heading" id="cinematic">
       <div class="cinematic-still-plate">
         <div class="cinematic-media js-cinematic-media" aria-hidden="true">
+          <img class="video-fallback js-video-fallback"
+               src="assets/img/img placeholders/1821742227-fdce69c69bd924b86a1cc8bae31772457b2b78a02fd9e9da32cb46d423834f94-d_1920x1080.avif"
+               alt=""
+               loading="lazy"
+               aria-hidden="true">
           <!-- js-vimeo-target: Vimeo Player API wraps the iframe on init -->
           <div class="cinematic-video js-vimeo-target"
                data-vimeo-id="792429935"
@@ -446,8 +522,6 @@
             title="Selected work preview"
             allowfullscreen></iframe>
     <div class="work-focus-caption">
-      <span class="work-focus-index js-focus-index"></span>
-      <span class="work-focus-hairline" aria-hidden="true"></span>
       <span class="work-focus-title js-focus-title"></span>
       <span class="work-focus-meta js-focus-meta"></span>
     </div>
@@ -455,7 +529,7 @@
       <div class="work-focus-controls__cluster">
         <button type="button" class="work-focus-control js-focus-prev" aria-label="Previous project">Prev</button>
         <button type="button" class="work-focus-control js-focus-play" aria-label="Pause video">Pause</button>
-        <button type="button" class="work-focus-control js-focus-mute" aria-label="Mute video">Sound On</button>
+        <button type="button" class="work-focus-control js-focus-mute" aria-label="Mute video">Mute</button>
       </div>
       <div class="work-focus-scrub-wrap">
         <span class="work-focus-time js-focus-current" aria-live="off">00:00</span>
