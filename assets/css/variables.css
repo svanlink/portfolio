@@ -93,9 +93,9 @@
   /* ─── LAYOUT ──────────────────────────────────────────────────────────── */
   /* Figma frame = 1728 × 1000 per section. Nav = 64. Safezones = 120/120. */
   --site-width:    1728px;
-  --content-left:  96px;    /* Figma primary column — headings, rules, index */
-  --catalog-left:  96px;
-  --content-inset: 152px;   /* Selected-Work row content (left of title/meta) */
+  --content-left:  5.556vw;  /* 96 ÷ 1728 — Figma primary column anchor */
+  --catalog-left:  5.556vw;  /* same value */
+  --content-inset: 8.796vw;  /* 152 ÷ 1728 — §02 row content anchor */
   --nav-height:    64px;
   --safezone:      120px;
 

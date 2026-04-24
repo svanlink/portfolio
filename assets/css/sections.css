@@ -61,7 +61,8 @@
 
 
 /* ─── SECTION 2: SELECTED WORK ────────────────────────────────────────────── */
-/* Figma 1:65 — 1728×1000, bone bg */
+/* Figma 1:65 — 1728 × 1000 frame. All positions in vw (÷ 1728) or vh (÷ 1000)
+   so proportions hold at any viewport size.                                  */
 
 .section-work {
   height: var(--height-selected-work);
@@ -72,7 +73,7 @@
 
 .work-heading {
   position: absolute;
-  top: 120px;
+  top: 12vh;                       /* 120 ÷ 1000 */
   left: var(--content-left);
   margin: 0;
   font-family: var(--font-display);
@@ -85,7 +86,7 @@
 
 .work-list {
   position: absolute;
-  top: 217px;
+  top: 21.5vh;                     /* 215 ÷ 1000 */
   left: 0;
   right: 0;
   margin: 0;
@@ -95,19 +96,24 @@
 
 .work-row {
   position: relative;
-  height: 89px;
+  height: 8.9vh;                   /* 89 ÷ 1000 */
   cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease-expo-out);
+}
+
+.work-list.has-active .work-row:not(.is-active) {
+  opacity: 0.30;
 }
 
 .work-row.is-active {
-  height: 199px;
+  height: 20.1vh;                  /* 201 ÷ 1000 */
 }
 
 .work-row__rule {
   position: absolute;
   top: 0;
   left: var(--content-left);
-  width: 447px;
+  width: 25.868vw;                 /* 447 ÷ 1728 */
   margin: 0;
   border: 0;
   border-top: var(--rule-weight) solid var(--ink-10);
@@ -115,7 +121,7 @@
 
 .work-row__index {
   position: absolute;
-  top: 18px;
+  top: 2vh;                        /* 20 ÷ 1000 */
   left: var(--content-left);
   font-family: var(--font-index);
   font-weight: var(--weight-bold);
@@ -123,17 +129,15 @@
   line-height: var(--lh-index);
   letter-spacing: var(--ls-index);
   color: var(--color-ink);
-  opacity: 0.30;
 }
 
 .work-row.is-active .work-row__index {
   color: var(--color-index-active);
-  opacity: 1;
 }
 
 .work-row__title {
   position: absolute;
-  top: 20px;
+  top: 2.2vh;                      /* 22 ÷ 1000 */
   left: var(--content-inset);
   margin: 0;
   font-family: var(--font-subtitle);
@@ -142,22 +146,17 @@
   line-height: var(--lh-subtitle-bold);
   letter-spacing: var(--ls-subtitle-bold);
   color: var(--color-ink);
-  opacity: 0.30;
-}
-
-.work-row.is-active .work-row__title {
-  opacity: 1;
 }
 
 .work-row__meta {
   position: absolute;
-  top: 57px;
+  top: 5.9vh;                      /* 59 ÷ 1000 */
   left: var(--content-inset);
   margin: 0;
   padding: 0;
   list-style: none;
   display: flex;
-  gap: 28px;
+  gap: 1.62vw;                     /* 28 ÷ 1728 */
   font-family: var(--font-mono);
   font-weight: var(--weight-regular);
   font-size: var(--fs-caption);
@@ -165,33 +164,50 @@
   letter-spacing: var(--ls-caption);
   color: var(--color-meta);
   text-transform: uppercase;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--duration-normal) var(--ease-expo-out),
+    visibility var(--duration-normal) var(--ease-expo-out);
+  pointer-events: none;
 }
 
 .work-row__body {
   position: absolute;
-  top: 85px;
+  top: 8.7vh;                      /* 87 ÷ 1000 */
   left: var(--content-inset);
-  width: 392px;
+  width: 22.685vw;                 /* 392 ÷ 1728 */
   margin: 0;
   font-family: var(--font-body);
   font-weight: var(--weight-regular);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
   color: var(--color-ink);
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--duration-normal) var(--ease-expo-out),
+    visibility var(--duration-normal) var(--ease-expo-out);
+  pointer-events: none;
+}
+
+.work-row.is-active .work-row__meta {
+  opacity: 1;
+  visibility: visible;
 }
 
 .work-row.is-active .work-row__body {
-  display: block;
+  opacity: 0.60;
+  visibility: visible;
 }
 
-/* Player — 1013 × 570 at x=619, vertically centered in 1000h frame */
+/* Player — 58.62vw × 57vh at left=35.82vw, top=21.5vh */
 .work-player {
   position: absolute;
-  top: 215px;
-  left: 619px;
-  width: 1013px;
-  height: 570px;
+  top: 21.5vh;                     /* 215 ÷ 1000 */
+  left: 35.822vw;                  /* 619 ÷ 1728 */
+  width: 58.623vw;                 /* 1013 ÷ 1728 */
+  height: 57vh;                    /* 570 ÷ 1000 */
   margin: 0;
   background-color: var(--color-ink);
   overflow: hidden;
@@ -228,25 +244,48 @@
   border: 0;
 }
 
+.work-player::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(0, 0, 0, 0.20) 66.35%
+  );
+  pointer-events: none;
+}
+
 .work-player__caption {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 40px;
+  height: 4vh;                     /* 40 ÷ 1000 */
   background-color: var(--ink-40);
   color: var(--color-bone);
   font-family: var(--font-mono);
   font-size: var(--fs-caption);
   line-height: var(--lh-caption);
   letter-spacing: var(--ls-caption);
-  z-index: 3;
+  z-index: 4;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--duration-normal) var(--ease-expo-out),
+    visibility var(--duration-normal) var(--ease-expo-out);
+}
+
+.work-player.has-preview .work-player__caption {
+  opacity: 1;
+  visibility: visible;
 }
 
 .work-player__caption-title {
   position: absolute;
   top: 50%;
-  left: 32px;
+  left: 3.159%;                    /* 32 ÷ 1013 — relative to player */
   transform: translateY(-50%);
   text-transform: uppercase;
 }
@@ -254,14 +293,14 @@
 .work-player__caption-meta {
   position: absolute;
   top: 50%;
-  left: 232px;
+  left: 22.902%;                   /* 232 ÷ 1013 — relative to player */
   transform: translateY(-50%);
   text-transform: uppercase;
 }
 
 
 /* ─── SECTION 3: SERVICES ─────────────────────────────────────────────────── */
-/* Figma 11:176 — 1728×1000, bone bg */
+/* Figma 11:176 — 1728 × 1000 frame. Positions in vw (÷ 1728) / vh (÷ 1000). */
 
 .section-services {
   height: var(--height-services);
@@ -273,7 +312,7 @@
 
 .services-heading {
   position: absolute;
-  top: 120px;
+  top: 12vh;                       /* 120 ÷ 1000 */
   left: var(--content-left);
   margin: 0;
   font-family: var(--font-display);
@@ -286,7 +325,7 @@
 
 .services-list {
   position: absolute;
-  top: 217px;
+  top: 21.7vh;                     /* 217 ÷ 1000 */
   left: 0;
   right: 0;
   margin: 0;
@@ -296,7 +335,7 @@
 
 .service-row {
   position: relative;
-  height: 93px;
+  height: 9.3vh;                   /* 93 ÷ 1000 */
   border: 0;
   background: transparent;
   cursor: pointer;
@@ -304,7 +343,7 @@
 }
 
 .service-row.is-active {
-  height: 197px;
+  height: 19.7vh;                  /* 197 ÷ 1000 */
 }
 
 .service-row__rule {
@@ -319,8 +358,8 @@
 
 .service-row__title {
   position: absolute;
-  top: 32px;
-  left: 96px;
+  top: 3.2vh;                      /* 32 ÷ 1000 */
+  left: var(--content-left);
   margin: 0;
   font-family: var(--font-subtitle);
   font-weight: var(--weight-regular);
@@ -339,9 +378,9 @@
 
 .service-row__body {
   position: absolute;
-  top: 90px;
-  left: 96px;
-  width: 1275px;
+  top: 9vh;                        /* 90 ÷ 1000 */
+  left: var(--content-left);
+  width: 73.785vw;                 /* 1275 ÷ 1728 */
   margin: 0;
   font-family: var(--font-body);
   font-weight: var(--weight-regular);
@@ -357,8 +396,8 @@
 
 .service-row__arrow {
   position: absolute;
-  top: 31px;
-  left: 1554px;
+  top: 3.1vh;                      /* 31 ÷ 1000 */
+  left: 89.931vw;                  /* 1554 ÷ 1728 */
   width: 32px;
   height: 32px;
   display: inline-flex;
@@ -383,7 +422,7 @@
   position: absolute;
   left: var(--content-left);
   right: var(--content-left);
-  top: calc(217px + 93px + 93px + 197px + 93px + 93px + 93px);
+  top: 87.9vh;                     /* 879 ÷ 1000 — sum of all row heights */
   margin: 0;
   border: 0;
   border-top: var(--rule-weight) solid var(--ink-10);
